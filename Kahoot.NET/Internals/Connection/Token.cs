@@ -33,21 +33,20 @@ internal static class Token
         return builder.ToString();
     }
 
-    private static string Decode(string challenge)
+    private static string Decode(ReadOnlySpan<char> challenge)
     {
         int offset = ((41 * 39) * (100 + 11 * 9));
-
-        char repl(char value, int position)
-        {
-            return Convert.ToChar(((value * position + offset) % 77) + 48);
-        }
+        
         StringBuilder builder = new(string.Empty);
 
         for (int i = 0; i < challenge.Length; i++)
         {
-            builder.Append(repl(challenge[i], i));
+            builder.Append(ChangeChar(challenge[i], i, offset));
         }
         return builder.ToString();
     }
-
+    private static char ChangeChar(char value, int position, int offset)
+    {
+        return Convert.ToChar(((value * position + offset) % 77) + 48);
+    }
 }

@@ -2,4 +2,11 @@
 global using Kahoot.NET.Quiz;
 global using Kahoot.NET.Shared;
 global using Kahoot.NET.Question;
+global using Kahoot.NET.Internals;
+global using Kahoot.NET.Internals.Responses;
+global using Kahoot.NET.Internals.Connection;
+global using Kahoot.NET.Exceptions;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
 global using OneOf;
+

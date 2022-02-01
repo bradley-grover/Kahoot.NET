@@ -11,7 +11,7 @@ namespace Kahoot.NET.Client;
 public partial class KahootClient
 {
     /// <summary>
-    /// 
+    /// Initializes a new instance of the <see cref="KahootClient"/> class
     /// </summary>
     /// <param name="client"></param>
     public KahootClient(HttpClient client)
@@ -20,7 +20,7 @@ public partial class KahootClient
         Client = client;
     }
     /// <summary>
-    /// 
+    /// Initializes a new instance of the <see cref="KahootClient"/> class
     /// </summary>
     /// <param name="factory"></param>
     public KahootClient(IHttpClientFactory factory)

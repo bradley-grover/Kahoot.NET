@@ -1,6 +1,5 @@
 ﻿namespace Kahoot.NET.Exceptions;
 
-
 [Serializable]
 public class NoGameIdException : Exception
 {

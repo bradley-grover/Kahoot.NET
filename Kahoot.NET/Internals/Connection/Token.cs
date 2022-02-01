@@ -5,6 +5,13 @@ namespace Kahoot.NET.Internals.Connection;
 
 internal static class Token
 {
+    /// <summary>
+    /// Creates token from Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="client"></param>
+    /// <returns></returns>
+    /// <exception cref="GameNotFoundException"></exception>
     public static async Task<string> CreateTokenAsync(int id, HttpClient client)
     {
         var (response, header) = await ConnectionHelper.CreateSessionResponseAsync(id, client);
@@ -37,7 +44,7 @@ internal static class Token
     {
         int offset = ((41 * 39) * (100 + 11 * 9));
         
-        StringBuilder builder = new(string.Empty);
+        StringBuilder builder = new(string.Empty, challenge.Length);
 
         for (int i = 0; i < challenge.Length; i++)
         {

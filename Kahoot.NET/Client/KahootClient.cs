@@ -1,14 +1,14 @@
-﻿namespace Kahoot.NET.Client;
+﻿using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Kahoot.NET.ConsoleDemo")]
+
+namespace Kahoot.NET.Client;
 
 #pragma warning disable CS1998
 
-public class KahootClient : IKahootClient
+public partial class KahootClient : IKahootClient
 {
-    public KahootClient()
-    {
-    }
     #region Events
-
     public event EventHandler? OnJoined;
     public event EventHandler<QuestionReceivedEventArgs>? OnQuestionReceived;
     public event EventHandler? OnQuizStart;
@@ -18,6 +18,9 @@ public class KahootClient : IKahootClient
     #endregion
 
     #region Properties
+
+    private HttpClient Client { get; }
+    internal int? GameId { get; set; }
 
     public IQuiz? Quiz { get; private set; }
     public INemesis? Nemesis { get; private set; }

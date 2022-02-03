@@ -1,7 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using System.Text;
-
-namespace Kahoot.NET.Internals.Connection;
+﻿namespace Kahoot.NET.Internals.Connection;
 
 internal static class Token
 {

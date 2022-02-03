@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using System.Text;
-using Jint;
 
 namespace Kahoot.NET.Internals.Connection.Token;
 

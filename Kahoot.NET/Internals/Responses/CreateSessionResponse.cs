@@ -5,6 +5,12 @@ internal class CreateSessionResponse
     [JsonPropertyName("gameMode")]
     public string? GameMode { get; set; }
 
+    [JsonPropertyName("collaborations")]
+    public bool Collabs { get; set; }
+
+    [JsonPropertyName("liveGameId")]
+    public string? LiveGameId { get; set; }
+
     [JsonPropertyName("challenge")]
     public string? Challenge { get; set; }
 

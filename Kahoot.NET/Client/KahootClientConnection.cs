@@ -1,4 +1,4 @@
-﻿using WebSocketSharp;
+﻿using System.Net.WebSockets;
 
 namespace Kahoot.NET.Client;
 
@@ -9,7 +9,8 @@ namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
-    private WebSocket? Socket { get; set; }
+    // TODO: FIND BEST WEBSOCKET CLIENT LIBRARY
+    // private WebSocket Socket { get; }
 
     internal async Task CreateHandshakeAsync()
     {
@@ -20,10 +21,7 @@ public partial class KahootClient
 
         string token = await Token.CreateTokenAsync(GameId.Value, Client);
 
-        Socket = new($"wss://kahoot.it/cometd/{GameId.Value}/{token}");
-
-
-        //Socket.Connect();
-
+        // create socket then join
+        // "wss://kahoot.it/cometd/{gameid}/{token}"
     }
 }

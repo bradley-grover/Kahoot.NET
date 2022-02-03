@@ -58,6 +58,8 @@ public partial class KahootClient : IKahootClient
 
     public async Task JoinAsync(int gameCode, string name)
     {
+        GameId = gameCode;
+        await CreateHandshakeAsync();
     }
 
     #endregion

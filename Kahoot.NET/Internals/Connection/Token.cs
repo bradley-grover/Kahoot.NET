@@ -27,30 +27,30 @@ internal static class Token
 
     private static string CombineTokens(ReadOnlySpan<char> header, ReadOnlySpan<char> challenge)
     {
-        StringBuilder builder = new(header.Length);
+        Span<char> stackAllocated = stackalloc char[header.Length];
+
 
         for (int i = 0;  i < header.Length; i++)
         {
-            char c = header[i];
             char mod = challenge[i % challenge.Length];
-            int decoded = c ^ mod;
-            builder.Append(Convert.ToChar(decoded));
+            int decoded = header[i] ^ mod;
+            stackAllocated[i] = Convert.ToChar(decoded);
         }
-        
-        return builder.ToString();
+
+        return new string(stackAllocated);
     }
 
     private static string Decode(ReadOnlySpan<char> challenge)
     {
         int offset = ((41 * 39) * (100 + 11 * 9));
-        
-        StringBuilder builder = new(string.Empty, challenge.Length);
 
+        Span<char> stackAllocatedString = stackalloc char[challenge.Length];
+      
         for (int i = 0; i < challenge.Length; i++)
         {
-            builder.Append(ChangeChar(challenge[i], i, offset));
+            stackAllocatedString[i] = ChangeChar(challenge[i], i, offset);
         }
-        return builder.ToString();
+        return new string(stackAllocatedString);
     }
     private static char ChangeChar(char value, int position, int offset)
     {

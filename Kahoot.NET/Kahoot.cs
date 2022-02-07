@@ -7,6 +7,17 @@ namespace Kahoot.NET;
 /// </summary>
 public static class Kahoot
 {
+    internal static HttpClient? Client { get; set; }
+    /// <summary>
+    /// Sets the global <see cref="HttpClient"/> to be used for the <see cref="KahootClient"/>
+    /// internal messaging
+    /// </summary>
+    /// <param name="client"></param>
+    public static void SetGlobalHttpClient(HttpClient client)
+    {
+        ArgumentNullException.ThrowIfNull(client, nameof(client));
+        Client = client;
+    }
     /// <summary>
     /// The public facing URL for Kahoot
     /// </summary>
@@ -37,5 +48,42 @@ public static class Kahoot
         var reply = await ping.SendPingAsync(PublicURL, timeOut);
 
         return reply.Status.HasFlag(IPStatus.Success);
+    }
+    /// <summary>
+    /// Creates the most recent <see cref="IKahootClient"/> implementation
+    /// </summary>
+    /// <returns></returns>
+    public static IKahootClient CreateClient()
+    {
+        return new KahootClient(KahootClientConfig.Default, new HttpClient());
+    }
+
+    /// <summary>
+    /// Creates the most recent <see cref="IKahootClient"/> implementation with the specified configuration
+    /// </summary>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    public static IKahootClient CreateClient(KahootClientConfig config)
+    {
+        return new KahootClient(config, new HttpClient());
+    }
+
+    /// <summary>
+    /// Creates many <see cref="IKahootClient"/> using the integer passed
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    public static IList<IKahootClient> CreateClients(int amount)
+    {
+        ThrowHelper.AssertAboveZero(amount);
+
+        List<IKahootClient> clients = new(amount);
+
+        for (int i = 0; i < amount; i++)
+        {
+            clients[i] = CreateClient();
+        }
+
+        return clients;
     }
 }

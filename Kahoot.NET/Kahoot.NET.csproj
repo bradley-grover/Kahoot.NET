@@ -6,6 +6,13 @@
     <Nullable>enable</Nullable>
     <LangVersion>10</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <SignAssembly>False</SignAssembly>
+    <PackageProjectUrl>https://github.com/ac111897/Kahoot.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ac11897/Kahoot.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Kahoot,Library</PackageTags>
+    <NeutralLanguage>en-NZ</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>

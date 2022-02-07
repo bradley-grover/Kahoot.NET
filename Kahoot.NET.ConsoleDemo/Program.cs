@@ -1,25 +1,30 @@
 ﻿using Kahoot.NET;
 using Kahoot.NET.Client;
 using Kahoot.NET.Internals.Connection;
-using Kahoot.NET.Internals.Connection.Parsers;
+using Kahoot.NET.Internals.Parsers;
 using Kahoot.NET.Internals.Connection.Token;
+using Kahoot.NET.Shared;
+using Kahoot.NET.FluentBuilder;
+using System.Net.WebSockets;
+using Kahoot.NET.Internals.Messages;
+using System.Text;
 
 namespace Kahoot.NET.ConsoleDemo;
 
 public class Program
 {
-    public static async Task Main(string[] args)
+    public static void Main(string[] args)
     {
-        Console.WriteLine("ENTER CODE");
-        int code = Convert.ToInt32(Console.ReadLine());
 
-        var kahoot = new KahootClient(new HttpClient());
+        //Console.WriteLine("ENTER CODE");
+        //int code = Convert.ToInt32(Console.ReadLine());
 
-        await kahoot.JoinAsync(code, "ok");
-        await kahoot.CreateHandshakeAsync();
+        //var kahoot = new KahootClient(new HttpClient());
+
+        //await kahoot.JoinAsync(code, "ok");
+        //await kahoot.CreateHandshakeAsync();
 
         //await RunConnectionTestAsync(code);
-
     }
 
     public static async Task RunConnectionTestAsync(int code)
@@ -33,9 +38,9 @@ public class Program
         Console.WriteLine($"Header After:\n\n{head}");
 
 
-        Console.WriteLine($"Challenge before transformation:\n\n {res.Challenge}");
+        Console.WriteLine($"Challenge before transformation:\n\n {res!.Challenge}");
 
-        Console.WriteLine($"\nOffset calculated:\n{new OffsetParser().Parse(res.Challenge.RemoveWhitespace())}");
+        Console.WriteLine($"\nOffset calculated:\n{new OffsetParser().Parse(res.Challenge.AsSpan().RemoveWhitespace())}");
 
 
         Console.WriteLine(ChallengeToken.CreateToken(res.Challenge).ToString());

@@ -1,5 +1,8 @@
 ﻿namespace Kahoot.NET.Exceptions;
 
+/// <summary>
+/// Thrown when the challenge provided by Kahoot is unable to be parsed
+/// </summary>
 
 [Serializable]
 public class InvalidChallengeException : Exception

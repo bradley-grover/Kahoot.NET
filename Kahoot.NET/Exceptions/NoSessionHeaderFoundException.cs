@@ -1,5 +1,8 @@
 ﻿namespace Kahoot.NET.Exceptions;
 
+/// <summary>
+/// Thrown when the session request header is unable to be located
+/// </summary>
 
 [Serializable]
 public class NoSessionHeaderFoundException : Exception

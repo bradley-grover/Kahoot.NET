@@ -1,5 +1,9 @@
 ﻿namespace Kahoot.NET.Exceptions;
 
+
+/// <summary>
+/// Thrown when the client tries to connect to Kahoot but has no game id
+/// </summary>
 [Serializable]
 public class NoGameIdException : Exception
 {

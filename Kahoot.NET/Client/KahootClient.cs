@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("Kahoot.NET.ConsoleDemo")]
+﻿[assembly: InternalsVisibleTo("Kahoot.NET.ConsoleDemo")]
 
 namespace Kahoot.NET.Client;
 
@@ -18,48 +16,66 @@ public partial class KahootClient : IKahootClient
     #endregion
 
     #region Properties
-
+    /// <summary>
+    /// <see cref="HttpClient"/> used for some methods to connect
+    /// </summary>
     private HttpClient Client { get; }
+    /// <summary>
+    /// The Kahoot game id to connect to
+    /// </summary>
     internal int? GameId { get; set; }
 
+    /// <inheritdoc></inheritdoc>
     public IQuiz? Quiz { get; private set; }
+
+    /// <inheritdoc></inheritdoc>
     public INemesis? Nemesis { get; private set; }
+    /// <inheritdoc></inheritdoc>
     public int? SessionId { get; private set; }
+    /// <inheritdoc></inheritdoc>
     public string? UserName { get; private set; }
+    /// <inheritdoc></inheritdoc>
     public int? TotalScore { get; private set; }
+    /// <inheritdoc></inheritdoc>
     public int? ClientId { get; private set; }
+    /// <inheritdoc></inheritdoc>
     public GameMode? Mode { get; private set; }
 
     #endregion
 
     #region Methods
 
-    public async Task AnswerAsync(int position)
+    public async Task LeaveAsync(CancellationToken cancellationToken = default)
+    {
+        if (Socket is null)
+        {
+            return;
+        }
+        await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, 
+            "Client is disconnecting",
+            cancellationToken);
+    }
+    public async Task ReconnectAsync(CancellationToken cancellationToken)
     {
 
     }
-    public async Task LeaveAsync()
-    {
-
-    }
-    public async Task ReconnectAsync()
-    {
-
-    }
-    public async Task SendFeedbackAsync(byte fun, bool learned, bool wouldRecommend, int overall)
+    public async Task SendFeedbackAsync(Feedback feedBack, CancellationToken cancellationToken = default)
     {
 
     }
 
-    public async Task AnswerAsync(OneOf<int, string, int[]> id)
+    public async Task AnswerAsync(OneOf<int, string, int[]> id, CancellationToken cancellationToken = default)
     {
-       
+
     }
 
-    public async Task JoinAsync(int gameCode, string name)
+    public async Task JoinAsync(int gameCode, string name, CancellationToken cancellationToken = default)
     {
         GameId = gameCode;
-        await CreateHandshakeAsync();
+
+        Logger?.LogInformation("Received game code attempting to create handshake");
+
+        await CreateHandshakeAsync(cancellationToken);
     }
 
     #endregion

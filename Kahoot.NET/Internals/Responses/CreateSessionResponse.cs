@@ -1,5 +1,8 @@
 ﻿namespace Kahoot.NET.Internals.Responses;
 
+/// <summary>
+/// JSON response for data used to create the session
+/// </summary>
 internal class CreateSessionResponse
 {
     [JsonPropertyName("gameMode")]
@@ -25,9 +28,4 @@ internal class CreateSessionResponse
 
     [JsonPropertyName("participantId")]
     public bool ParticipantId { get; set; }
-
-    public override string ToString()
-    {
-        return $"{GameMode}";
-    }
 }

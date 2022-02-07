@@ -1,9 +1,8 @@
-﻿using System.Text;
+﻿namespace Kahoot.NET.Internals.Connection.Token;
 
-[assembly: InternalsVisibleTo("Kahoot.NET.ConsoleDemo")]
-
-namespace Kahoot.NET.Internals.Connection.Token;
-
+/// <summary>
+/// Provides method to decode the challenge and retrieve the token required to connect to the kahoot websocket
+/// </summary>
 internal static class Token
 {
     /// <summary>
@@ -26,6 +25,12 @@ internal static class Token
         return CombineTokens(HeaderToken.CreateHeaderToken(header), ChallengeToken.CreateToken(response.Challenge));
     }
 
+    /// <summary>
+    /// Combines the two seperate tokens to form the final token
+    /// </summary>
+    /// <param name="header"></param>
+    /// <param name="challenge"></param>
+    /// <returns></returns>
     internal static string CombineTokens(ReadOnlySpan<char> header, ReadOnlySpan<char> challenge)
     {
         StringBuilder builder = new();

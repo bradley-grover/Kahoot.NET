@@ -1,6 +1,4 @@
-﻿[assembly: InternalsVisibleTo("Kahoot.NET.ConsoleDemo")]
-
-namespace Kahoot.NET.Internals.Connection;
+﻿namespace Kahoot.NET.Internals.Connection;
 
 /// <summary>
 /// Contains static methods to help create a connection to the kahoot game

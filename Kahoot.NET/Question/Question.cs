@@ -1,5 +1,8 @@
 ﻿namespace Kahoot.NET.Question;
 
+/// <summary>
+/// Represents a question in Kahoot
+/// </summary>
 public class Question : IQuestion
 {
     public async Task AnswerAsync(int id)

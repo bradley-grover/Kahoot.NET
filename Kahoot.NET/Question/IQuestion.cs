@@ -1,5 +1,9 @@
 ﻿namespace Kahoot.NET.Question;
 
+
+/// <summary>
+/// Represents a question in Kahoot
+/// </summary>
 public interface IQuestion
 {
     bool Ended { get; }

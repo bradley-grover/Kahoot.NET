@@ -64,7 +64,7 @@ public partial class KahootClient : IKahootClient
             return;
         }
 
-        Memory<byte> memory = new byte[1024];
+        Memory<byte> memory = new byte[2056];
 
         while (true)
         {
@@ -99,7 +99,7 @@ public partial class KahootClient : IKahootClient
             disposedValue = true;
         }
     }
-
+    /// <inheritdoc></inheritdoc>
     public void Dispose()
     {
         Dispose(disposing: true);

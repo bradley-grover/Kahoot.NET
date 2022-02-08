@@ -7,10 +7,15 @@ namespace Kahoot.NET.Client;
 public partial class KahootClient : IKahootClient
 {
     #region Events
+    /// <inheritdoc></inheritdoc>
     public event EventHandler? OnJoined;
+    /// <inheritdoc></inheritdoc>
     public event EventHandler<QuestionReceivedEventArgs>? OnQuestionReceived;
+    /// <inheritdoc></inheritdoc>
     public event EventHandler? OnQuizStart;
+    /// <inheritdoc></inheritdoc>
     public event EventHandler? OnQuizFinish;
+    /// <inheritdoc></inheritdoc>
     public event EventHandler? OnQuizDisconnect;
 
     #endregion
@@ -44,7 +49,7 @@ public partial class KahootClient : IKahootClient
     #endregion
 
     #region Methods
-
+    /// <inheritdoc></inheritdoc>
     public async Task LeaveAsync(CancellationToken cancellationToken = default)
     {
         if (Socket is null)
@@ -55,20 +60,22 @@ public partial class KahootClient : IKahootClient
             "Client is disconnecting",
             cancellationToken);
     }
+    /// <inheritdoc></inheritdoc>
     public async Task ReconnectAsync(CancellationToken cancellationToken)
     {
 
     }
+    /// <inheritdoc></inheritdoc>
     public async Task SendFeedbackAsync(Feedback feedBack, CancellationToken cancellationToken = default)
     {
 
     }
-
+    /// <inheritdoc></inheritdoc>
     public async Task AnswerAsync(OneOf<int, string, int[]> id, CancellationToken cancellationToken = default)
     {
 
     }
-
+    /// <inheritdoc></inheritdoc>
     public async Task JoinAsync(int gameCode, string name, CancellationToken cancellationToken = default)
     {
         GameId = gameCode;

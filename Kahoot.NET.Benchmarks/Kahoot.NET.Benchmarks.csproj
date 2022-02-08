@@ -10,15 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Connection\**" />
+    <EmbeddedResource Remove="Connection\**" />
+    <None Remove="Connection\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kahoot.NET\Kahoot.NET.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Connection\" />
   </ItemGroup>
 
 </Project>

@@ -20,4 +20,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kahoot.NET\Kahoot.NET.csproj" />
+  </ItemGroup>
+
 </Project>

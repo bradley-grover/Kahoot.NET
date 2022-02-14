@@ -13,18 +13,9 @@ namespace Kahoot.NET.ConsoleDemo;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-
-        //Console.WriteLine("ENTER CODE");
-        //int code = Convert.ToInt32(Console.ReadLine());
-
-        //var kahoot = new KahootClient(new HttpClient());
-
-        //await kahoot.JoinAsync(code, "ok");
-        //await kahoot.CreateHandshakeAsync();
-
-        //await RunConnectionTestAsync(code);
+        await RunConnectionTestAsync(int.Parse(Console.ReadLine()!));
     }
 
     public static async Task RunConnectionTestAsync(int code)

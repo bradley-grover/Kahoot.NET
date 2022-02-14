@@ -30,7 +30,7 @@ internal static class ChallengeToken
 
     internal static char Repl(char character, int position, long offset)
     {
-        return Convert.ToChar(((((int)character*position)+offset)%77)+48);
+        return Convert.ToChar((((character*position)+offset)%77)+48);
     }
 
 
@@ -64,6 +64,7 @@ internal static class ChallengeToken
 
         return content;
     }
+    #region HideObsolete
     [Obsolete("Solution memory ineffiency and speed", false)]
     public static string RemoveWhitespace(this string input)
     {
@@ -71,4 +72,5 @@ internal static class ChallengeToken
             .Where(c => !char.IsWhiteSpace(c))
             .ToArray());
     }
+    #endregion
 }

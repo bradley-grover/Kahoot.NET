@@ -1,5 +1,6 @@
-﻿namespace Kahoot.NET.Internals.Connection.Token;
+﻿using System.Globalization;
 
+namespace Kahoot.NET.Internals.Connection.Token;
 /// <summary>
 /// Provides method to decode the challenge and retrieve the token required to connect to the kahoot websocket
 /// </summary>
@@ -43,6 +44,21 @@ internal static class Token
 
             builder.Append(char.ConvertFromUtf32(decodedChar));
         }
+        return builder.ToString();
+    }
+
+    internal static string CombineTokensTemp(ReadOnlySpan<char> header, ReadOnlySpan<char> challenge)
+    {
+        StringBuilder builder = new();
+
+        for (int i = 0; i < header.Length; i++)
+        {
+            var character = (int)header[i];
+            var mod = (int)challenge[i % challenge.Length];
+            var decoded = character ^ mod;
+            builder.Append(Convert.ToChar(decoded));
+        }
+
         return builder.ToString();
     }
 

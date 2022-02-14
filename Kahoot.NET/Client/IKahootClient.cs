@@ -25,6 +25,8 @@ public interface IKahootClient : IDisposable
     /// Would not recommend calling functions from here as this is mainly to see properties
     /// </remarks>
     IQuiz? Quiz { get; }
+
+    /// <inheritdoc></inheritdoc>
     int? SessionId { get; }
     /// <summary>
     /// The total score of the <see cref="IKahootClient"/> in an <see cref="int"/>

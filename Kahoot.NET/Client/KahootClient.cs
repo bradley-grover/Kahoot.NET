@@ -83,6 +83,8 @@ public partial class KahootClient : IKahootClient
         Logger?.LogInformation("Received game code attempting to create handshake");
 
         await CreateHandshakeAsync(cancellationToken);
+
+        await ExecuteAndWaitForDataAsync(cancellationToken); 
     }
 
     #endregion

@@ -1,7 +1,7 @@
 ﻿namespace Kahoot.NET.Internals;
 
 /// <summary>
-/// Providea static methods to throw exceptions under conditions
+/// Provides static methods to throw exceptions under conditions
 /// </summary>
 internal static class ThrowHelper
 {

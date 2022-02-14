@@ -45,4 +45,19 @@ internal static class Token
         }
         return builder.ToString();
     }
+
+    internal static string CombineTokensFast(ReadOnlySpan<char> header, ReadOnlySpan<char> challenge)
+    {
+        Span<char> converted = new char[header.Length];
+
+        for (int i = 0; i < header.Length; i++)
+        {
+            int charCodeAt = header[i];
+            int mod = challenge[i % challenge.Length];
+            int decodedChar = charCodeAt ^ mod;
+            converted[i] = char.ConvertFromUtf32(decodedChar)[0];
+        }
+
+        return new string(converted);
+    }
 }

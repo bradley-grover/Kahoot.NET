@@ -15,18 +15,12 @@ public partial class KahootClient
 
     internal async Task SendFirstMessageAsync(CancellationToken cancellationToken = default)
     {
-        if (Socket is null)
+        if (WebSocket is null)
         {
             throw new InvalidOperationException("Connection must be created first before sending the first shake");
         }
 
-        await Socket.SendAsync(CreateInternalMessage(), WebSocketMessageType.Text, true, cancellationToken);
+        await WebSocket.SendAsync(ClientSerializer.Serialize(new FirstHandshake()), WebSocketMessageType.Text, true, cancellationToken);
 
-    }
-    internal static ArraySegment<byte> CreateInternalMessage()
-    {
-        string data = JsonSerializer.Serialize(new FirstHandshake());
-
-        return new ArraySegment<byte>(Encoding.UTF8.GetBytes(data));
     }
 }

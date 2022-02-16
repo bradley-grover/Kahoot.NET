@@ -1,4 +1,7 @@
 ﻿using Kahoot.NET.Internals.Messages;
+using Kahoot.NET.Internals.Messages.Handshake.Advice;
+using Kahoot.NET.Internals.Messages.Handshake.Ext;
+using Kahoot.NET.Internals.Messages.Time;
 
 namespace Kahoot.NET.Internals.Responses;
 
@@ -9,6 +12,11 @@ namespace Kahoot.NET.Internals.Responses;
 /// </summary>
 public class FirstServerResponse : FirstMessage
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    [JsonPropertyName("ext")]
+    public FirstServerExt Ext { get; set; }
     /// <summary>
     /// Client Id of the websocket session
     /// </summary>
@@ -27,4 +35,12 @@ public class FirstServerResponse : FirstMessage
 
     [JsonPropertyName("successful")]
     public bool Successful { get; set; }
+    
+
+    /// <summary>
+    /// Advice from the websocket server on connection
+    /// </summary>
+
+    [JsonPropertyName("advice")]
+    public ServerAdvice Advice { get; set; }
 }

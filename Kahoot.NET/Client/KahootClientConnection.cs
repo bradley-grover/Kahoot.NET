@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Kahoot.NET.Internals.Messages;
 using Kahoot.NET.Internals.Messages.Handshake;
+using System.Diagnostics;
 
 namespace Kahoot.NET.Client;
 
@@ -26,9 +27,9 @@ public partial class KahootClient : IKahootClient
 
         Logger?.LogInformation("Attemping to create token");
 
-        string token = await Token.CreateTokenAsync(GameId.Value, Client);
+        (var token, var response) = await Token.CreateTokenSessionAsync(GameId.Value, Client);
 
-        WebSocket = new();
+        Socket = new();
 
         Logger?.LogInformation("Attemping to connect to websocket");
 
@@ -37,7 +38,7 @@ public partial class KahootClient : IKahootClient
             cancellationToken);
     }
 
-    internal async Task ExecuteAndWaitForDataAsync()
+    public async Task ExecuteAndWaitForDataAsync(CancellationToken cancellationToken = default)
     {
         Memory<byte> buffer = new byte[512];
 
@@ -70,28 +71,16 @@ public partial class KahootClient : IKahootClient
     {
         if (!_sessionState.FirstMessageReceivedBack)
         {
-            await ParseFirstServerReponse(data, count);
+            var response = JsonSerializer.Deserialize<FirstServerResponse>(Encoding.UTF8.GetString(data.ToArray(), 0, count));
+            if (response is null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            ParseFirstResponse(response);
             return;
         }
-
-
     }
-
-    private async Task ParseFirstServerReponse(Memory<byte> data, int count)
-    {
-        var res = JsonSerializer.Deserialize<FirstServerResponse>(Encoding.UTF8.GetString(data.ToArray(), 0, count));
-
-        if (res is null)
-        {
-            throw new InvalidOperationException();
-        }
-
-        ClientId = Convert.ToInt32(res.ClientId);
-
-        if (!res.Successful)
-        {
-            throw new CouldNotEstablishConnectionException();
-        }
 
         if (OnJoined is not null)
         {

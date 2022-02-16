@@ -10,7 +10,7 @@ namespace Kahoot.NET.Internals.Messages.Handshake.Ext;
 public class FirstServerExt
 {
     /// <summary>
-    /// If the request was acknowledged or not
+    /// 
     /// </summary>
     [JsonPropertyName("ack")]
     public bool Acknowledged { get; set; }

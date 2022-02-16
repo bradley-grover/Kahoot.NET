@@ -82,6 +82,10 @@ public partial class KahootClient : IKahootClient
     /// <inheritdoc></inheritdoc>
     public async Task JoinAsync(int gameCode, string name, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
+
+        UserName = name;
+
         GameId = gameCode;
 
         Logger?.LogInformation("Received game code attempting to create handshake");

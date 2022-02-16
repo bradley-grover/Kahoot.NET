@@ -29,18 +29,22 @@ public partial class KahootClient : IKahootClient
 
         (var token, var response) = await Token.CreateTokenSessionAsync(GameId.Value, Client);
 
-        Socket = new();
+        WebSocket = new();
 
         Logger?.LogInformation("Attemping to connect to websocket");
+
+        Console.WriteLine(token);
 
         await WebSocket.ConnectAsync(
             new Uri(string.Format(WebsocketUrl, GameId.Value, token)),
             cancellationToken);
+
+        await SendFirstMessageAsync(cancellationToken);
     }
 
-    public async Task ExecuteAndWaitForDataAsync(CancellationToken cancellationToken = default)
+    internal async Task ExecuteAndWaitForDataAsync()
     {
-        Memory<byte> buffer = new byte[512];
+        Memory<byte> buffer = new byte[1024];
 
         if (WebSocket is null)
         {
@@ -71,16 +75,31 @@ public partial class KahootClient : IKahootClient
     {
         if (!_sessionState.FirstMessageReceivedBack)
         {
-            var response = JsonSerializer.Deserialize<FirstServerResponse>(Encoding.UTF8.GetString(data.ToArray(), 0, count));
+            Console.WriteLine(Encoding.UTF8.GetString(data.ToArray(), 0, count));
+            var response = JsonSerializer.Deserialize<FirstServerResponse>(Encoding.UTF8.GetString(data.ToArray(), 0, count).AsSpan());
             if (response is null)
             {
                 throw new InvalidOperationException();
             }
 
-            ParseFirstResponse(response);
+            await ParseFirstResponse(response);
             return;
         }
+
+        if (OnJoined is not null)
+        {
+            await OnJoined.Invoke(this, EventArgs.Empty);
+        }
     }
+
+    private async Task ParseFirstResponse(FirstServerResponse response)
+    {
+        ClientId = Convert.ToInt32(response.ClientId);
+
+        if (!response.Successful)
+        {
+            throw new CouldNotEstablishConnectionException();
+        }
 
         if (OnJoined is not null)
         {

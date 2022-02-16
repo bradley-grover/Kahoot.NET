@@ -21,6 +21,5 @@ public partial class KahootClient
         }
 
         await WebSocket.SendAsync(ClientSerializer.Serialize(new FirstHandshake()), WebSocketMessageType.Text, true, cancellationToken);
-
     }
 }

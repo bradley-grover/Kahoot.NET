@@ -6,16 +6,17 @@
 public class LiveTimeSyncDataServerFirst
 {
     /// <summary>
+    /// The P component of the <see cref="LiveTimeSyncDataServerFirst"/>
+    /// </summary>
+    [JsonPropertyName("p")]
+    public int P { get; set; }
+    /// <summary>
     /// The A component of the <see cref="LiveTimeSyncDataServerFirst"/>
     /// </summary>
     [JsonPropertyName("a")]
     public int A { get; set; }
 
-    /// <summary>
-    /// The P comonent of the <see cref="LiveTimeSyncDataServerFirst"/>
-    /// </summary>
-    [JsonPropertyName("p")]
-    public int P { get; set; }
+
     /// <summary>
     /// The TC component of the <see cref="LiveTimeSyncDataServerFirst"/>
     /// </summary>

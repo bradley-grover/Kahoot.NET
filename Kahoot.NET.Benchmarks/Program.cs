@@ -15,8 +15,9 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        BenchmarkRunner.Run<Shared.SharedBenchmarks>();
+        //BenchmarkRunner.Run<Shared.SharedBenchmarks>();
         //BenchmarkRunner.Run<Internals.Parsers.InternalParsers>();
+        BenchmarkRunner.Run<Internals.TokenBenchmarks>();
     }
     /*
      * using Kahoot.NET.[X]

@@ -92,6 +92,7 @@ public partial class KahootClient : IKahootClient
 
         await CreateHandshakeAsync(cancellationToken);
 
+
         AsyncHelper.RunSync(ExecuteAndWaitForDataAsync);
     }
 

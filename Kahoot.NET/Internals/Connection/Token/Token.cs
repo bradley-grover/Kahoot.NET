@@ -22,7 +22,7 @@ internal static class Token
             throw new GameNotFoundException();
         }
 
-        return (CombineTokensTemp(HeaderToken.CreateHeaderToken(header), response.Challenge), response);
+        return (CombineTokensTemp(HeaderToken.CreateHeaderToken(header), ChallengeToken.CreateToken(response.Challenge)), response);
     }
 
     /// <summary>

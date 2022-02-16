@@ -13,7 +13,7 @@ internal static class Token
     /// <param name="client"></param>
     /// <returns></returns>
     /// <exception cref="GameNotFoundException"></exception>
-    public static async Task<string> CreateTokenAsync(int id, HttpClient client)
+    public static async Task<(string, CreateSessionResponse)> CreateTokenSessionAsync(int id, HttpClient client)
     {
         var (response, header) = await ConnectionHelper.CreateSessionResponseAsync(id, client);
 
@@ -22,8 +22,7 @@ internal static class Token
             throw new GameNotFoundException();
         }
 
-
-        return CombineTokens(HeaderToken.CreateHeaderToken(header), ChallengeToken.CreateToken(response.Challenge));
+        return (CombineTokensTemp(HeaderToken.CreateHeaderToken(header), response.Challenge), response);
     }
 
     /// <summary>

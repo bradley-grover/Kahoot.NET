@@ -12,10 +12,6 @@ internal class HeaderToken
     /// <returns>Header token</returns>
     public static ReadOnlySpan<char> CreateHeaderToken(ReadOnlySpan<char> header)
     {
-        Span<byte> span = new byte[Encoding.UTF8.GetByteCount(header)];
-        
-        Encoding.UTF8.GetBytes(header, span);
-
-        return Encoding.UTF8.GetString(span);
+        return Encoding.UTF8.GetString(Convert.FromBase64String(header.ToString()));
     }
 }

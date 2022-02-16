@@ -29,6 +29,7 @@ internal static class ConnectionHelper
             throw new GameNotFoundException();
         }
 
+
         var content = await data.Content.ReadAsStringAsync();
 
         if (!data.Headers.TryGetValues(SessionHeader, out var headers))
@@ -38,6 +39,7 @@ internal static class ConnectionHelper
 
         return (JsonSerializer.Deserialize<CreateSessionResponse>(content), headers.FirstOrDefault());
     }
+
 
     private static double GetSeconds()
     {

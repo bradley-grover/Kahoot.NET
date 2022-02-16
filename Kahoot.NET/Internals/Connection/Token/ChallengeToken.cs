@@ -30,7 +30,11 @@ internal static class ChallengeToken
 
     internal static char Repl(char character, int position, long offset)
     {
-        return Convert.ToChar((((character*position)+offset)%77)+48);
+        int combined = character * position;
+
+        long result = ((combined + offset)%77)+48;
+
+        return Convert.ToChar(result);
     }
 
 
@@ -53,16 +57,14 @@ internal static class ChallengeToken
 
     public static ReadOnlySpan<char> Decode(ReadOnlySpan<char> value, long offset)
     {
-        string content = value.ToString();
-
         StringBuilder builder = new();
 
-        for (int i = 0; i < content.Length; i++)
+        for (int i = 0; i < value.Length; i++)
         {
-            builder.Append(Repl(content[i], i, offset));
+            builder.Append(Repl(value[i], i, offset));
         }
 
-        return content;
+        return builder.ToString();
     }
     #region HideObsolete
     [Obsolete("Solution memory ineffiency and speed", false)]

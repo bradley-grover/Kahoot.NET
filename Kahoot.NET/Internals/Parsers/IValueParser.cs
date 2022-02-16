@@ -1,7 +1,7 @@
 ﻿namespace Kahoot.NET.Internals.Parsers;
 
 /// <summary>
-/// Parses data from a span into <see cref="T"/>
+/// Parses data from a span into <typeparamref name="T"/>
 /// </summary>
 /// <typeparam name="T"></typeparam>
 internal interface IValueParser<out T>

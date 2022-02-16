@@ -13,7 +13,7 @@ namespace Kahoot.NET.Client;
 /// <inheritdoc></inheritdoc>/>
 public partial class KahootClient : IKahootClient
 {
-    private ClientWebSocket? Socket { get; set; }
+    private ClientWebSocket? WebSocket { get; set; }
     private const string WebsocketUrl = "wss://kahoot.it/cometd/{0}/{1}";
     private bool disposedValue;
 
@@ -28,33 +28,31 @@ public partial class KahootClient : IKahootClient
 
         string token = await Token.CreateTokenAsync(GameId.Value, Client);
 
-        Socket = new();
+        WebSocket = new();
 
         Logger?.LogInformation("Attemping to connect to websocket");
 
-        await Socket.ConnectAsync(
+        await WebSocket.ConnectAsync(
             new Uri(string.Format(WebsocketUrl, GameId.Value, token)),
             cancellationToken);
-
-        await SendFirstMessageAsync(cancellationToken);
     }
 
-    public async Task ExecuteAndWaitForDataAsync(CancellationToken cancellationToken = default)
+    internal async Task ExecuteAndWaitForDataAsync()
     {
         Memory<byte> buffer = new byte[512];
 
-        if (Socket is null)
+        if (WebSocket is null)
         {
             throw new InvalidOperationException();
         }
 
-        while (Socket.State == WebSocketState.Open && !cancellationToken.IsCancellationRequested)
+        while (WebSocket.State == WebSocketState.Open)
         {
-            var result = await Socket.ReceiveAsync(buffer, cancellationToken);
+            var result = await WebSocket.ReceiveAsync(buffer, CancellationToken.None);
 
             if (result.MessageType == WebSocketMessageType.Close)
             {
-                await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                await WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
             }
 
             await ProcessAsync(buffer, result.Count);
@@ -72,20 +70,33 @@ public partial class KahootClient : IKahootClient
     {
         if (!_sessionState.FirstMessageReceivedBack)
         {
-            var response = JsonSerializer.Deserialize<FirstServerResponse>(Encoding.UTF8.GetString(data.ToArray(), 0, count));
-            if (response is null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            ParseFirstResponse(response);
+            await ParseFirstServerReponse(data, count);
             return;
         }
+
+
     }
 
-    private void ParseFirstResponse(FirstServerResponse response)
+    private async Task ParseFirstServerReponse(Memory<byte> data, int count)
     {
-        ClientId = Convert.ToInt32(response.ClientId);
+        var res = JsonSerializer.Deserialize<FirstServerResponse>(Encoding.UTF8.GetString(data.ToArray(), 0, count));
+
+        if (res is null)
+        {
+            throw new InvalidOperationException();
+        }
+
+        ClientId = Convert.ToInt32(res.ClientId);
+
+        if (!res.Successful)
+        {
+            throw new CouldNotEstablishConnectionException();
+        }
+
+        if (OnJoined is not null)
+        {
+            await OnJoined.Invoke(this, EventArgs.Empty);
+        }
     }
 
     /// <summary>
@@ -98,7 +109,7 @@ public partial class KahootClient : IKahootClient
         {
             if (disposing)
             {
-                Socket?.Dispose();
+                WebSocket?.Dispose();
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer

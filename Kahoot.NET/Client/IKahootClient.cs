@@ -40,23 +40,23 @@ public interface IKahootClient : IDisposable
     /// <summary>
     /// Raised when the client connects
     /// </summary>
-    event EventHandler? OnJoined;
+    event AsyncEventHandler? OnJoined;
     /// <summary>
     /// Raised when the client receives a question from the websocket
     /// </summary>
-    event EventHandler<QuestionReceivedEventArgs>? OnQuestionReceived;
+    event AsyncEventHandler<QuestionReceivedEventArgs>? OnQuestionReceived;
     /// <summary>
     /// Raised when the client is kicked or disconnected from the question
     /// </summary>
-    event EventHandler? OnQuizDisconnect;
+    event AsyncEventHandler? OnQuizDisconnect;
     /// <summary>
     /// Raised when the quiz finishes
     /// </summary>
-    event EventHandler? OnQuizFinish;
+    event AsyncEventHandler? OnQuizFinish;
     /// <summary>
     /// Raised when the quiz starts
     /// </summary>
-    event EventHandler? OnQuizStart;
+    event AsyncEventHandler? OnQuizStart;
 
     /// <summary>
     /// Method to answer the current question

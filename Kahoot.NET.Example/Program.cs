@@ -99,8 +99,9 @@ public class Program
         using IKahootClient explicitPass = new KahootClient(config, new HttpClient());
     }
 
-    private static void Client_OnJoined(object? sender, EventArgs e)
+    private static async Task Client_OnJoined(object? sender, EventArgs e)
     {
-        Console.WriteLine("I joined the kahoot!");
+        Console.WriteLine("Stuff");
+        await Task.Delay(1000);
     }
 }

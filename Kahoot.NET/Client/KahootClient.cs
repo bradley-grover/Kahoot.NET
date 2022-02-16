@@ -8,15 +8,15 @@ public partial class KahootClient : IKahootClient
 {
     #region Events
     /// <inheritdoc></inheritdoc>
-    public event EventHandler? OnJoined;
+    public event AsyncEventHandler? OnJoined;
     /// <inheritdoc></inheritdoc>
-    public event EventHandler<QuestionReceivedEventArgs>? OnQuestionReceived;
+    public event AsyncEventHandler<QuestionReceivedEventArgs>? OnQuestionReceived;
     /// <inheritdoc></inheritdoc>
-    public event EventHandler? OnQuizStart;
+    public event AsyncEventHandler? OnQuizStart;
     /// <inheritdoc></inheritdoc>
-    public event EventHandler? OnQuizFinish;
+    public event AsyncEventHandler? OnQuizFinish;
     /// <inheritdoc></inheritdoc>
-    public event EventHandler? OnQuizDisconnect;
+    public event AsyncEventHandler? OnQuizDisconnect;
 
     #endregion
 
@@ -52,13 +52,17 @@ public partial class KahootClient : IKahootClient
     /// <inheritdoc></inheritdoc>
     public async Task LeaveAsync(CancellationToken cancellationToken = default)
     {
-        if (Socket is null)
+        if (WebSocket is null)
         {
             return;
         }
-        await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, 
-            "Client is disconnecting",
+
+        await WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, 
+            string.Empty,
             cancellationToken);
+
+        WebSocket.Dispose();
+        WebSocket = null;
     }
     /// <inheritdoc></inheritdoc>
     public async Task ReconnectAsync(CancellationToken cancellationToken)
@@ -84,7 +88,7 @@ public partial class KahootClient : IKahootClient
 
         await CreateHandshakeAsync(cancellationToken);
 
-        await ExecuteAndWaitForDataAsync(cancellationToken); 
+        AsyncHelper.RunSync(ExecuteAndWaitForDataAsync);
     }
 
     #endregion

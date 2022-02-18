@@ -31,6 +31,7 @@ public partial class KahootClient
     /// <summary>
     /// Initializes a new instance of the <see cref="KahootClient"/> class
     /// </summary>
+    /// <param name="config"></param>
     /// <param name="client"></param>
     public KahootClient(KahootClientConfig? config, HttpClient client)
     {
@@ -41,6 +42,7 @@ public partial class KahootClient
     /// <summary>
     /// Initializes a new instance of the <see cref="KahootClient"/> class
     /// </summary>
+    /// <param name="config"></param>
     /// <param name="factory"></param>
     public KahootClient(KahootClientConfig? config, IHttpClientFactory factory)
     {

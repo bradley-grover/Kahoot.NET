@@ -44,6 +44,7 @@ public partial class KahootClient : IKahootClient
 
     internal async Task ExecuteAndWaitForDataAsync()
     {
+        // Buffer to store response 1024B or 1KB
         Memory<byte> buffer = new byte[1024];
 
         if (WebSocket is null)
@@ -58,11 +59,14 @@ public partial class KahootClient : IKahootClient
             if (result.MessageType == WebSocketMessageType.Close)
             {
                 await WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                if (OnQuizDisconnect is not null)
+                {
+                    await OnQuizDisconnect.Invoke(this, EventArgs.Empty);
+                }
             }
 
             await ProcessAsync(buffer, result.Count);
         }
-
     }
 
     /// <summary>

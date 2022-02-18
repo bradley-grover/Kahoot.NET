@@ -61,6 +61,8 @@ public interface IKahootClient : IDisposable
     /// <summary>
     /// Method to answer the current question
     /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
     /// <param name="position"></param>
     /// <returns></returns>
     Task AnswerAsync(OneOf<int, string, int[]> id, CancellationToken cancellationToken = default);
@@ -69,6 +71,7 @@ public interface IKahootClient : IDisposable
     /// </summary>
     /// <param name="gameCode"></param>
     /// <param name="name"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task JoinAsync(int gameCode, string name, CancellationToken cancellationToken = default);
     /// <summary>

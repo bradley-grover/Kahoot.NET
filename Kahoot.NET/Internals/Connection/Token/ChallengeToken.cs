@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace Kahoot.NET.Internals.Connection.Token;
+﻿namespace Kahoot.NET.Internals.Connection.Token;
 
 /// <summary>
 /// Provides methods to compute the first part of the token
@@ -10,6 +8,7 @@ internal static class ChallengeToken
     #region Parsers
     private static readonly IParser<char> Offset = new OffsetParser();
     private static readonly IParser<char> Parameter = new SpecialParameterParser();
+    private static readonly IValueParser<long> ComputeOffset = new LargeOffsetParser();
     #endregion
 
 
@@ -37,8 +36,6 @@ internal static class ChallengeToken
         return Convert.ToChar(result);
     }
 
-
-    private static DataTable Table { get; } = new();
     /// <summary>
     /// Computes the offset string to a integer
     /// </summary>
@@ -46,7 +43,7 @@ internal static class ChallengeToken
     /// <returns>Value of the offset</returns>
     internal static long GetOffset(ReadOnlySpan<char> offsetString)
     {
-        return (int)Table.Compute(offsetString.ToString(), string.Empty);
+        return ComputeOffset.Parse(offsetString);
     }
     /// <summary>
     /// Decodes the key from the challenge string to get the first part of the token

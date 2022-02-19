@@ -15,10 +15,10 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        BenchmarkRunner.Run<Internals.Request.RequestBenchmarks>();
+        //BenchmarkRunner.Run<Internals.Request.RequestBenchmarks>();
         //BenchmarkRunner.Run<Shared.SharedBenchmarks>();
         //BenchmarkRunner.Run<Internals.Parsers.InternalParsers>();
-        //BenchmarkRunner.Run<Internals.TokenBenchmarks>();
+        BenchmarkRunner.Run<Internals.TokenBenchmarks>();
         
     }
     public static int GetCode()

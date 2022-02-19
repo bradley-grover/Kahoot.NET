@@ -4,6 +4,10 @@ namespace Kahoot.NET.Client;
 
 #pragma warning disable CS1998
 
+/// <summary>
+/// First implementation of <see cref="IKahootClient"/>
+/// </summary>
+
 public partial class KahootClient : IKahootClient
 {
     #region Events
@@ -57,9 +61,7 @@ public partial class KahootClient : IKahootClient
             return;
         }
 
-        await WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, 
-            string.Empty,
-            cancellationToken);
+        await WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, cancellationToken);
 
         WebSocket.Dispose();
         WebSocket = null;
@@ -72,12 +74,12 @@ public partial class KahootClient : IKahootClient
     /// <inheritdoc></inheritdoc>
     public async Task SendFeedbackAsync(Feedback feedBack, CancellationToken cancellationToken = default)
     {
-
+        ThrowIfNotConnected();
     }
     /// <inheritdoc></inheritdoc>
     public async Task AnswerAsync(OneOf<int, string, int[]> id, CancellationToken cancellationToken = default)
     {
-
+        ThrowIfNotConnected();
     }
     /// <inheritdoc></inheritdoc>
     public async Task JoinAsync(int gameCode, string name, CancellationToken cancellationToken = default)
@@ -88,10 +90,9 @@ public partial class KahootClient : IKahootClient
 
         GameId = gameCode;
 
-        Logger?.LogInformation("Received game code attempting to create handshake");
+        Logger?.LogInformation("Received game code, attempting to create handshake");
 
         await CreateHandshakeAsync(cancellationToken);
-
 
         AsyncHelper.RunSync(ExecuteAndWaitForDataAsync);
     }

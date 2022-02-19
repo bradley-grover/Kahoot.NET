@@ -11,6 +11,6 @@ public class RequestBenchmarks
     [Benchmark]
     public async Task CreateRequest()
     {
-        await Token.CreateTokenSessionAsync(1832884, new());
+        await Token.CreateTokenSessionAsync(2162040, new());
     }
 }

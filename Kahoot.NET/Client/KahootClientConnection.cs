@@ -1,9 +1,4 @@
-﻿using System.Net.WebSockets;
-using System.Runtime.InteropServices;
-using System.Text;
-using Kahoot.NET.Internals.Messages;
-using Kahoot.NET.Internals.Messages.Handshake;
-using System.Diagnostics;
+﻿using System.Buffers;
 
 namespace Kahoot.NET.Client;
 
@@ -14,10 +9,16 @@ namespace Kahoot.NET.Client;
 /// <inheritdoc></inheritdoc>/>
 public partial class KahootClient : IKahootClient
 {
+    /// <summary>
+    /// Potentially to be used for reconnection
+    /// </summary>
+    private string? ConnectionToken { get; set; }
+    private string? ClientToken { get; set; }
     private ClientWebSocket? WebSocket { get; set; }
-    private const string WebsocketUrl = "wss://kahoot.it/cometd/{0}/{1}";
+    internal const string WebsocketUrl = "wss://kahoot.it/cometd/{0}/{1}";
     private bool disposedValue;
 
+    #region CreationAndExecution
     internal async Task CreateHandshakeAsync(CancellationToken cancellationToken = default)
     {
         if (GameId is null)
@@ -29,28 +30,37 @@ public partial class KahootClient : IKahootClient
 
         (var token, var response) = await Token.CreateTokenSessionAsync(GameId.Value, Client);
 
+        ParseResponse(response);
+
         WebSocket = new();
 
-        Logger?.LogInformation("Attemping to connect to websocket");
+        ConnectionToken = token;
 
-        Console.WriteLine(token);
+        Logger?.LogDebug("Token is formed: {token}", token);
+
+        Logger?.LogInformation("Attemping to connect to websocket");
 
         await WebSocket.ConnectAsync(
             new Uri(string.Format(WebsocketUrl, GameId.Value, token)),
             cancellationToken);
 
         await SendFirstMessageAsync(cancellationToken);
+
+        if (OnJoined is not null)
+        {
+            await OnJoined.Invoke(this, EventArgs.Empty);
+        }
     }
 
     internal async Task ExecuteAndWaitForDataAsync()
     {
-        // Buffer to store response 1024B or 1KB
-        Memory<byte> buffer = new byte[1024];
 
         if (WebSocket is null)
         {
             throw new InvalidOperationException();
         }
+        // Buffer to store response 1024B or 1KB
+        Memory<byte> buffer = new byte[1024];
 
         while (WebSocket.State == WebSocketState.Open)
         {
@@ -65,22 +75,26 @@ public partial class KahootClient : IKahootClient
                 }
             }
 
-            await ProcessAsync(buffer, result.Count);
+            await ProcessAsync(buffer);
         }
     }
+    #endregion
 
     /// <summary>
     /// Processes websocket data to events
     /// </summary>
     /// <param name="data"></param>
-    /// <param name="count"></param>
     /// <returns></returns>
-    private async Task ProcessAsync(Memory<byte> data, int count)
+    private async Task ProcessAsync(Memory<byte> data)
     {
+        string json = RemoveBrackets(Encoding.UTF8.GetString(data.Span));
+
+        Logger?.LogDebug("Response received: {json}", json);
+
         if (!_sessionState.FirstMessageReceivedBack)
         {
-            Console.WriteLine(Encoding.UTF8.GetString(data.ToArray(), 0, count));
-            var response = JsonSerializer.Deserialize<FirstServerResponse>(Encoding.UTF8.GetString(data.ToArray(), 0, count).AsSpan());
+            _sessionState.FirstMessageReceivedBack = true;
+            var response = JsonSerializer.Deserialize<FirstServerResponse>(json);
             if (response is null)
             {
                 throw new InvalidOperationException();
@@ -89,49 +103,43 @@ public partial class KahootClient : IKahootClient
             await ParseFirstResponse(response);
             return;
         }
+    }
 
-        if (OnJoined is not null)
-        {
-            await OnJoined.Invoke(this, EventArgs.Empty);
-        }
+    private static string RemoveBrackets(ReadOnlySpan<char> span)
+    {
+        int start = 1;
+        int end = span.LastIndexOf(']');
+
+        return span.Slice(start, end - 1).ToString();
     }
 
     private async Task ParseFirstResponse(FirstServerResponse response)
     {
-        ClientId = Convert.ToInt32(response.ClientId);
-
         if (!response.Successful)
         {
             throw new CouldNotEstablishConnectionException();
         }
 
+        ClientToken = response.ClientId;
+
         if (OnJoined is not null)
         {
             await OnJoined.Invoke(this, EventArgs.Empty);
         }
+
+        await SendSecondHandshakeAsync();
     }
 
-    /// <summary>
-    /// Disposes the Client
-    /// </summary>
-    /// <param name="disposing"></param>
-    protected virtual void Dispose(bool disposing)
+    internal void ParseResponse(CreateSessionResponse response)
     {
-        if (!disposedValue)
+    }
+
+
+    private void ThrowIfNotConnected()
+    {
+        if (WebSocket == null || WebSocket.State == WebSocketState.Closed)
         {
-            if (disposing)
-            {
-                WebSocket?.Dispose();
-            }
-
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-            disposedValue = true;
+            throw new NotConnectedException(); 
         }
-    }
-    /// <inheritdoc></inheritdoc>
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }

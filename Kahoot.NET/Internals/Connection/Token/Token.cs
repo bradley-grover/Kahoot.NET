@@ -1,6 +1,5 @@
-﻿using System.Globalization;
+﻿namespace Kahoot.NET.Internals.Connection.Token;
 
-namespace Kahoot.NET.Internals.Connection.Token;
 /// <summary>
 /// Provides method to decode the challenge and retrieve the token required to connect to the kahoot websocket
 /// </summary>

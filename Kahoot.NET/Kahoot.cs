@@ -73,17 +73,13 @@ public static class Kahoot
     /// </summary>
     /// <param name="amount"></param>
     /// <returns></returns>
-    public static IList<IKahootClient> CreateClients(int amount)
+    public static IEnumerable<IKahootClient> CreateClients(int amount)
     {
         ThrowHelper.AssertAboveZero(amount);
 
-        List<IKahootClient> clients = new(amount);
-
         for (int i = 0; i < amount; i++)
         {
-            clients[i] = CreateClient();
+            yield return CreateClient();
         }
-
-        return clients;
     }
 }

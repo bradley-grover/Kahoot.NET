@@ -1,18 +1,6 @@
 ﻿using Kahoot.NET;
 using Kahoot.NET.Client;
-using Kahoot.NET.Internals.Connection;
-using Kahoot.NET.Internals.Parsers;
-using Kahoot.NET.Internals.Connection.Token;
-using Kahoot.NET.Shared;
-using Kahoot.NET.FluentBuilder;
-using System.Net.WebSockets;
-using Kahoot.NET.Internals.Messages;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Kahoot.NET.Internals.Messages.Handshake;
-using Kahoot.NET.Internals.Responses;
-using System.Diagnostics;
+using Kahoot.NET.Exceptions;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.ConsoleDemo;
@@ -30,14 +18,38 @@ public class Program
                 .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
                 .AddConsole();
         });
+        var logger = loggerFactory.CreateLogger<Program>();
 
         IKahootClient client = new KahootClient(loggerFactory.CreateLogger<IKahootClient>(), new());
 
-
-        int code = int.Parse(Console.ReadLine()!);
-
+        int code = GetGameCode();
+        try
+        {
+            await client.JoinAsync(code, "ok");
+            logger.LogInformation("Am here");
+        }
+        catch (GameNotFoundException)
+        {
+            Console.WriteLine("Could not find game");
+            Thread.Sleep(1000);
+            await Main(args);
+        }
+        await Task.Delay(-1);
         
+    }
+    private static int GetGameCode()
+    {
+        int code;
 
-        await client.JoinAsync(code, "ok");
+        Console.WriteLine("code: ");
+
+        while (!int.TryParse(Console.ReadLine().AsSpan(), out code))
+        {
+            Console.WriteLine("code: ");
+            Console.Clear();
+            Thread.Sleep(1000);
+        }
+
+        return code;
     }
 }

@@ -34,4 +34,10 @@ public class SharedBenchmarks
         string item = Data;
         item = item.RemoveWhitespaceM();
     }
+    [Benchmark]
+    public void RemoveWhitespaceInPlaceCharArray()
+    {
+        string item = Data;
+        item = item.RemoveInPlaceCharArray();
+    }
 }

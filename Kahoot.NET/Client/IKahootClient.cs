@@ -63,7 +63,6 @@ public interface IKahootClient : IDisposable
     /// </summary>
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
-    /// <param name="position"></param>
     /// <returns></returns>
     Task AnswerAsync(OneOf<int, string, int[]> id, CancellationToken cancellationToken = default);
     /// <summary>
@@ -72,8 +71,9 @@ public interface IKahootClient : IDisposable
     /// <param name="gameCode"></param>
     /// <param name="name"></param>
     /// <param name="cancellationToken"></param>
+    /// <exception cref="GameNotFoundException"></exception>
     /// <returns></returns>
-    Task JoinAsync(int gameCode, string name, CancellationToken cancellationToken = default);
+    Task JoinAsync(int gameCode, string? name = null, CancellationToken cancellationToken = default);
     /// <summary>
     /// Method when invoked leaves the current quiz that the game is in
     /// </summary>

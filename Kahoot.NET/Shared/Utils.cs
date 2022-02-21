@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Contracts;
+using Kahoot.NET.Internals.Messages.Time;
 
 namespace Kahoot.NET.Shared;
 
@@ -60,5 +61,15 @@ internal static class Utils
 
 
         return result;
+    }
+
+    internal static (int L, int O) CalculateTimesyncData(this LiveTimeSyncDataServerFirst sync)
+    {
+        (int L, int O) data = new();
+
+        data.O = (int)(sync.Ts - sync.Tc - 1);
+        data.L = (int)(DateTime.UtcNow.Millisecond - sync.Tc - sync.P);
+
+        return data;
     }
 }

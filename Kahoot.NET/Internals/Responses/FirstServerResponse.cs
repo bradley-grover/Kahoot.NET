@@ -15,7 +15,7 @@ public class FirstServerResponse : FirstMessage
     /// Ext field of response
     /// </summary>
     [JsonPropertyName("ext")]
-    public ExtJustTimesync<LiveTimeSyncDataFirst> Ext { get; set; }
+    public ExtJustTimesync<LiveTimeSyncDataServerFirst> Ext { get; set; }
 
     /// <summary>
     /// Id for the websocket client

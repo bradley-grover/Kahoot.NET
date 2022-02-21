@@ -82,9 +82,8 @@ public partial class KahootClient : IKahootClient
         ThrowIfNotConnected();
     }
     /// <inheritdoc></inheritdoc>
-    public async Task JoinAsync(int gameCode, string name, CancellationToken cancellationToken = default)
+    public async Task JoinAsync(int gameCode, string? name = null, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(name, nameof(name));
 
         UserName = name;
 
@@ -94,7 +93,11 @@ public partial class KahootClient : IKahootClient
 
         await CreateHandshakeAsync(cancellationToken);
 
-        AsyncHelper.RunSync(ExecuteAndWaitForDataAsync);
+        var thread = new Thread(async () => await ExecuteAndWaitForDataAsync());
+
+        thread.Start();
+
+        //AsyncHelper.RunSync(ExecuteAndWaitForDataAsync);
     }
 
     #endregion

@@ -7,6 +7,7 @@ internal static class ClientSerializer
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="data"></param>
+    /// <param name="json"></param>
     /// <returns></returns>
     internal static ArraySegment<byte> Serialize<T>(T data, out ReadOnlySpan<char> json)
     {

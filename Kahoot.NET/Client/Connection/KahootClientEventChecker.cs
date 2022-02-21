@@ -30,11 +30,32 @@ public partial class KahootClient
     }
     internal async Task SendFirstMessageAsync(CancellationToken cancellationToken = default)
     {
-        await SendAsync(new FirstHandshake(), cancellationToken);
+        await SendAsync(new FirstHandshake() { Ext = new() { Acknowledged = true } }, cancellationToken);
     }
 
     internal async Task SendSecondHandshakeAsync(CancellationToken cancellationToken = default)
     {
-        await SendAsync(new SecondHandshake() { Advice = new() { TimeOut = 0 }, ClientId = ClientToken }, cancellationToken);
+        await SendAsync(CreateSecondHandshake(), cancellationToken);
+    }
+    internal SecondHandshake CreateSecondHandshake()
+    {
+        if (_sessionState.LiveTimesyncData is null)
+        {
+            throw new InvalidOperationException("Lag and network information has not been parsed");
+        }
+
+        var (L, O) = _sessionState.LiveTimesyncData.Value;
+
+        return new SecondHandshake()
+        {
+            Advice = new() { TimeOut = 0 },
+
+            ClientId = ClientToken,
+
+            Ext = new()
+            {
+                Timesync = new() { L = L, O = O }
+            }
+        };
     }
 }

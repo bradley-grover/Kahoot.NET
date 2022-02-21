@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using Kahoot.NET.Internals.Messages.Time;
 
 namespace Kahoot.NET.Client;
 
@@ -26,8 +27,6 @@ public partial class KahootClient : IKahootClient
             throw new NoGameIdException();
         }
 
-        Logger?.LogInformation("Attemping to create token");
-
         (var token, var response) = await Token.CreateTokenSessionAsync(GameId.Value, Client);
 
         ParseResponse(response);
@@ -36,13 +35,14 @@ public partial class KahootClient : IKahootClient
 
         ConnectionToken = token;
 
-        Logger?.LogDebug("Token is formed: {token}", token);
+        Uri uri = new(string.Format(WebsocketUrl, GameId.Value, token));
+
+        Logger?.LogDebug("{token}", uri);
 
         Logger?.LogInformation("Attemping to connect to websocket");
 
-        await WebSocket.ConnectAsync(
-            new Uri(string.Format(WebsocketUrl, GameId.Value, token)),
-            cancellationToken);
+        
+        await WebSocket.ConnectAsync(uri, cancellationToken);
 
         await SendFirstMessageAsync(cancellationToken);
 
@@ -121,6 +121,7 @@ public partial class KahootClient : IKahootClient
         }
 
         ClientToken = response.ClientId;
+        _sessionState.LiveTimesyncData = response.Ext.Timesync.CalculateTimesyncData();
 
         if (OnJoined is not null)
         {
@@ -129,6 +130,9 @@ public partial class KahootClient : IKahootClient
 
         await SendSecondHandshakeAsync();
     }
+
+
+
 
     internal void ParseResponse(CreateSessionResponse response)
     {

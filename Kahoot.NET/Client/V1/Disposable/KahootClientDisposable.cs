@@ -1,8 +1,15 @@
 ﻿namespace Kahoot.NET.Client;
 
-/// <inheritdoc></inheritdoc>
-public partial class KahootClient : IDisposable
+public partial class KahootClient
 {
+    private bool disposedValue;
+
+    /// <inheritdoc></inheritdoc>
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
     /// <summary>
     /// Disposes the Client
     /// </summary>
@@ -13,17 +20,11 @@ public partial class KahootClient : IDisposable
         {
             if (disposing)
             {
-                WebSocket?.Dispose();
+                Socket?.Dispose();
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer
             disposedValue = true;
         }
-    }
-    /// <inheritdoc></inheritdoc>
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 }

@@ -1,22 +1,10 @@
 ﻿using System.Diagnostics.Contracts;
-using Kahoot.NET.Internals.Messages.Time;
+using System.Runtime.CompilerServices;
 
 namespace Kahoot.NET.Shared;
 
-/// <summary>
-/// Static methods that are project wide
-/// </summary>
-internal static class Utils
+internal static class Extensions
 {
-    /// <summary>
-    /// Highly optimized way of removing white space from span prefer over string version
-    /// </summary>
-    /// <remarks>
-    /// This method works about 2x faster and is about 8x more memory efficient
-    /// than <see cref="ChallengeToken.RemoveWhitespace(string)"/>
-    /// </remarks>
-    /// <param name="input"></param>
-    /// <returns><see cref="ReadOnlySpan{T}"/> where the spaces are removed</returns>
     [Pure]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ReadOnlySpan<char> RemoveWhitespace(this ReadOnlySpan<char> input)
@@ -49,7 +37,7 @@ internal static class Utils
         int originalSpan = 0;
 
 
-        for (int i = 0; i < result.Length; )
+        for (int i = 0; i < result.Length;)
         {
             if (char.IsWhiteSpace(input[indexesAhead + originalSpan]))
             {
@@ -61,15 +49,5 @@ internal static class Utils
 
 
         return result;
-    }
-
-    internal static (int L, int O) CalculateTimesyncData(this LiveTimeSyncDataServerFirst sync)
-    {
-        (int L, int O) data = new();
-
-        data.O = (int)(sync.Ts - sync.Tc - 1);
-        data.L = (int)(DateTime.UtcNow.Millisecond - sync.Tc - sync.P);
-
-        return data;
     }
 }

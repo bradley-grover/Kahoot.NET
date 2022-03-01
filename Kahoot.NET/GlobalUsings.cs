@@ -3,11 +3,11 @@ global using Kahoot.NET.Client;
 global using Kahoot.NET.Quiz;
 global using Kahoot.NET.Shared;
 global using Kahoot.NET.Question;
-global using Kahoot.NET.Internals;
 global using Kahoot.NET.Exceptions;
-global using Kahoot.NET.Internals.Responses;
-global using Kahoot.NET.Internals.Parsers;
-global using Kahoot.NET.Internals.Connection.Token;
+global using Kahoot.NET.Internal;
+global using Kahoot.NET.Internal.Data.Messages;
+global using Kahoot.NET.Internal.Token;
+global using Kahoot.NET.Internal.Data.Responses;
 #endregion
 #region Standard Libraries
 global using System.Text;

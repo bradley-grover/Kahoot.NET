@@ -55,6 +55,6 @@ public class FluentClientBuilder
     /// <returns>A <see cref="KahootClient"/></returns>
     public KahootClient Build()
     {
-        return new KahootClient(_logger, _httpClient!);
+        return new KahootClient(_logger!, _httpClient!);
     }
 }

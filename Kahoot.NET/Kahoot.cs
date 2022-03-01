@@ -49,37 +49,4 @@ public static class Kahoot
 
         return reply.Status.HasFlag(IPStatus.Success);
     }
-    /// <summary>
-    /// Creates the most recent <see cref="IKahootClient"/> implementation
-    /// </summary>
-    /// <returns></returns>
-    public static IKahootClient CreateClient()
-    {
-        return new KahootClient(KahootClientConfig.Default, new HttpClient());
-    }
-
-    /// <summary>
-    /// Creates the most recent <see cref="IKahootClient"/> implementation with the specified configuration
-    /// </summary>
-    /// <param name="config"></param>
-    /// <returns></returns>
-    public static IKahootClient CreateClient(KahootClientConfig config)
-    {
-        return new KahootClient(config, new HttpClient());
-    }
-
-    /// <summary>
-    /// Creates many <see cref="IKahootClient"/> using the integer passed
-    /// </summary>
-    /// <param name="amount"></param>
-    /// <returns></returns>
-    public static IEnumerable<IKahootClient> CreateClients(int amount)
-    {
-        ThrowHelper.AssertAboveZero(amount);
-
-        for (int i = 0; i < amount; i++)
-        {
-            yield return CreateClient();
-        }
-    }
 }

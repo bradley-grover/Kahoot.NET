@@ -1,4 +1,4 @@
-﻿using Kahoot.NET.Internals.Parsers;
+﻿using Kahoot.NET.Internal.Token.Parsers;
 
 namespace Kahoot.NET.Benchmarks.Internals.Parsers;
 
@@ -15,7 +15,7 @@ public class InternalParsers
     [Benchmark]
     public void OffsetParserTest()
     {
-        IParser<char> parser = new OffsetParser();
+        IParser parser = new OffsetFinder();
         var parse = parser.Parse(ForOffset);
     }
     [Benchmark]
@@ -28,7 +28,7 @@ public class InternalParsers
     [Benchmark]
     public void TokenParserTest()
     {
-        IParser<char> parser = new SpecialParameterParser();
+        IParser parser = new GetSpecialTokenParser();
         var parse = parser.Parse(ForToken);
     }
 }

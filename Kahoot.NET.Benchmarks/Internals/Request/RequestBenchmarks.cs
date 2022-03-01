@@ -1,4 +1,4 @@
-﻿using Kahoot.NET.Internals.Connection.Token;
+﻿using Kahoot.NET.Internal.Token;
 
 namespace Kahoot.NET.Benchmarks.Internals.Request;
 
@@ -11,6 +11,6 @@ public class RequestBenchmarks
     [Benchmark]
     public async Task CreateRequest()
     {
-        await Token.CreateTokenSessionAsync(2162040, new());
+        await Token.CreateTokenAndSessionAsync(2162040, new());
     }
 }

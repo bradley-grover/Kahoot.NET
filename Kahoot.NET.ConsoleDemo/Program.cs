@@ -20,7 +20,7 @@ public class Program
         });
         var logger = loggerFactory.CreateLogger<Program>();
 
-        IKahootClient client = new KahootClient(loggerFactory.CreateLogger<IKahootClient>(), new());
+        IKahootClient client = new KahootClient(logger: loggerFactory.CreateLogger<IKahootClient>(), new HttpClient());
 
         int code = GetGameCode();
         try

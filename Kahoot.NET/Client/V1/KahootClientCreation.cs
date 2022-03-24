@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {

@@ -39,7 +39,9 @@ public partial class KahootClient
 
         var message = JsonSerializer.Deserialize<LiveBaseMessage>(json.AsSpan());
 
-        switch ((int.Parse(message!.Id.AsSpan()), message.Channel))
+        int id = int.Parse(message!.Id.AsSpan());
+
+        switch ((id, message.Channel))
         {
             case (1, LiveMessageChannels.Handshake):
                 var obj = JsonSerializer.Deserialize<LiveClientHandshakeResponse>(json.AsSpan()!);
@@ -56,6 +58,14 @@ public partial class KahootClient
             default:
                 switch (message.Channel)
                 {
+                    case LiveMessageChannels.Disconnection:
+                        break;
+                    case LiveMessageChannels.Status:
+                        break;
+                    case LiveMessageChannels.Player:
+                        break;
+                    case LiveMessageChannels.Service:
+                        break;
                     case LiveMessageChannels.Handshake:
                         break;
                 }

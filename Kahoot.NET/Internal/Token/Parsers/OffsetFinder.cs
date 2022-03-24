@@ -1,5 +1,8 @@
 ﻿namespace Kahoot.NET.Internal.Token.Parsers;
 
+/// <summary>
+/// Finds the offset string to parse using <see cref="OffsetCalculator"/>
+/// </summary>
 internal class OffsetFinder : IParser
 {
     private const string Start = "varoffset=";

@@ -19,6 +19,8 @@ public partial class KahootClient
             }
 
             await ProcessAsync(buffer);
+
+            Thread.Sleep(1000);
         }
     }
 
@@ -35,15 +37,22 @@ public partial class KahootClient
 
         Logger?.LogDebug("Response received: {res}", json);
 
-        var message = JsonSerializer.Deserialize<LiveBaseMessage>(json);
+        var message = JsonSerializer.Deserialize<LiveBaseMessage>(json.AsSpan());
 
         switch ((int.Parse(message!.Id.AsSpan()), message.Channel))
         {
             case (1, LiveMessageChannels.Handshake):
-                ProcessFirstServerResponse(JsonSerializer.Deserialize<LiveClientHandshakeResponse>(json.AsSpan())!);
-                Interlocked.Increment(ref _sessionObject.id);
-                break;
+                var obj = JsonSerializer.Deserialize<LiveClientHandshakeResponse>(json.AsSpan()!);
 
+                if (obj is null)
+                {
+                    throw new InvalidOperationException("An internal problem occured whilst parsing the websocket data");
+                }
+
+                ProcessFirstServerResponse(obj);
+                Interlocked.Increment(ref _sessionObject.id);
+                await SendAsync(CreateSecondHandshakeObject(obj));
+                break;
             default:
                 switch (message.Channel)
                 {
@@ -53,6 +62,7 @@ public partial class KahootClient
                 break;
         }
     }
+
     private void ProcessFirstServerResponse(LiveClientHandshakeResponse response)
     {
         _sessionObject.clientId = response.ClientId;

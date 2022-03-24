@@ -56,7 +56,8 @@ public partial class KahootClient
                 Acknowledged = Interlocked.Read(ref _sessionObject.ack),
                 Timesync = new()
                 {
-                    
+                    L = 0,
+                    O = 0,
                 }
             },
             Id = Interlocked.Read(ref _sessionObject.id).ToString(),

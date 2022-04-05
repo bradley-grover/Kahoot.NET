@@ -8,6 +8,6 @@ public class HandshakeBenchmarks
     [Benchmark]
     public void CreateHandshake()
     {
-        var client = new KahootClient(KahootClientConfig.Default, new HttpClient());
+        
     }
 }

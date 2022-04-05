@@ -13,7 +13,7 @@ namespace Kahoot.NET.Tests;
 public class ConnectionsTests
 {
     [Theory]
-    [InlineData(2162040)] // here should go the game code
+    [InlineData(3296858)] // here should go the game code
     public async Task ConnectAsync(int gameCode)
     {
         (var token, var response) = await Token.CreateTokenAndSessionAsync(gameCode, new System.Net.Http.HttpClient());

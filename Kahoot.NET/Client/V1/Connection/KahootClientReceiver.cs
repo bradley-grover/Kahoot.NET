@@ -4,13 +4,13 @@ public partial class KahootClient
 {
     internal async Task ReceiveAsync()
     {
-        AssertConnected();
+        if (Socket is null || Socket.State is not WebSocketState.Open)
+        {
+            throw new InvalidOperationException("Connection is not open for this");
+        }
 
-        
-#nullable disable
         while (Socket.State == WebSocketState.Open)
         {
-#nullable restore
             Memory<byte> buffer = new byte[1024];
 
             var result = await Socket.ReceiveAsync(buffer, CancellationToken.None);

@@ -1,4 +1,6 @@
-﻿namespace Kahoot.NET.Client;
+﻿using Kahoot.NET.Internal.Data.Shared.Ext;
+
+namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
@@ -46,9 +48,14 @@ public partial class KahootClient
 
     internal SecondLiveClientHandshake CreateSecondHandshakeObject(LiveClientHandshakeResponse response)
     {
+        Logger?.LogDebug("{}", JsonSerializer.Serialize(response));
+        //(var l, var o) = GetLagAndOffset(response.Ext);
+        _sessionObject.l = 68;
+        _sessionObject.o = 2999;
+
         return new()
         {
-            Advice = new() { Interval = 0 },
+            Advice = new() { Timeout = 0 },
             ConnectionType = InternalConsts.ConnectionType,
             ClientId = _sessionObject.clientId,
             Ext = new()
@@ -56,14 +63,23 @@ public partial class KahootClient
                 Acknowledged = Interlocked.Read(ref _sessionObject.ack),
                 Timesync = new()
                 {
-                    L = 0,
-                    O = 0,
+                    L = _sessionObject.l,
+                    O = _sessionObject.o,
                 }
             },
             Id = Interlocked.Read(ref _sessionObject.id).ToString(),
             Channel = LiveMessageChannels.Connection,
         };
     }
+
+    internal static (long L, long O) GetLagAndOffset(ExtWithExtendedTimesyncData data)
+    {
+        long l = (DateTime.UtcNow.Millisecond - data.Timesync.CurrentTime) / 2;
+        long o = (data.Timesync.Ts - data.Timesync.CurrentTime - 1);
+
+        return (l, o);
+    }
+
 
     internal void CreateConnectionObject()
     {

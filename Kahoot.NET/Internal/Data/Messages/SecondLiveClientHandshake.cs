@@ -12,7 +12,7 @@ internal class SecondLiveClientHandshake : ExtendedLiveBaseMessage
     /// Advice to send to the server
     /// </summary>
     [JsonPropertyName("advice")]
-    public IntervalAdvice? Advice { get; set; }
+    public TimeoutAdvice? Advice { get; set; }
 
     /// <summary>
     /// Ext with timesync data

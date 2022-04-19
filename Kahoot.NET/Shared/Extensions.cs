@@ -50,4 +50,22 @@ internal static class Extensions
 
         return result;
     }
+
+    public static bool IsValidJson(this string value)
+    {
+        if (value is null)
+        {
+            return false;
+        }
+
+        try
+        {
+            JsonDocument.Parse(value);
+            return true;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
 }

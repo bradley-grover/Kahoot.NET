@@ -19,8 +19,6 @@ public partial class KahootClient
             }
 
             await ProcessAsync(buffer);
-
-            Thread.Sleep(1000);
         }
     }
 
@@ -31,6 +29,7 @@ public partial class KahootClient
 
         return span.Slice(start, end - 1).ToString();
     }
+
     private async Task ProcessAsync(Memory<byte> data)
     {
         string json = RemoveBrackets(Encoding.UTF8.GetString(data.Span));

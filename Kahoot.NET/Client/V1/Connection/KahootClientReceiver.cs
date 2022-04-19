@@ -6,11 +6,13 @@ public partial class KahootClient
     {
         AssertConnected();
 
-        Memory<byte> buffer = new byte[1024];
+        
 #nullable disable
         while (Socket.State == WebSocketState.Open)
         {
 #nullable restore
+            Memory<byte> buffer = new byte[1024];
+
             var result = await Socket.ReceiveAsync(buffer, CancellationToken.None);
 
             if (result.MessageType == WebSocketMessageType.Close)

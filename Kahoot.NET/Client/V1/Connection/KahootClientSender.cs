@@ -19,4 +19,25 @@ public partial class KahootClient
 
         return message;
     }
+
+    private async Task SendKeepAliveAsync()
+    {
+        await SendAsync(new KeepAlive()
+        {
+            Channel = LiveMessageChannels.Connection,
+            ClientId = _sessionObject.clientId,
+            ConnectionType = InternalConsts.ConnectionType,
+            Id = Interlocked.Increment(ref _sessionObject.id).ToString(),
+            Ext = new()
+            {
+                Acknowledged = Interlocked.Read(ref _sessionObject.ack),
+                Timesync = new()
+                {
+                    L = _sessionObject.l,
+                    O = _sessionObject.o,
+                }
+            }
+        });
+        Interlocked.Increment(ref _sessionObject.ack);
+    }
 }

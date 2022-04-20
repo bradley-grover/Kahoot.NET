@@ -1,5 +1,4 @@
 ﻿using Kahoot.NET.Internal.Data.Shared.Ext;
-using Kahoot.NET.Internal.Data.Shared.Timesync;
 
 namespace Kahoot.NET.Internal.Data.Messages;
 
@@ -9,5 +8,5 @@ namespace Kahoot.NET.Internal.Data.Messages;
 internal class KeepAlive : ExtendedLiveBaseMessage
 {
     [JsonPropertyName("ext")]
-    public ExtWithTimesync<TimesyncData>? Ext { get; set; }
+    public ExtWithTimesync<long>? Ext { get; set; }
 }

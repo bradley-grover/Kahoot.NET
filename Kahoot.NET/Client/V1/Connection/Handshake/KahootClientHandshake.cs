@@ -1,4 +1,6 @@
 ﻿using Kahoot.NET.Internal.Data.Shared.Ext;
+using Kahoot.NET.Internal.Data.Messages.Handshake;
+using Kahoot.NET.Internal.Data.Responses.Handshake;
 
 namespace Kahoot.NET.Client;
 
@@ -43,6 +45,26 @@ public partial class KahootClient
             Channel = LiveMessageChannels.Handshake,
             Id = Interlocked.Read(ref _sessionObject.id).ToString(),
             Ext = new() { Acknowledged = true, Timesync = new() { L = 0, O = 0 } }
+        };
+    }
+
+    internal FinalHandshake CreateFinalHandshake()
+    {
+        return new FinalHandshake()
+        {
+            Channel = LiveMessageChannels.Connection,
+            ConnectionType = InternalConsts.ConnectionType,
+            ClientId = _sessionObject.clientId,
+            Id = Interlocked.Read(ref _sessionObject.id).ToString(),
+            Ext = new()
+            {
+                Acknowledged = Interlocked.Read(ref _sessionObject.ack),
+                Timesync = new()
+                {
+                    L = _sessionObject.l,
+                    O = _sessionObject.o
+                }
+            }
         };
     }
 

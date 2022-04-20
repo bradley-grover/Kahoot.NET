@@ -1,4 +1,6 @@
-﻿namespace Kahoot.NET.Client;
+﻿using Kahoot.NET.Internal.Data.Responses.Handshake;
+
+namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
@@ -56,9 +58,21 @@ public partial class KahootClient
                 Interlocked.Increment(ref _sessionObject.id);
                 await SendAsync(CreateSecondHandshakeObject(obj));
                 break;
+            case (2, LiveMessageChannels.Connection):
+                Interlocked.Increment(ref _sessionObject.id);
+                Interlocked.Increment(ref _sessionObject.ack);
+
+                await SendAsync(CreateFinalHandshake());
+                await Task.Delay(800);
+                await SendLoginAsync();
+
+                break;
             default:
                 switch (message.Channel)
                 {
+                    case LiveMessageChannels.Connection:
+                        await SendKeepAliveAsync();
+                        break;
                     case LiveMessageChannels.Disconnection:
                         break;
                     case LiveMessageChannels.Status:

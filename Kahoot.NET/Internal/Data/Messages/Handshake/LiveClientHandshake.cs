@@ -1,7 +1,7 @@
 ﻿using Kahoot.NET.Internal.Data.Shared;
 using Kahoot.NET.Internal.Data.Shared.Ext;
 
-namespace Kahoot.NET.Internal.Data.Messages;
+namespace Kahoot.NET.Internal.Data.Messages.Handshake;
 
 /// <summary>
 /// First handshake that we send to the server

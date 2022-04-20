@@ -40,14 +40,14 @@ public partial class KahootClient
 
         Logger?.LogDebug("Response received: {res}", json);
 
-        var message = JsonSerializer.Deserialize<LiveBaseMessage>(json.AsSpan());
+        var message = JsonSerializer.Deserialize(json.AsSpan(), LiveBaseMessageContext.Default.LiveBaseMessage);
 
         int id = int.Parse(message!.Id.AsSpan());
 
         switch ((id, message.Channel))
         {
             case (1, LiveMessageChannels.Handshake):
-                var obj = JsonSerializer.Deserialize<LiveClientHandshakeResponse>(json.AsSpan()!);
+                var obj = JsonSerializer.Deserialize(json.AsSpan()!, LiveClientHandshakeResponseContext.Default.LiveClientHandshakeResponse);
 
                 if (obj is null)
                 {
@@ -62,7 +62,7 @@ public partial class KahootClient
                 Interlocked.Increment(ref _sessionObject.id);
                 Interlocked.Increment(ref _sessionObject.ack);
 
-                await SendAsync(CreateFinalHandshake());
+                await SendAsync(CreateFinalHandshake(), FinalHandshakeContext.Default.FinalHandshake);
                 await Task.Delay(800);
                 await SendLoginAsync();
 

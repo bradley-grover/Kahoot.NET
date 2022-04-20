@@ -29,7 +29,7 @@ public partial class KahootClient
 
         await Socket.ConnectAsync(uri, cancellationToken);
 
-        await SendAsync(CreateFirstHandshakeObject(), cancellationToken);
+        await SendAsync(CreateFirstHandshakeObject(), LiveClientHandshakeContext.Default.LiveClientHandshake, cancellationToken);
     }
 
 

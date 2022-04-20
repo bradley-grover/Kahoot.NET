@@ -35,7 +35,7 @@ internal static class RequestFormer
             throw new Exception();
         }
 
-        return (JsonSerializer.Deserialize<CreateSessionResponse>(content), headers.FirstOrDefault());
+        return (JsonSerializer.Deserialize(content, CreateSessionResponseContext.Default.CreateSessionResponse), headers.FirstOrDefault());
     }
 
     /// <summary>

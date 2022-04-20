@@ -1,19 +1,31 @@
-﻿namespace Kahoot.NET.Client;
+﻿using System.Text.Json.Serialization.Metadata;
+
+namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
-    internal async Task SendAsync<TData>(TData data, CancellationToken cancellationToken = default) where TData : class
+    internal async Task SendAsync<TData>(TData data, JsonTypeInfo<TData>? typeInfo = null, CancellationToken cancellationToken = default) where TData : class
     {
         if (Socket is null)
         {
             throw new InvalidOperationException("Socket is not connected");
         }
 
-        await Socket.SendAsync(LogSend(data), WebSocketMessageType.Text,  WebSocketMessageFlags.EndOfMessage, cancellationToken);
+        await Socket.SendAsync(LogSend(data, typeInfo), WebSocketMessageType.Text,  WebSocketMessageFlags.EndOfMessage, cancellationToken);
     }
-    private Memory<byte> LogSend<T>(T data)
+    private Memory<byte> LogSend<T>(T data, JsonTypeInfo<T>? typeInfo = null)
     {
-        Memory<byte> message = InternalSerializer.Serialize(data, out var json);
+        ReadOnlySpan<char> json;
+        Memory<byte> message;
+
+        if (typeInfo is null)
+        {
+            message = InternalSerializer.Serialize(data, out json);
+        }
+        else
+        {
+            message = InternalSerializer.Serialize(data, typeInfo, out json);
+        }
 
         Logger?.LogDebug("Sending: {message}", json.ToString());
 

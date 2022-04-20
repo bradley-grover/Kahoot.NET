@@ -10,7 +10,7 @@ Kahoot.NET C# Library to connect to Kahoot! games and interact as a player
 
 Connects to game using a WebSocket and is an event based client, so make sure to have it hosted as a background service or something like this at the end of your app
 ```cs
-Console.ReadLine() // at the end
+Console.ReadLine(); // at the end
 // or perhaps
 using System.Threading.Tasks;
 

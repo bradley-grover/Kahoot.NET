@@ -23,6 +23,7 @@
     <PackageReference Include="Flee" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="OneOf" Version="3.0.216" />
+    <PackageReference Include="RandomUserAgent" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>

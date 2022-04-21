@@ -1,6 +1,8 @@
 ﻿using Kahoot.NET.Internal.Data.Shared;
+using Kahoot.NET.Internal.Data.Shared.Ext;
+using Kahoot.NET.Internal.Data.Messages.Handshake;
 
-namespace Kahoot.NET.Internal.Data.Responses;
+namespace Kahoot.NET.Internal.Data.Responses.Handshake;
 
 /// <summary>
 /// Response we get from kahoot after sending a <see cref="LiveClientHandshake"/>
@@ -36,4 +38,10 @@ internal class LiveClientHandshakeResponse : LiveBaseMessage
     /// </summary>
     [JsonPropertyName("advice")]
     public LiveHandshakeAdvice? Advice { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+#nullable disable
+    [JsonPropertyName("timesync")]
+    public ExtWithExtendedTimesyncData Ext { get; set; }
 }

@@ -1,16 +1,20 @@
-﻿namespace Kahoot.NET.Client;
+﻿using Kahoot.NET.Internal.Data.Responses.Handshake;
+
+namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
     internal async Task ReceiveAsync()
     {
-        AssertConnected();
+        if (Socket is null || Socket.State is not WebSocketState.Open)
+        {
+            throw new InvalidOperationException("Connection is not open for this");
+        }
 
-        Memory<byte> buffer = new byte[1024];
-#nullable disable
         while (Socket.State == WebSocketState.Open)
         {
-#nullable restore
+            Memory<byte> buffer = new byte[1024];
+
             var result = await Socket.ReceiveAsync(buffer, CancellationToken.None);
 
             if (result.MessageType == WebSocketMessageType.Close)
@@ -19,8 +23,6 @@ public partial class KahootClient
             }
 
             await ProcessAsync(buffer);
-
-            Thread.Sleep(1000);
         }
     }
 
@@ -31,20 +33,21 @@ public partial class KahootClient
 
         return span.Slice(start, end - 1).ToString();
     }
+
     private async Task ProcessAsync(Memory<byte> data)
     {
         string json = RemoveBrackets(Encoding.UTF8.GetString(data.Span));
 
         Logger?.LogDebug("Response received: {res}", json);
 
-        var message = JsonSerializer.Deserialize<LiveBaseMessage>(json.AsSpan());
+        var message = JsonSerializer.Deserialize(json.AsSpan(), LiveBaseMessageContext.Default.LiveBaseMessage);
 
         int id = int.Parse(message!.Id.AsSpan());
 
         switch ((id, message.Channel))
         {
             case (1, LiveMessageChannels.Handshake):
-                var obj = JsonSerializer.Deserialize<LiveClientHandshakeResponse>(json.AsSpan()!);
+                var obj = JsonSerializer.Deserialize(json.AsSpan()!, LiveClientHandshakeResponseContext.Default.LiveClientHandshakeResponse);
 
                 if (obj is null)
                 {
@@ -55,9 +58,21 @@ public partial class KahootClient
                 Interlocked.Increment(ref _sessionObject.id);
                 await SendAsync(CreateSecondHandshakeObject(obj));
                 break;
+            case (2, LiveMessageChannels.Connection):
+                Interlocked.Increment(ref _sessionObject.id);
+                Interlocked.Increment(ref _sessionObject.ack);
+
+                await SendAsync(CreateFinalHandshake(), FinalHandshakeContext.Default.FinalHandshake);
+                await Task.Delay(800);
+                await SendLoginAsync();
+
+                break;
             default:
                 switch (message.Channel)
                 {
+                    case LiveMessageChannels.Connection:
+                        await SendKeepAliveAsync();
+                        break;
                     case LiveMessageChannels.Disconnection:
                         break;
                     case LiveMessageChannels.Status:

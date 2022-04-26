@@ -25,7 +25,8 @@ public partial class KahootClient
                 }),
                 GameId = GameId.ToString(),
                 Name = Username ?? random.NextInt64(0, 999_999_999_999_999).ToString(),
-            }
+            },
+            ClientId = _sessionObject.clientId
         });
     }
 }

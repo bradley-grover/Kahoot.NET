@@ -1,7 +1,7 @@
 ﻿namespace Kahoot.NET.Client;
 
 /// <summary>
-/// Ok
+/// First version of <see cref="IKahootClient"/> to be used to connect and interact with Kahoot games
 /// </summary>
 public partial class KahootClient : IKahootClient
 {

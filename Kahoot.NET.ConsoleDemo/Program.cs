@@ -7,6 +7,19 @@ namespace Kahoot.NET.ConsoleDemo;
 
 public class Program
 {
+    private static readonly Random random = new();
+    public static string GenerateName()
+    {
+        Span<char> name = new char[10];
+
+        for (int i = 0; i < name.Length; i++)
+        {
+            name[i] = random.Next(0, 9).ToString()[0];
+        }
+
+        return new string(name);
+    }
+
     public static async Task Main(string[] args)
     {
         using var loggerFactory = LoggerFactory.Create(builder =>
@@ -25,7 +38,7 @@ public class Program
         int code = GetGameCode();
         try
         {
-            await client.JoinAsync(code, "ok");
+            await client.JoinAsync(code, GenerateName());
             logger.LogInformation("Am here");
         }
         catch (GameNotFoundException)

@@ -23,7 +23,7 @@ await Task.Delay(-1);
 - [x] Generate token to connect
 - [x] Create handshake with Kahoot websocket
 
-- [ ] Join the game with a name
+- [x] Join the game with a name (event not yet supported)
 - [ ] Support answering
 - [ ] Support various client events
 

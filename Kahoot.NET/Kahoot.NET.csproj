@@ -11,8 +11,15 @@
     <PackageProjectUrl>https://github.com/ac111897/Kahoot.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ac11897/Kahoot.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>Kahoot,Library</PackageTags>
+    <PackageTags>Kahoot;.NET;WebSockets</PackageTags>
     <NeutralLanguage>en-NZ</NeutralLanguage>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Bradley Grover</Authors>
+    <Version>1.0.0</Version>
+    <Description>Library to connect and interact with Kahoot's using .NET</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReleaseNotes>First publish</PackageReleaseNotes>
+    <PackageId>Paradox.Kahoot.NET</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +29,7 @@
   <ItemGroup>
     <PackageReference Include="Flee" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="NuGet.Build" Version="2.12.1" />
     <PackageReference Include="OneOf" Version="3.0.216" />
     <PackageReference Include="RandomUserAgent" Version="1.1.2" />
   </ItemGroup>

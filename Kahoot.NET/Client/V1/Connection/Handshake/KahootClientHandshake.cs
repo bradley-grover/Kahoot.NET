@@ -15,7 +15,7 @@ public partial class KahootClient
 
         (var token, var response) = await Token.CreateTokenAndSessionAsync(GameId.Value, Client);
 
-        CreateResponse = response;
+        usingNamerator = response.Namerator;
 
         CreateConnectionObject();
 

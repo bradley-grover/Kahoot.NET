@@ -9,10 +9,6 @@ public partial class KahootClient
     private ConnectionObject _sessionObject;
 #nullable restore
 
-    #region Stored
-    private CreateSessionResponse? CreateResponse { get; set; }
-    #endregion
-
     internal int? GameId { get; set; }
     /// <summary>
     /// Username of the current client

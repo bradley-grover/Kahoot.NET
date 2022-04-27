@@ -12,4 +12,7 @@ internal class LoginMessage : LiveBaseMessage
 
     [JsonPropertyName("ext")]
     public object Ext { get; set; }
+
+    [JsonPropertyName("clientId")]
+    public string ClientId { get; set; }
 }

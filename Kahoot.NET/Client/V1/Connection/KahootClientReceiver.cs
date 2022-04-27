@@ -1,4 +1,5 @@
 ﻿using Kahoot.NET.Internal.Data.Responses.Handshake;
+using Kahoot.NET.Internal.Data.Responses.Login;
 
 namespace Kahoot.NET.Client;
 
@@ -42,7 +43,7 @@ public partial class KahootClient
 
         var message = JsonSerializer.Deserialize(json.AsSpan(), LiveBaseMessageContext.Default.LiveBaseMessage);
 
-        int id = int.Parse(message!.Id.AsSpan());
+        int id = message!.Id is null ? -1 : int.Parse(message!.Id.AsSpan());
 
         switch ((id, message.Channel))
         {
@@ -80,6 +81,9 @@ public partial class KahootClient
                     case LiveMessageChannels.Player:
                         break;
                     case LiveMessageChannels.Service:
+                        var loginResponse = JsonSerializer.Deserialize<LoginResponse>(json.AsSpan()!);
+                        await HandleLoginResponseAsync(loginResponse!);
+
                         break;
                     case LiveMessageChannels.Handshake:
                         break;

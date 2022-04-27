@@ -1,6 +1,6 @@
 ﻿namespace Kahoot.NET.Internal.Data.Messages.Login;
 
-internal class Screen
+internal struct Screen
 {
     [JsonPropertyName("width")]
     public int Width { get; set; }

@@ -9,6 +9,7 @@ public class Program
     {
         var logFactory = LoggerFactory.Create(x =>
         {
+            x.AddConsole();
             x.SetMinimumLevel(LogLevel.Debug);
         });
 

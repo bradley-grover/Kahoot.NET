@@ -41,4 +41,28 @@ public partial class QuizCreator
 
         }, LiveClientHandshakeContext.Default.LiveClientHandshake);
     }
+
+    internal SecondLiveClientHandshake CreateSecondHandshake()
+    {
+        _sessionObject.ack = 0;
+        return new()
+        {
+            Advice = new()
+            {
+                Timeout = 0,
+            },
+            Ext = new()
+            {
+                Acknowledged = _sessionObject.ack,
+                Timesync = new()
+                {
+
+                }
+            },
+            Channel = LiveMessageChannels.Connection,
+            ClientId = _sessionObject.clientId,
+            ConnectionType = InternalConsts.ConnectionType,
+            Id = Interlocked.Increment(ref _sessionObject.id).ToString()
+        };
+    }
 }

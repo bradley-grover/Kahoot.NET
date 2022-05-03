@@ -1,4 +1,7 @@
 ﻿using System.Text;
+using Kahoot.NET.Internal;
+using Kahoot.NET.Internal.Data.SourceGenerators.Messages;
+using Kahoot.NET.Internal.Data.SourceGenerators.Responses;
 
 namespace Kahoot.NET.Game.Client;
 
@@ -33,6 +36,29 @@ public partial class QuizCreator
     {
         string json = RemoveBrackets(Encoding.UTF8.GetString(data.Span));
 
-        Logger?.LogDebug("{json}", json);
+        Logger?.LogDebug("Received: {json}", json);
+
+        var message = JsonSerializer.Deserialize(json.AsSpan(), LiveBaseMessageContext.Default.LiveBaseMessage);
+
+        int id = message!.Id is null ? -1 : int.Parse(message!.Id.AsSpan());
+
+
+        switch ((id, message.Channel))
+        {
+            case (1, LiveMessageChannels.Handshake):
+                var obj = JsonSerializer.Deserialize(json.AsSpan()!, LiveClientHandshakeResponseContext.Default.LiveClientHandshakeResponse);
+
+                if (obj is null)
+                {
+                    throw new InvalidOperationException("An internal problem occured whilst parsing the websocket data");
+                }
+
+                _sessionObject.clientId = obj.ClientId;
+
+                await SendAsync(CreateSecondHandshake());
+
+                break;
+
+        }
     }
 }

@@ -58,7 +58,25 @@ public partial class QuizCreator
                 await SendAsync(CreateSecondHandshake());
 
                 break;
+            case (2, LiveMessageChannels.Connection):
+                var secondResponse = JsonSerializer.Deserialize(json.AsSpan()!, QuizHandshakeResponseContext.Default.QuizHandshakeResponse); ;
 
+                if (secondResponse is null)
+                {
+                    throw new InvalidOperationException("An internal problem occured");
+                }
+
+                _sessionObject.ack = secondResponse.Ext.Acknowledged;
+
+                Interlocked.Increment(ref _sessionObject.id);
+
+                await SendAsync(CreateStartMessage());
+
+                Interlocked.Increment(ref _sessionObject.id);
+
+                await SendAsync(CreateFinalHandshake(), FinalHandshakeContext.Default.FinalHandshake);
+
+                break;
         }
     }
 }

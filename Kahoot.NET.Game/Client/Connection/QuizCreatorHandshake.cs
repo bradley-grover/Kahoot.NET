@@ -1,4 +1,6 @@
-﻿using Kahoot.NET.Internal;
+﻿using Kahoot.NET.Game.Internal.Data.Messages;
+using Kahoot.NET.Internal;
+using Kahoot.NET.Internal.Data.Messages;
 using Kahoot.NET.Internal.Data.Messages.Handshake;
 using Kahoot.NET.Internal.Data.SourceGenerators.Messages;
 using Microsoft.Extensions.Logging;
@@ -45,6 +47,9 @@ public partial class QuizCreator
     internal SecondLiveClientHandshake CreateSecondHandshake()
     {
         _sessionObject.ack = 0;
+        _sessionObject.o = 2236;
+        _sessionObject.l = 68;
+
         return new()
         {
             Advice = new()
@@ -56,13 +61,48 @@ public partial class QuizCreator
                 Acknowledged = _sessionObject.ack,
                 Timesync = new()
                 {
-
+                    L = _sessionObject.l,
+                    O = _sessionObject.o
                 }
             },
             Channel = LiveMessageChannels.Connection,
             ClientId = _sessionObject.clientId,
             ConnectionType = InternalConsts.ConnectionType,
             Id = Interlocked.Increment(ref _sessionObject.id).ToString()
+        };
+    }
+    internal StartGameMessage CreateStartGameMessage()
+    {
+        return new StartGameMessage()
+        {
+            Channel = LiveMessageChannels.Player,
+            Id = _sessionObject.id.ToString(),
+            ClientId = _sessionObject.clientId,
+            Data = new()
+            {
+                GameId = gameCode.ToString(),
+                Type = "started",
+                Host = "play.kahoot.it"
+            }
+        };
+    }
+    internal KeepAlive CreateKeepAlive()
+    {
+        return new KeepAlive()
+        {
+            Channel = LiveMessageChannels.Connection,
+            ClientId = _sessionObject.clientId,
+            ConnectionType = InternalConsts.ConnectionType,
+            Id = _sessionObject.id.ToString(),
+            Ext = new()
+            {
+                Acknowledged = _sessionObject.ack,
+                Timesync = new()
+                {
+                    L = _sessionObject.l,
+                    O = _sessionObject.o
+                }
+            }
         };
     }
 }

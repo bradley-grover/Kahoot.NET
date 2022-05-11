@@ -17,8 +17,6 @@ internal static class QuizInitializer
             throw new Exception();
         }
 
-
-
         return (JsonSerializer.Deserialize<int>(await response.Content.ReadAsStringAsync()), webSocketKey.First());
     }
 

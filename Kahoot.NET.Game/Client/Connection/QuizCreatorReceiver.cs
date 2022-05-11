@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Kahoot.NET.Game.Internal.Data.Messages;
 using Kahoot.NET.Internal;
 using Kahoot.NET.Internal.Data.SourceGenerators.Messages;
 using Kahoot.NET.Internal.Data.SourceGenerators.Responses;
@@ -58,7 +59,27 @@ public partial class QuizCreator
                 await SendAsync(CreateSecondHandshake());
 
                 break;
+            case (2, LiveMessageChannels.Connection):
+                Interlocked.Increment(ref _sessionObject.id);
+                Interlocked.Increment(ref _sessionObject.ack);
 
+                await SendAsync(CreateStartGameMessage(), StartGameMessageContext.Default.StartGameMessage);
+                await Task.Delay(500);
+                Interlocked.Increment(ref _sessionObject.id);
+                await SendAsync(CreateKeepAlive());
+
+                break;
+            case (4, LiveMessageChannels.Connection):
+                Interlocked.Increment(ref _sessionObject.id);
+                Interlocked.Increment(ref _sessionObject.ack);
+                await SendAsync(CreateKeepAlive());
+
+                if (QuizCreated is not null)
+                {
+                    await QuizCreated.Invoke(this, EventArgs.Empty);
+                }
+
+                break;
         }
     }
 }

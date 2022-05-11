@@ -9,8 +9,11 @@ namespace Kahoot.NET.Game.Client;
 
 public partial class QuizCreator
 {
+    private int _gameCode;
     internal async Task CreateHandshakeAsync(int gameCode, string websocketKey)
     {
+        _gameCode = gameCode;
+
         Uri uri = new($"wss://play.kahoot.it/cometd/{gameCode}/{websocketKey}");
 
         Logger?.LogDebug("{url}", uri);
@@ -61,14 +64,41 @@ public partial class QuizCreator
                 Acknowledged = _sessionObject.ack,
                 Timesync = new()
                 {
+
+    }
+    internal StartGameMessage CreateStartMessage()
+    {
+        return new StartGameMessage()
+        {
+            Id = _sessionObject.id.ToString(),
+            Channel = LiveMessageChannels.Player,
+            Ext = new
+            {
+                gameid = _gameCode.ToString(),
+                host = "play.kahoot.it",
+                type = "started",
+            },
+            Data = new { },
+            ClientId = _sessionObject.clientId
+        };
+    }
+    internal FinalHandshake CreateFinalHandshake()
+    {
+        return new()
+        {
+            Channel = LiveMessageChannels.Connection,
+            ClientId = _sessionObject.clientId,
+            Ext = new()
+            {
+                Acknowledged = _sessionObject.ack,
+                Timesync = new()
+                {
                     L = _sessionObject.l,
                     O = _sessionObject.o
                 }
             },
-            Channel = LiveMessageChannels.Connection,
-            ClientId = _sessionObject.clientId,
             ConnectionType = InternalConsts.ConnectionType,
-            Id = Interlocked.Increment(ref _sessionObject.id).ToString()
+            Id = _sessionObject.id.ToString()
         };
     }
     internal StartGameMessage CreateStartGameMessage()

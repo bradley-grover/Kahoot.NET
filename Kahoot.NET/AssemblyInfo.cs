@@ -4,3 +4,4 @@
 [assembly: InternalsVisibleTo("Kahoot.NET.ConsoleDemo")]
 [assembly: InternalsVisibleTo("Kahoot.NET.Benchmarks")]
 [assembly: InternalsVisibleTo("Kahoot.NET.Tests")]
+[assembly: InternalsVisibleTo("Kahoot.NET.Game")]

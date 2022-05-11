@@ -49,6 +49,7 @@ public partial class QuizCreator
 
     internal SecondLiveClientHandshake CreateSecondHandshake()
     {
+        Interlocked.Increment(ref _sessionObject.id);
         _sessionObject.ack = 0;
         _sessionObject.o = 2236;
         _sessionObject.l = 68;
@@ -64,43 +65,17 @@ public partial class QuizCreator
                 Acknowledged = _sessionObject.ack,
                 Timesync = new()
                 {
-
-    }
-    internal StartGameMessage CreateStartMessage()
-    {
-        return new StartGameMessage()
-        {
-            Id = _sessionObject.id.ToString(),
-            Channel = LiveMessageChannels.Player,
-            Ext = new
-            {
-                gameid = _gameCode.ToString(),
-                host = "play.kahoot.it",
-                type = "started",
-            },
-            Data = new { },
-            ClientId = _sessionObject.clientId
-        };
-    }
-    internal FinalHandshake CreateFinalHandshake()
-    {
-        return new()
-        {
-            Channel = LiveMessageChannels.Connection,
-            ClientId = _sessionObject.clientId,
-            Ext = new()
-            {
-                Acknowledged = _sessionObject.ack,
-                Timesync = new()
-                {
-                    L = _sessionObject.l,
-                    O = _sessionObject.o
+                    O = _sessionObject.o,
+                    L = _sessionObject.l
                 }
             },
+            Channel = LiveMessageChannels.Connection,
+            ClientId = _sessionObject.clientId,
             ConnectionType = InternalConsts.ConnectionType,
             Id = _sessionObject.id.ToString()
         };
     }
+
     internal StartGameMessage CreateStartGameMessage()
     {
         return new StartGameMessage()

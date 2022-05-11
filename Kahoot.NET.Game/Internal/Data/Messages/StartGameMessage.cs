@@ -10,4 +10,5 @@ internal class StartGameMessage : LiveMessage
     public StartData Data { get; set; }
 
     [JsonPropertyName("ext")]
+    public object Ext { get; } = new();
 }

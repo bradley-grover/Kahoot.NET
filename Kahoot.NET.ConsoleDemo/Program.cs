@@ -35,7 +35,8 @@ public class Program
 
         IKahootClient client = new KahootClient(logger: loggerFactory.CreateLogger<IKahootClient>(), new HttpClient());
 
-        int code = GetGameCode();
+        int code = args.Length == 1 ? int.Parse(args[0]) : GetGameCode();
+
         try
         {
             await client.JoinAsync(code, GenerateName());

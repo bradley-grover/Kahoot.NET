@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.Internal.Data.Responses.Handshake;
+﻿using System.Buffers;
+using Kahoot.NET.Internal.Data.Responses.Handshake;
 using Kahoot.NET.Internal.Data.Responses.Login;
 
 namespace Kahoot.NET.Client;
@@ -14,7 +15,9 @@ public partial class KahootClient
 
         while (Socket.State == WebSocketState.Open)
         {
-            Memory<byte> buffer = new byte[1024];
+            byte[] array = ArrayPool<byte>.Shared.Rent(1024);
+                
+            Memory<byte> buffer = array;
 
             var result = await Socket.ReceiveAsync(buffer, CancellationToken.None);
 
@@ -24,6 +27,8 @@ public partial class KahootClient
             }
 
             await ProcessAsync(buffer);
+
+            ArrayPool<byte>.Shared.Return(array, true);
         }
     }
 

@@ -28,6 +28,8 @@ public class Program
 
        
         await kahootClient.JoinAsync(result);
+
+        await Task.Delay(-1);
     }
 
 

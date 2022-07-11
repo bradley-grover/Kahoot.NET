@@ -39,7 +39,7 @@ public partial class KahootClient
             Ext = new { },
             Data = new
             {
-                content = JsonSerializer.Serialize(new { usingNamerator = usingNamerator } ),
+                content = JsonSerializer.Serialize(new { usingNamerator } ),
                 gameid = GameId,
                 host = "kahoot.it",
                 id = 16,

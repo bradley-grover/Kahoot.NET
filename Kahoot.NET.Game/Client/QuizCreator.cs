@@ -9,16 +9,14 @@ namespace Kahoot.NET.Game.Client;
 public partial class QuizCreator : IQuizCreator
 {
     private ClientWebSocket Socket { get; }
-    private ILogger<IQuizCreator> Logger { get; }
+    private ILogger<IQuizCreator>? Logger { get; }
     private readonly ConnectionObject _sessionObject;
     private int gameCode;
 
-// for events
-#nullable disable
-    public event AsyncEventHandler<EventArgs> QuizCreated;
-#nullable restore
+    // for events
+    public event Func<object?, EventArgs, Task>? QuizCreated;
 
-    public QuizCreator(ILogger<IQuizCreator> logger)
+    public QuizCreator(ILogger<IQuizCreator>? logger)
     {
         Socket = new();
         Logger = logger;

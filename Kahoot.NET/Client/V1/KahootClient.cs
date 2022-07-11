@@ -8,16 +8,21 @@ namespace Kahoot.NET.Client;
 public partial class KahootClient : IKahootClient
 {
     /// <inheritdoc></inheritdoc>
-    public async Task JoinAsync(int code, string? username = null, CancellationToken cancellationToken = default)
+    public async Task<bool> JoinAsync(int code, string? username = null, CancellationToken cancellationToken = default)
     {
         Username = username;
         GameId = code;
 
         Logger?.LogDebug("Creating handshake");
 
-        await CreateHandshakeAsync(cancellationToken);
+        var result = await CreateHandshakeAsync(cancellationToken);
 
-        Logger?.LogDebug("Spawning data loop");
+        if (!result)
+        {
+            return false;
+        }
+
+        Logger?.LogDebug("Data thread spawning");
 
         var backgroundProcesser = new Thread(async () => await ReceiveAsync())
         {
@@ -25,6 +30,8 @@ public partial class KahootClient : IKahootClient
         };
 
         backgroundProcesser.Start();
+
+        return true;
     }
 
     /// <inheritdoc></inheritdoc>
@@ -37,9 +44,9 @@ public partial class KahootClient : IKahootClient
 
         await SendAsync(new LiveLeaveMessage()
         {
-            Id = _sessionObject.id.ToString(),
+            Id = State.id.ToString(),
             Channel = LiveMessageChannels.Disconnection,
-            ClientId = _sessionObject.clientId,
+            ClientId = State.clientId,
         }, LiveLeaveMessageContext.Default.LiveLeaveMessage, cancellationToken);
 
 

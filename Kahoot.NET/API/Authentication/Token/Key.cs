@@ -11,7 +11,7 @@ internal class Key
     /// <param name="sessionHeaderToken"></param>
     /// <param name="challengeFunction"></param>
     /// <returns>The WebSocket key used to connection</returns>
-    internal static ReadOnlySpan<char> Create(ReadOnlySpan<char> sessionHeaderToken, ReadOnlySpan<char> challengeFunction)
+    internal static string Create(ReadOnlySpan<char> sessionHeaderToken, ReadOnlySpan<char> challengeFunction)
     {
         var header = Header.Create(sessionHeaderToken);
         var challenge = Challenge.CreateToken(challengeFunction);

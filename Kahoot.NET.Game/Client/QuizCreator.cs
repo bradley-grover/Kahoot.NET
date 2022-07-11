@@ -1,4 +1,5 @@
 ﻿using System.Net.WebSockets;
+using Kahoot.NET.API;
 using Kahoot.NET.Client;
 using Kahoot.NET.Game.Internal.Request;
 using Kahoot.NET.Shared;
@@ -10,7 +11,7 @@ public partial class QuizCreator : IQuizCreator
 {
     private ClientWebSocket Socket { get; }
     private ILogger<IQuizCreator>? Logger { get; }
-    private readonly ConnectionObject _sessionObject;
+    private readonly StateObject _sessionObject;
     private int gameCode;
 
     // for events

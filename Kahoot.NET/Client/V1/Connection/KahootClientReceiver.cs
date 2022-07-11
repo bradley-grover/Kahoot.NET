@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using Kahoot.NET.API;
 using Kahoot.NET.Internal.Data.Responses.Handshake;
 using Kahoot.NET.Internal.Data.Responses.Login;
 
@@ -8,14 +9,17 @@ public partial class KahootClient
 {
     internal async Task ReceiveAsync()
     {
-        if (Socket is null || Socket.State is not WebSocketState.Open)
+        if (Socket.State is not WebSocketState.Open)
         {
-            throw new InvalidOperationException("Connection is not open for this");
+            if (OnClientError is not null)
+            {
+                await OnClientError.Invoke(this, new(new InvalidOperationException("Connection is not open for operation")));
+            }
         }
 
         while (Socket.State == WebSocketState.Open)
         {
-            byte[] array = ArrayPool<byte>.Shared.Rent(1024);
+            byte[] array = ArrayPool<byte>.Shared.Rent(StateObject.BufferSize);
                 
             Memory<byte> buffer = array;
 
@@ -61,12 +65,12 @@ public partial class KahootClient
                 }
 
                 ProcessFirstServerResponse(obj);
-                Interlocked.Increment(ref _sessionObject.id);
+                Interlocked.Increment(ref State.id);
                 await SendAsync(CreateSecondHandshakeObject(obj));
                 break;
             case (2, LiveMessageChannels.Connection):
-                Interlocked.Increment(ref _sessionObject.id);
-                Interlocked.Increment(ref _sessionObject.ack);
+                Interlocked.Increment(ref State.id);
+                Interlocked.Increment(ref State.ack);
 
                 await SendAsync(CreateFinalHandshake(), FinalHandshakeContext.Default.FinalHandshake);
                 await Task.Delay(800);
@@ -99,6 +103,6 @@ public partial class KahootClient
 
     private void ProcessFirstServerResponse(LiveClientHandshakeResponse response)
     {
-        _sessionObject.clientId = response.ClientId;
+        State.clientId = response.ClientId;
     }
 }

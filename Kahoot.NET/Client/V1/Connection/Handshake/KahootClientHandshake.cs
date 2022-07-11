@@ -1,27 +1,29 @@
 ﻿using Kahoot.NET.Internal.Data.Shared.Ext;
 using Kahoot.NET.Internal.Data.Messages.Handshake;
 using Kahoot.NET.Internal.Data.Responses.Handshake;
+using Kahoot.NET.API.Authentication;
 
 namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
-    internal async Task CreateHandshakeAsync(CancellationToken cancellationToken = default)
+    internal async Task<bool> CreateHandshakeAsync(CancellationToken cancellationToken = default)
     {
         if (GameId is null)
         {
             throw new NoGameIdException();
         }
 
-        (var token, var response) = await Token.CreateTokenAndSessionAsync(GameId.Value, Client);
+        var session = await Session.CreateAsync(Client, GameId.Value);
 
-        usingNamerator = response.Namerator;
+        if (!session.Success)
+        {
+            return false;
+        }
 
-        CreateConnectionObject();
+        usingNamerator = session.Namerator;
 
-        Socket = new();
-
-        Uri uri = new(string.Format(WebsocketUrl, GameId.Value, token));
+        Uri uri = new(string.Format(WebsocketUrl, GameId.Value, session.WebSocketKey));
 
         Logger?.LogDebug("{url}", uri);
 
@@ -30,6 +32,8 @@ public partial class KahootClient
         await Socket.ConnectAsync(uri, cancellationToken);
 
         await SendAsync(CreateFirstHandshakeObject(), LiveClientHandshakeContext.Default.LiveClientHandshake, cancellationToken);
+
+        return true;
     }
 
 
@@ -43,7 +47,7 @@ public partial class KahootClient
             Version = InternalConsts.Version,
             SupportedConnectionTypes = InternalConsts.SupportedConnectionTypes,
             Channel = LiveMessageChannels.Handshake,
-            Id = Interlocked.Read(ref _sessionObject.id).ToString(),
+            Id = Interlocked.Read(ref State.id).ToString(),
             Ext = new() { Acknowledged = true, Timesync = new() { L = 0, O = 0 } }
         };
     }
@@ -54,15 +58,15 @@ public partial class KahootClient
         {
             Channel = LiveMessageChannels.Connection,
             ConnectionType = InternalConsts.ConnectionType,
-            ClientId = _sessionObject.clientId,
-            Id = Interlocked.Read(ref _sessionObject.id).ToString(),
+            ClientId = State.clientId,
+            Id = Interlocked.Read(ref State.id).ToString(),
             Ext = new()
             {
-                Acknowledged = Interlocked.Read(ref _sessionObject.ack),
+                Acknowledged = Interlocked.Read(ref State.ack),
                 Timesync = new()
                 {
-                    L = _sessionObject.l,
-                    O = _sessionObject.o
+                    L = State.l,
+                    O = State.o
                 }
             }
         };
@@ -72,24 +76,24 @@ public partial class KahootClient
     {
         Logger?.LogDebug("{}", JsonSerializer.Serialize(response));
         //(var l, var o) = GetLagAndOffset(response.Ext);
-        _sessionObject.l = 68;
-        _sessionObject.o = 2999;
+        State.l = 68;
+        State.o = 2999;
 
         return new()
         {
             Advice = new() { Timeout = 0 },
             ConnectionType = InternalConsts.ConnectionType,
-            ClientId = _sessionObject.clientId,
+            ClientId = State.clientId,
             Ext = new()
             {
-                Acknowledged = Interlocked.Read(ref _sessionObject.ack),
+                Acknowledged = Interlocked.Read(ref State.ack),
                 Timesync = new()
                 {
-                    L = _sessionObject.l,
-                    O = _sessionObject.o,
+                    L = State.l,
+                    O = State.o,
                 }
             },
-            Id = Interlocked.Read(ref _sessionObject.id).ToString(),
+            Id = Interlocked.Read(ref State.id).ToString(),
             Channel = LiveMessageChannels.Connection,
         };
     }
@@ -100,15 +104,5 @@ public partial class KahootClient
         long o = (data.Timesync.Ts - data.Timesync.CurrentTime - 1);
 
         return (l, o);
-    }
-
-
-    internal void CreateConnectionObject()
-    {
-        _sessionObject = new()
-        {
-            id = 1,
-            ack = 0,
-        };
     }
 }

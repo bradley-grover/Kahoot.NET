@@ -12,7 +12,7 @@ public partial class KahootClient
         await SendAsync(new LoginMessage()
         {
             Channel = LiveMessageChannels.Service,
-            Id = Interlocked.Increment(ref _sessionObject.id).ToString(),
+            Id = Interlocked.Increment(ref State.id).ToString(),
             Ext = new { },
             LoginData = new LoginData()
             {
@@ -27,7 +27,7 @@ public partial class KahootClient
                 GameId = GameId.ToString(),
                 Name = Username ?? random.NextInt64(0, 999_999_999_999_999).ToString(),
             },
-            ClientId = _sessionObject.clientId
+            ClientId = State.clientId
         });
     }
 
@@ -35,7 +35,7 @@ public partial class KahootClient
     {
         await SendAsync(new LoginReply()
         {
-            ClientId = _sessionObject.clientId,
+            ClientId = State.clientId,
             Ext = new { },
             Data = new
             {

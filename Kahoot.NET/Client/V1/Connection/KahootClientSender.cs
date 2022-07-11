@@ -6,11 +6,6 @@ public partial class KahootClient
 {
     internal async Task SendAsync<TData>(TData data, JsonTypeInfo<TData>? typeInfo = null, CancellationToken cancellationToken = default) where TData : class
     {
-        if (Socket is null)
-        {
-            throw new InvalidOperationException("Socket is not connected");
-        }
-
         await Socket.SendAsync(LogSend(data, typeInfo), WebSocketMessageType.Text,  WebSocketMessageFlags.EndOfMessage, cancellationToken);
     }
     private Memory<byte> LogSend<T>(T data, JsonTypeInfo<T>? typeInfo = null)
@@ -37,19 +32,20 @@ public partial class KahootClient
         await SendAsync(new KeepAlive()
         {
             Channel = LiveMessageChannels.Connection,
-            ClientId = _sessionObject.clientId,
+            ClientId = State.clientId,
             ConnectionType = InternalConsts.ConnectionType,
-            Id = Interlocked.Increment(ref _sessionObject.id).ToString(),
+            Id = Interlocked.Increment(ref State.id).ToString(),
             Ext = new()
             {
-                Acknowledged = Interlocked.Read(ref _sessionObject.ack),
+                Acknowledged = Interlocked.Read(ref State.ack),
                 Timesync = new()
                 {
-                    L = _sessionObject.l,
-                    O = _sessionObject.o,
+                    L = State.l,
+                    O = State.o,
                 }
             }
         });
-        Interlocked.Increment(ref _sessionObject.ack);
+
+        Interlocked.Increment(ref State.ack);
     }
 }

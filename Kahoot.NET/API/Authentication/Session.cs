@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.API.Authentication.Token;
+﻿using Kahoot.NET.API.Authentication.Json;
+using Kahoot.NET.API.Authentication.Token;
 
 namespace Kahoot.NET.API.Authentication;
 
@@ -21,16 +22,15 @@ internal static class Session
             return Failed();
         }
 
-        var session = JsonSerializer.Deserialize<SessionResponse>(await response.Content.ReadAsStringAsync());
+        var session = JsonSerializer.Deserialize(
+            await response.Content.ReadAsStringAsync(), SessionContext.Default.SessionResponse);
 
         if (session is null)
         {
             return Failed();
         }
 
-        var websocketKey = Key.Create(header, session.Challenge);
-
-        session.WebSocketKey = websocketKey.ToString();
+        session.WebSocketKey = Key.Create(header, session.Challenge);
         session.Success = true;
 
         return session;
@@ -38,6 +38,6 @@ internal static class Session
 
     private static SessionResponse Failed()
     {
-        return new() { Success = false }
+        return new() { Success = false };
     }
 }

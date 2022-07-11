@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="API\Authentication\" />
+    <Folder Include="API\Authentication\Parsers\" />
     <Folder Include="API\Requests\Json\" />
     <Folder Include="API\Responses\Json\" />
     <Folder Include="API\Shared\" />

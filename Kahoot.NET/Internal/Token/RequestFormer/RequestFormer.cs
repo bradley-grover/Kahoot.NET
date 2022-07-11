@@ -39,7 +39,7 @@ internal static class RequestFormer
     }
 
     /// <summary>
-    /// Creates a request to send to kahoot
+    /// Creates a request to send to kahoot 
     /// </summary>
     /// <param name="gameId">The game id to join</param>
     /// <returns>A <see cref="HttpRequestMessage"/> used to ping kahoot and get the data back</returns>

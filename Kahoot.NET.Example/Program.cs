@@ -1,6 +1,5 @@
 ﻿using Kahoot.NET;
 using Kahoot.NET.Client;
-using Kahoot.NET.FluentBuilder;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Example;

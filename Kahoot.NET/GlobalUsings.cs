@@ -1,8 +1,6 @@
 ﻿#region ProjectLibraries
 global using Kahoot.NET.Client;
-global using Kahoot.NET.Quiz;
 global using Kahoot.NET.Shared;
-global using Kahoot.NET.Question;
 global using Kahoot.NET.Exceptions;
 global using Kahoot.NET.Internal;
 global using Kahoot.NET.Internal.Data.Messages;

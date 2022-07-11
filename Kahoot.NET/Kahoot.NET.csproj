@@ -42,4 +42,11 @@
     <None Include="F:\repos\Kahoot.NET\Kahoot.NET\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="API\Authentication\" />
+    <Folder Include="API\Requests\Json\" />
+    <Folder Include="API\Responses\Json\" />
+    <Folder Include="API\Shared\" />
+  </ItemGroup>
+
 </Project>

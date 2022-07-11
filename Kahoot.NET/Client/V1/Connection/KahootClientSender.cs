@@ -22,7 +22,7 @@ public partial class KahootClient
             message = InternalSerializer.Serialize(data, typeInfo, out json);
         }
 
-        Logger?.LogDebug("Sending: {message}", json.ToString());
+        Logger?.LogDebug("[SEND]: {json}", json.ToString());
 
         return message;
     }

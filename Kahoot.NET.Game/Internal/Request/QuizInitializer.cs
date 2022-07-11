@@ -1,4 +1,4 @@
-﻿using Kahoot.NET.Internal.Token.RequestFormer;
+﻿using Kahoot.NET.API.Authentication;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Game.Internal.Request;
@@ -25,7 +25,7 @@ internal static class QuizInitializer
         var request = new HttpRequestMessage()
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri(string.Format(Url, RequestFormer.CalculateSeconds())),
+            RequestUri = new Uri(string.Format(Url, API.Authentication.Request.CalculateSeconds())),
         };
 
         request.Content = new StringContent(JsonSerializer.Serialize(configuration, GameConfigurationContext.Default.GameConfiguration));

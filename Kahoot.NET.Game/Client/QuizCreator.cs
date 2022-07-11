@@ -2,7 +2,6 @@
 using Kahoot.NET.API;
 using Kahoot.NET.Client;
 using Kahoot.NET.Game.Internal.Request;
-using Kahoot.NET.Shared;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Game.Client;

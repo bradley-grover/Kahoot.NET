@@ -1,5 +1,6 @@
 ﻿using Kahoot.NET;
 using Kahoot.NET.Client;
+using Kahoot.NET.Client.Data;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Example;
@@ -25,16 +26,31 @@ public class Program
             Console.WriteLine($"Could not get numeric code, try again");
         }
 
+        kahootClient.OnJoined += KahootClient_OnJoined;
+
        
-        await kahootClient.JoinAsync(result);
+        var validGame = await kahootClient.JoinAsync(result);
+
+        if (!validGame)
+        {
+            Console.WriteLine("Could not find game");
+        }
 
         await Task.Delay(-1);
     }
 
-
-    private static async Task Client_OnJoined(object? sender, EventArgs e)
+    private static Task KahootClient_OnJoined(object? sender, JoinEventArgs args)
     {
-        Console.WriteLine("Stuff");
-        await Task.Delay(1000);
+        if (args.Success)
+        {
+            Console.WriteLine("Joined the game");
+            Console.WriteLine($"Is2fa: {args.Requires2Fa}");
+        }
+        else 
+        {
+            Console.WriteLine("Failed to join game");
+        }
+
+        return Task.CompletedTask;
     }
 }

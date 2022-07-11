@@ -1,5 +1,4 @@
-﻿using Kahoot.NET.Internal.Token;
-using Kahoot.NET.Internal.Token.Processing;
+﻿using Kahoot.NET.API.Authentication.Token;
 
 namespace Kahoot.NET.Tests;
 
@@ -9,7 +8,7 @@ public class DecodeTokenTests
     [ClassData(typeof(ChallengeTokens))]
     public void DecodeToken(string header, string challengeToken, string expected)
     {
-        var actual = Merger.Create(Header.CreateHeaderToken(header), Challenge.CreateToken(challengeToken));
+        var actual = Key.Create(header, challengeToken);
 
         Assert.Equal(expected, actual);
     }

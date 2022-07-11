@@ -30,23 +30,17 @@ public partial class KahootClient
                 await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
             }
 
-            await ProcessAsync(buffer);
+            await ProcessDataAsync(buffer);
 
             ArrayPool<byte>.Shared.Return(array, true);
         }
     }
 
-    private static string RemoveBrackets(ReadOnlySpan<char> span)
-    {
-        int start = 1;
-        int end = span.LastIndexOf(']');
 
-        return span.Slice(start, end - 1).ToString();
-    }
 
     private async Task ProcessAsync(Memory<byte> data)
     {
-        string json = RemoveBrackets(Encoding.UTF8.GetString(data.Span));
+        string json = Encoding.UTF8.GetString(data.Span).AsSpan().RemoveBrackets();
 
         Logger?.LogDebug("Response received: {res}", json);
 
@@ -66,13 +60,13 @@ public partial class KahootClient
 
                 ProcessFirstServerResponse(obj);
                 Interlocked.Increment(ref State.id);
-                await SendAsync(CreateSecondHandshakeObject(obj));
+                //await SendAsync(CreateSecondHandshakeObject(obj));
                 break;
             case (2, LiveMessageChannels.Connection):
                 Interlocked.Increment(ref State.id);
                 Interlocked.Increment(ref State.ack);
 
-                await SendAsync(CreateFinalHandshake(), FinalHandshakeContext.Default.FinalHandshake);
+                //await SendAsync(CreateFinalHandshake(), FinalHandshakeContext.Default.FinalHandshake);
                 await Task.Delay(800);
                 await SendLoginAsync();
 

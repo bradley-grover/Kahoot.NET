@@ -22,7 +22,7 @@ internal static class Challenge
         var parameter = Parameter.Parse(token);
 
         // find and calculate the offset
-        var offset = OffsetCalculator.Parse(OffsetSectionParser.Parse(token.RemoveWhitespace()));
+        var offset = OffsetCalculator.Parse(OffsetSectionParser.Parse(token.RemoveWhiteSpace()));
 
         return Decode(parameter, offset);
     }

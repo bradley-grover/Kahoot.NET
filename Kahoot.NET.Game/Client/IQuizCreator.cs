@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.Shared;
-
-namespace Kahoot.NET.Game.Client;
+﻿namespace Kahoot.NET.Game.Client;
 
 public interface IQuizCreator
 {

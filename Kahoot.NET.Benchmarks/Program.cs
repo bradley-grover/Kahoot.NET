@@ -6,8 +6,6 @@
  */
 
 using BenchmarkDotNet.Running;
-using Kahoot.NET.Shared;
-using Kahoot.NET.Benchmarks.MockTypesForComparison;
 
 namespace Kahoot.NET.Benchmarks;
 
@@ -15,24 +13,6 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        //BenchmarkRunner.Run<Internals.Request.RequestBenchmarks>();
-        //BenchmarkRunner.Run<Shared.SharedBenchmarks>();
-        //BenchmarkRunner.Run<Internals.Parsers.InternalParsers>();
-        //BenchmarkRunner.Run<Internals.TokenBenchmarks>();
-        BenchmarkRunner.Run<Internals.JsonBenchmarks>();
-        
-    }
-    public static int GetCode()
-    {
-        while (true)
-        {
-            if (int.TryParse(Console.ReadLine(), out var code))
-            {
-                return code;
-            }
-            Console.WriteLine("Enter code in proper format");
-            continue;
-        }
     }
     /*
      * using Kahoot.NET.[X]

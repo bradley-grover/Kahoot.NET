@@ -15,7 +15,7 @@ public partial class KahootClient : IKahootClient
 
         Logger?.LogDebug("Creating handshake");
 
-        var result = await CreateHandshakeAsync(cancellationToken);
+        var result = await SendHandshakeAsync(cancellationToken);
 
         if (!result)
         {

@@ -13,9 +13,11 @@ public partial class KahootClient
     {
         id = 1,
         ack = 0,
+        l = 68,
+        o = 2999
     };
 
-    internal int? GameId { get; set; }
+    internal int GameId { get; set; }
     /// <summary>
     /// Username of the current client
     /// </summary>

@@ -6,7 +6,7 @@ public partial class KahootClient
 {
     internal async Task SendAsync<TData>(TData data, JsonTypeInfo<TData>? typeInfo = null, CancellationToken cancellationToken = default) where TData : class
     {
-        await Socket.SendAsync(LogSend(data, typeInfo), WebSocketMessageType.Text,  WebSocketMessageFlags.EndOfMessage, cancellationToken);
+        await Socket.SendAsync(LogSend(data, typeInfo), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, cancellationToken);
     }
     private Memory<byte> LogSend<T>(T data, JsonTypeInfo<T>? typeInfo = null)
     {

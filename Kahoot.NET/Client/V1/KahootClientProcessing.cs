@@ -20,8 +20,8 @@ public partial class KahootClient
         }
 
         await (message.Id is null ?
-            ProcessChannelAsync(json, message.Channel) :
-            ProcessChannelIdAsync(json, int.Parse(message.Id), message.Channel));
+            ProcessChannelAsync(json, message.Channel, message?.Data?.Type) :
+            ProcessChannelIdAsync(json, int.Parse(message.Id), message.Channel, message?.Data?.Type));
     }
 
     internal async Task<bool> AlertOnNull<T>(T value)

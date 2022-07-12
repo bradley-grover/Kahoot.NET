@@ -5,14 +5,14 @@ namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
-    internal async Task ProcessChannelIdAsync(string data, int id, string channel)
+    internal async Task ProcessChannelIdAsync(string data, int id, string channel, string? dataType = null)
     {
         switch ((id, channel))
         {
             case (1, Channels.Handshake):
                 var hsResponse = JsonSerializer.Deserialize(data, BaseCMessageContext.Default.BaseClientMessage)!;
 
-                if (!await AlertOnNull(hsResponse)) {
+                if (await AlertOnNull(hsResponse)) {
                     return;
                 }
 
@@ -28,6 +28,7 @@ public partial class KahootClient
 
                 await SendAsync(CreateLastHS(), LastHsContext.Default.LastHs);
                 await Task.Delay(800);
+                await SendLoginMessageAsync();
 
                 break;
             default: 

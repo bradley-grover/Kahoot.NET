@@ -1,4 +1,4 @@
-﻿namespace Kahoot.NET.Internal.Data.Messages.Login;
+﻿namespace Kahoot.NET.API.Shared;
 
 internal struct Screen
 {

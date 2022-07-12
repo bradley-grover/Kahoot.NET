@@ -14,4 +14,5 @@ internal static class Connection
     internal const string SessionUrl = "https://kahoot.it/reserve/session/{0}/?{1}";
 
     internal const string WebsocketUrl = "wss://kahoot.it/cometd/{0}/{1}";
+    internal const string Host = "kahoot.it";
 }

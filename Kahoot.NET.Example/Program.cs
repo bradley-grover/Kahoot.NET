@@ -27,6 +27,7 @@ public class Program
         }
 
         kahootClient.OnJoined += KahootClient_OnJoined;
+        kahootClient.OnClientError += KahootClient_OnClientError;
 
        
         var validGame = await kahootClient.JoinAsync(result);
@@ -37,6 +38,12 @@ public class Program
         }
 
         await Task.Delay(-1);
+    }
+
+    private static Task KahootClient_OnClientError(object? sender, ClientErrorEventArgs arg)
+    {
+        Console.WriteLine(arg.Error);
+        return Task.CompletedTask;
     }
 
     private static Task KahootClient_OnJoined(object? sender, JoinEventArgs args)

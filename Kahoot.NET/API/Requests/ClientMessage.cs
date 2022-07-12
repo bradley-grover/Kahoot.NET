@@ -1,6 +1,9 @@
-﻿namespace Kahoot.NET.API.Requests;
+﻿using Kahoot.NET.API.Shared;
 
-internal class ClientMessage : BaseClientMessage
+namespace Kahoot.NET.API.Requests;
+
+internal class ClientMessage<TData> : BaseClientMessage<TData>
+    where TData : Data
 {
     /// <summary>
     /// Type of connection that the message is using, 
@@ -9,3 +12,4 @@ internal class ClientMessage : BaseClientMessage
     [JsonPropertyName("connectionType")]
     public string? ConnectionType { get; set; } = Connection.ConnectionType;
 }
+internal class ClientMessage : BaseClientMessage<Data> { }

@@ -6,6 +6,7 @@
  */
 
 using BenchmarkDotNet.Running;
+using Kahoot.NET.Benchmarks.ToRun;
 
 namespace Kahoot.NET.Benchmarks;
 
@@ -13,6 +14,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        BenchmarkRunner.Run<DecodeBenchmarks>();
     }
     /*
      * using Kahoot.NET.[X]

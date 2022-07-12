@@ -1,4 +1,5 @@
-﻿using Flee.PublicTypes;
+﻿using System.Data;
+using Flee.PublicTypes;
 
 namespace Kahoot.NET.Parsers;
 
@@ -7,6 +8,7 @@ namespace Kahoot.NET.Parsers;
 /// </summary>
 internal class OffsetArithmetic : IValueParser<long>
 {
+    private static DataTable Table { get; } = new();
     /// <summary>
     /// Expression context, we use this libary as <see cref="System.Data.DataTable"/> can not
     /// parse some large integer values
@@ -14,8 +16,11 @@ internal class OffsetArithmetic : IValueParser<long>
     private static readonly ExpressionContext context = new();
     public long Parse(ReadOnlySpan<char> input)
     {
-        IGenericExpression<long> expression = context.CompileGeneric<long>(input.ToString());
+        var result = Table.Compute(input.ToString(), null);
 
-        return expression.Evaluate();
+        return (long)(int)result;
+        //IGenericExpression<long> expression = context.CompileGeneric<long>(input.ToString());
+
+        //return expression.Evaluate();
     }
 }

@@ -6,9 +6,9 @@ public class DecodeTokenTests
 {
     [Theory]
     [ClassData(typeof(ChallengeTokens))]
-    public void DecodeToken(string header, string challengeToken, string expected)
+    public void DecodeToken(string header, string challenge, string expected)
     {
-        var actual = Key.Create(header, challengeToken);
+        var actual = Key.Create(header, challenge);
 
         Assert.Equal(expected, actual);
     }

@@ -1,5 +1,8 @@
 ﻿namespace Kahoot.NET.API.Responses;
 
+/// <summary>
+/// The response we get after we HTTP GET <see cref="Connection.SessionUrl"/>
+/// </summary>
 internal class SessionResponse
 {
     /// <summary>
@@ -50,9 +53,15 @@ internal class SessionResponse
     [JsonPropertyName("participantId")]
     public bool ParticipantId { get; set; }
 
+    /// <summary>
+    /// If the HTTP GET sent back a game
+    /// </summary>
     [JsonIgnore]
     public bool Success { get; set; }
 
+    /// <summary>
+    /// The Websocket Key used for connecting decoded from the response
+    /// </summary>
     [JsonIgnore]
     public string? WebSocketKey { get; set; }
 }

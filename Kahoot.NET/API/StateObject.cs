@@ -8,16 +8,39 @@ namespace Kahoot.NET.API;
 internal class StateObject
 {
     /// <summary>
-    /// 1 Kilobyte for reading from the buffer
+    /// The size of the buffer to be used to store messages
     /// </summary>
     public const int BufferSize = 1024;
 
+    /// <summary>
+    /// The current message id count
+    /// </summary>
     public long id;
+
+    /// <summary>
+    /// The number of acknowledgements
+    /// </summary>
     public long ack;
+
+    /// <summary>
+    /// The lag of the connection
+    /// </summary>
     public long l;
+
+    /// <summary>
+    /// The offset of the connection
+    /// </summary>
     public long o;
+
+    /// <summary>
+    /// The client identifier so the server knows which session we are
+    /// </summary>
     public string? clientId;
 
+    /// <summary>
+    /// Get the timesync used for certain objects
+    /// </summary>
+    /// <returns>A timesync used for websocket messages</returns>
     internal ExtOnlyTimesync OnlyTimeFromState()
     {
         return new()

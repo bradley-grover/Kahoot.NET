@@ -2,6 +2,9 @@
 
 namespace Kahoot.NET.API.Requests;
 
+/// <summary>
+/// Message to send when disconnecting from the server
+/// </summary>
 internal class LeaveMessage : BaseClientMessage
 {
 #nullable disable

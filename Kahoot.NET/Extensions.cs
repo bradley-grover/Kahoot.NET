@@ -1,5 +1,8 @@
 ﻿namespace Kahoot.NET;
 
+/// <summary>
+/// Internal extension methods to minimize code duplications/helper methods
+/// </summary>
 internal static class Extensions
 {
     internal static string RemoveBrackets(this ReadOnlySpan<char> span)
@@ -14,10 +17,10 @@ internal static class Extensions
     /// Invokes an event if there are callers assigned to it
     /// </summary>
     /// <typeparam name="TEventArgs"></typeparam>
-    /// <param name="event"></param>
-    /// <param name="sender"></param>
-    /// <param name="args"></param>
-    /// <returns></returns>
+    /// <param name="event">The event to invoke</param>
+    /// <param name="sender">The sender of the event</param>
+    /// <param name="args">The event args/data to pass</param>
+    /// <returns>A <see cref="Task"/> to <see langword="await"/></returns>
     internal static async Task InvokeEventAsync<TEventArgs>(
         this Func<object?, TEventArgs, Task>? @event, object? sender, TEventArgs args)
     {

@@ -3,8 +3,14 @@ using Kahoot.NET.API.Shared.Extra;
 
 namespace Kahoot.NET.API.Requests.Handshake;
 
+/// <summary>
+/// The second message to send during the handshake proccess
+/// </summary>
 internal class SecondClientHandshake : ClientMessage
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SecondClientHandshake"/> class
+    /// </summary>
     public SecondClientHandshake()
     {
         Channel = Channels.Connection;

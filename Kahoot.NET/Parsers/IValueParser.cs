@@ -3,7 +3,7 @@
 /// <summary>
 /// Parses a string into a certain type with a value
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">The value to extract</typeparam>
 internal interface IValueParser<T>
 {
     /// <summary>

@@ -1,9 +1,11 @@
-﻿using Kahoot.NET.API.Shared;
-using Kahoot.NET.API.Shared.Adv;
+﻿using Kahoot.NET.API.Shared.Adv;
 using Kahoot.NET.API.Shared.Extra;
 
 namespace Kahoot.NET.API.Requests.Handshake;
 
+/// <summary>
+/// Handshake used to initialize connection to the server
+/// </summary>
 internal class ClientHandshake : Message
 {
     public ClientHandshake()

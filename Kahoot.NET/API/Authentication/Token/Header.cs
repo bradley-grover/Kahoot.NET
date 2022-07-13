@@ -1,5 +1,8 @@
 ﻿namespace Kahoot.NET.API.Authentication.Token;
 
+/// <summary>
+/// Static class to retrieve header part of the websocket key to combine
+/// </summary>
 internal static class Header
 {
     /// <summary>

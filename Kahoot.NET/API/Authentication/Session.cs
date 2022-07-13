@@ -2,6 +2,9 @@
 
 namespace Kahoot.NET.API.Authentication;
 
+/// <summary>
+/// Static class to create a session
+/// </summary>
 internal static class Session
 {
     /// <summary>

@@ -7,6 +7,9 @@ namespace Kahoot.NET.API.Requests;
 /// </summary>
 internal class Packet : ClientMessage
 {
+    /// <summary>
+    /// Extra data used which only contains time data to sync with the server
+    /// </summary>
     [JsonPropertyName("ext")]
     public ExtWithTimesync<long>? Ext { get; set; }
 }

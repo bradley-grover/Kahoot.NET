@@ -1,8 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Kahoot.NET.API.Shared;
-using Kahoot.NET.API.Shared.Json;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {

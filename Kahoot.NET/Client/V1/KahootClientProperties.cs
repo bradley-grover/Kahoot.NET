@@ -24,8 +24,11 @@ public partial class KahootClient
     public string? Username { get; private set; }
 
     /// <inheritdoc></inheritdoc>
-    public event Func<object?, JoinEventArgs, Task>? OnJoined;
+    public event Func<object?, JoinEventArgs, Task>? Joined;
 
     /// <inheritdoc></inheritdoc>
-    public event Func<object?, ClientErrorEventArgs, Task>? OnClientError;
+    public event Func<object?, ClientErrorEventArgs, Task>? ClientError;
+
+    /// <inheritdoc></inheritdoc>
+    public event Func<object?, LeftEventArgs, Task>? Left;
 }

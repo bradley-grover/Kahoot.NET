@@ -26,8 +26,9 @@ public class Program
             Console.WriteLine($"Could not get numeric code, try again");
         }
 
-        kahootClient.OnJoined += KahootClient_OnJoined;
-        kahootClient.OnClientError += KahootClient_OnClientError;
+        kahootClient.Joined += KahootClient_OnJoined;
+        kahootClient.ClientError += KahootClient_ClientError;
+        kahootClient.Left += KahootClient_Left;
 
        
         var validGame = await kahootClient.JoinAsync(result);
@@ -35,12 +36,43 @@ public class Program
         if (!validGame)
         {
             Console.WriteLine("Could not find game");
+            return;
         }
 
-        await Task.Delay(-1);
+        while (true)
+        {
+            string? input = Console.ReadLine();
+
+            if (input is not null)
+            {
+                switch (input)
+                {
+                    case "leave":
+                        await kahootClient.LeaveAsync();
+                        break;
+                }
+            }
+        }
     }
 
-    private static Task KahootClient_OnClientError(object? sender, ClientErrorEventArgs arg)
+    private static Task KahootClient_Left(object? sender, LeftEventArgs args)
+    {
+        switch (args.Reason)
+        {
+            case ReasonForLeaving.UserKicked:
+                Console.WriteLine("I was kicked from the game");
+                break;
+            case ReasonForLeaving.UserRequested:
+                Console.WriteLine("I have left the game");
+                break;
+            case ReasonForLeaving.GameLocked:
+                Console.WriteLine("The game is locked");
+                break;
+        }
+        return Task.CompletedTask;
+    }
+
+    private static Task KahootClient_ClientError(object? sender, ClientErrorEventArgs arg)
     {
         Console.WriteLine(arg.Error);
         return Task.CompletedTask;

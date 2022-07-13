@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.API.Shared;
-
-namespace Kahoot.NET.API.Responses;
+﻿namespace Kahoot.NET.API.Responses;
 
 internal class DataErrorResponse : Data
 {

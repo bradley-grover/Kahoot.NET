@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.Parsers;
-
-namespace Kahoot.NET.API.Authentication.Token;
+﻿namespace Kahoot.NET.API.Authentication.Token;
 
 /// <summary>
 /// Provides methods to decode the challenge string

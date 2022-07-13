@@ -9,7 +9,24 @@ public partial class KahootClient
         switch (dataType)
         {
             case Types.LoginResponse:
-                JsonSerializer.Deserialize<DataErrorResponse>(jsonContent);
+                var error = JsonSerializer.Deserialize<Message<DataErrorResponse>>(jsonContent)!;
+
+                // we know the data can't be null cause a login response was passed
+
+                if (error.Data!.Error != null)
+                {
+                    switch (error.Data.Error)
+                    {
+                        case Types.Errors.UserInput:
+                            await Joined.InvokeEventAsync(this, new()
+                            {
+                                Success = false,
+                                Error = Data.Errors.JoinErrors.DuplicateUserName
+                            });
+                            break;
+                    }
+                }
+                
 
                 await SendLastLoginMessageAsync();
                 break;

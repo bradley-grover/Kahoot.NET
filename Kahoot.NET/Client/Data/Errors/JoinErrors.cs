@@ -13,9 +13,12 @@ public enum JoinErrors
     /// When you try to join the game, but someone already has the same name
     /// </summary>
     DuplicateUserName,
-
     /// <summary>
     /// Caused the client id is unknown to the server
     /// </summary>
-    SessionUnknown
+    SessionUnknown,
+    /// <summary>
+    /// Occurs when the game locks more players from joining
+    /// </summary>
+    Locked
 }

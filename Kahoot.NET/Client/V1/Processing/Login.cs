@@ -1,6 +1,4 @@
 ﻿using Kahoot.NET.API.Requests.Login;
-using Kahoot.NET.API;
-using Kahoot.NET.API.Shared;
 
 namespace Kahoot.NET.Client;
 

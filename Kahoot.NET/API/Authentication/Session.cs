@@ -1,10 +1,15 @@
-﻿using Kahoot.NET.API.Authentication.Json;
-using Kahoot.NET.API.Authentication.Token;
+﻿using Kahoot.NET.API.Authentication.Token;
 
 namespace Kahoot.NET.API.Authentication;
 
 internal static class Session
 {
+    /// <summary>
+    /// Creates the session used to connect to the game
+    /// </summary>
+    /// <param name="client">Http client to be used for sending the request</param>
+    /// <param name="gameId">The game id to use</param>
+    /// <returns>Session response which may have failed</returns>
     internal static async Task<SessionResponse> CreateAsync(HttpClient client, int gameId)
     {
         HttpResponseMessage response = await client.SendGameAsync(gameId);
@@ -36,6 +41,10 @@ internal static class Session
         return session;
     }
 
+    /// <summary>
+    /// Returns a failed sessio response
+    /// </summary>
+    /// <returns>Failed response</returns>
     private static SessionResponse Failed()
     {
         return new() { Success = false };

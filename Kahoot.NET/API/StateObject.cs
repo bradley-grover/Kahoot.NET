@@ -1,4 +1,6 @@
-﻿namespace Kahoot.NET.API;
+﻿using Kahoot.NET.API.Shared.Extra;
+
+namespace Kahoot.NET.API;
 
 /// <summary>
 /// State object for storing the websocket information
@@ -15,4 +17,16 @@ internal class StateObject
     public long l;
     public long o;
     public string? clientId;
+
+    internal ExtOnlyTimesync OnlyTimeFromState()
+    {
+        return new()
+        {
+            Timesync = new()
+            {
+                L = l,
+                O = o
+            }
+        };
+    }
 }

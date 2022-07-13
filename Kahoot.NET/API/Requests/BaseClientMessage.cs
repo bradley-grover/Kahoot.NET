@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.API.Shared;
-
-namespace Kahoot.NET.API.Requests;
+﻿namespace Kahoot.NET.API.Requests;
 
 internal class BaseClientMessage<TData> : Message<TData>
     where TData : Data

@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.Internal.Data.Messages.Leaving;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 /// <summary>
 /// First version of <see cref="IKahootClient"/> to be used to connect and interact with Kahoot games
@@ -37,19 +35,15 @@ public partial class KahootClient : IKahootClient
     /// <inheritdoc></inheritdoc>
     public async Task LeaveAsync(CancellationToken cancellationToken = default)
     {
-        if (Socket is null)
+        if (Socket is null || Socket.State != WebSocketState.Open)
         {
             throw new InvalidOperationException("Can't perform this operation when the client isn't connected");
         }
 
-        await SendAsync(new LiveLeaveMessage()
-        {
-            Id = State.id.ToString(),
-            Channel = LiveMessageChannels.Disconnection,
-            ClientId = State.clientId,
-        }, LiveLeaveMessageContext.Default.LiveLeaveMessage, cancellationToken);
-
+        await SendLeaveMessageAsync();
 
         await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, cancellationToken);
+
+        await Left.InvokeEventAsync(this, new(ReasonForLeaving.UserRequested));
     }
 }

@@ -28,9 +28,9 @@ public partial class KahootClient
     {
         if (value is null)
         {
-            if (OnClientError is not null)
+            if (ClientError is not null)
             {
-                await OnClientError.Invoke(this, new(new Exception("An error occured internally parsing message")));
+                await ClientError.Invoke(this, new(new Exception("An error occured internally parsing message")));
             }
 
             return true;

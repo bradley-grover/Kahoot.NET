@@ -13,12 +13,17 @@ public interface IKahootClient : IDisposable
     /// <summary>
     /// When the client has failed to or joined a game, make sure to check if <see cref="JoinEventArgs.Success"/> is true before accessing fields
     /// </summary>
-    event Func<object?, JoinEventArgs, Task>? OnJoined;
+    event Func<object?, JoinEventArgs, Task>? Joined;
 
     /// <summary>
     /// When the client encounters an error
     /// </summary>
-    event Func<object?, ClientErrorEventArgs, Task>? OnClientError;
+    event Func<object?, ClientErrorEventArgs, Task>? ClientError;
+
+    /// <summary>
+    /// When the client has left the game/socket
+    /// </summary>
+    event Func<object?, LeftEventArgs, Task>? Left;
 
     /// <summary>
     /// Join a kahoot game with the name and code

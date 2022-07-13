@@ -1,7 +1,4 @@
-﻿using Kahoot.NET.API;
-using Kahoot.NET.API.Requests;
-using Kahoot.NET.API.Requests.Json;
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {

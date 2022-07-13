@@ -5,9 +5,6 @@ namespace Kahoot.NET.Client;
 /// <summary>
 /// Client to connect to a Kahoot
 /// </summary>
-/// <remarks>
-/// It implements <see cref="IDisposable"/>
-/// </remarks>
 public interface IKahootClient : IDisposable
 {
     /// <summary>
@@ -37,7 +34,7 @@ public interface IKahootClient : IDisposable
     /// <summary>
     /// Disconnects the client from the Kahoot game
     /// </summary>
-    /// <param name="cancellationToken">Cancellation token to cancel the <see cref="Task"/></param>
-    /// <returns>A <see cref="Task"/> to <see langword="await"/></returns>
+    /// <param name="cancellationToken">Cancellation token to cancel the task</param>
+    /// <returns>Awaitable</returns>
     Task LeaveAsync(CancellationToken cancellationToken = default);
 }

@@ -32,7 +32,7 @@ public partial class KahootClient
 
                 break;
             default: 
-                await ProcessChannelAsync(data, channel);
+                await ProcessChannelAsync(data, channel, dataType);
                 break;
         }
     }

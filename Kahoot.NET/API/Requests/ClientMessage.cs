@@ -7,7 +7,7 @@ internal class ClientMessage<TData> : BaseClientMessage<TData>
 {
     /// <summary>
     /// Type of connection that the message is using, 
-    /// the default is <see cref="InternalConsts.ConnectionType"/>
+    /// the default is <see cref="Connection.ConnectionType"/>
     /// </summary>
     [JsonPropertyName("connectionType")]
     public string? ConnectionType { get; set; } = Connection.ConnectionType;

@@ -11,7 +11,7 @@ public partial class KahootClient
             case Channels.Service:
                 if (data is null) return;
 
-                await ServiceAsync(data);
+                await ServiceAsync(content, data);
                 break;
         }
     }

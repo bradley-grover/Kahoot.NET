@@ -26,26 +26,4 @@ public partial class KahootClient
 
         return message;
     }
-
-    private async Task SendKeepAliveAsync()
-    {
-        await SendAsync(new KeepAlive()
-        {
-            Channel = LiveMessageChannels.Connection,
-            ClientId = State.clientId,
-            ConnectionType = InternalConsts.ConnectionType,
-            Id = Interlocked.Increment(ref State.id).ToString(),
-            Ext = new()
-            {
-                Acknowledged = Interlocked.Read(ref State.ack),
-                Timesync = new()
-                {
-                    L = State.l,
-                    O = State.o,
-                }
-            }
-        });
-
-        Interlocked.Increment(ref State.ack);
-    }
 }

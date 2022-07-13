@@ -39,7 +39,7 @@ internal class ClientHandshake : Message
     /// The connection types that our websocket supports
     /// </summary>
     [JsonPropertyName("supportedConnectionTypes")]
-    public string[]? SupportedConnectionTypes { get; set; } = Connection.SupportedConnectionTypes;
+    public string[]? SupportedConnectionTypes { get; set; } = Connection.SupportedConnectionTypes.ToArray();
 
     /// <summary>
     /// Ext data for the client, this also includes timesync data with default values

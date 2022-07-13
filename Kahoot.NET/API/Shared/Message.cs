@@ -1,10 +1,10 @@
 ﻿namespace Kahoot.NET.API.Shared;
 
 /// <summary>
-/// A message with data embedded in it
+/// A message with data embedded in it, the base of every single message sent in the websocket
 /// </summary>
 /// <typeparam name="TData">The type of data that the message can hold</typeparam>
-internal class Message<TData>
+public class Message<TData>
     where TData : Data
 {
     /// <summary>
@@ -31,4 +31,4 @@ internal class Message<TData>
 /// <summary>
 /// Represents a non-generic implementation without any additional data, used as the base to redirect to other processing
 /// </summary>
-internal class Message : Message<Data> { }
+public class Message : Message<Data> { }

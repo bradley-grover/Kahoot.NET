@@ -1,9 +1,9 @@
 ﻿namespace Kahoot.NET.API.Responses;
 
 /// <summary>
-/// Represents a error contained within a <see cref="Data"/>
+/// Represents a error contained within a <seealso cref="Data"/> object
 /// </summary>
-internal class DataErrorResponse : Data
+public class DataErrorResponse : Data
 {
     /// <summary>
     /// The type of error that occured

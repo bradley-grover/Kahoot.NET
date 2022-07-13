@@ -3,7 +3,7 @@
 /// <summary>
 /// Data to be included in when completing the login info that we have to send to authenticate to the server
 /// </summary>
-internal class FinalLoginInformation : Data
+public class FinalLoginInformation : Data
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="FinalLoginInformation"/>

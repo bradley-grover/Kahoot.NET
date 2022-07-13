@@ -3,7 +3,7 @@
 /// <summary>
 /// Status response used for the channel <see cref="Channels.Status"/>
 /// </summary>
-internal class StatusResponse : Data
+public class StatusResponse : Data
 {
     /// <summary>
     /// The status of the certain event

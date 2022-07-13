@@ -3,7 +3,7 @@
 /// <summary>
 /// The login message to send to the server
 /// </summary>
-internal class LoginMessage : BaseClientMessage<LoginInformation>
+public class LoginMessage : BaseClientMessage<LoginInformation>
 {
     /// <summary>
     /// Intializes a new instance of the <see cref="LoginMessage"/> class

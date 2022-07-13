@@ -4,7 +4,7 @@
 /// Message used when sending a client message, a request
 /// </summary>
 /// <typeparam name="TData">The type of data that could be contained within the method</typeparam>
-internal class BaseClientMessage<TData> : Message<TData>
+public class BaseClientMessage<TData> : Message<TData>
     where TData : Data
 {
     /// <summary>
@@ -17,4 +17,4 @@ internal class BaseClientMessage<TData> : Message<TData>
 /// <summary>
 /// Non generic <see cref="BaseClientMessage{TData}"/> where the data is ignored
 /// </summary>
-internal class BaseClientMessage : BaseClientMessage<Data> { }
+public class BaseClientMessage : BaseClientMessage<Data> { }

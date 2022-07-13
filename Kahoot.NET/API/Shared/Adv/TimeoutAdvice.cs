@@ -1,6 +1,9 @@
 ﻿namespace Kahoot.NET.API.Shared.Adv;
 
-internal class TimeoutAdvice
+/// <summary>
+/// Advice for the timeout of the connection
+/// </summary>
+public class TimeoutAdvice
 {
     /// <summary>
     /// Timeout time for the connection

@@ -5,7 +5,7 @@ namespace Kahoot.NET.API.Requests.Handshake;
 /// <summary>
 /// The last handshake message to send for the handshake part of the session
 /// </summary>
-internal class LastHs : ClientMessage
+public class LastHs : ClientMessage
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="LastHs"/> class

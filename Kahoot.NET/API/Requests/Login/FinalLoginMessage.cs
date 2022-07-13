@@ -3,7 +3,7 @@
 /// <summary>
 /// The final message to send for logging into the game
 /// </summary>
-internal class FinalLoginMessage : BaseClientMessage<FinalLoginInformation>
+public class FinalLoginMessage : BaseClientMessage<FinalLoginInformation>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="FinalLoginMessage"/> class

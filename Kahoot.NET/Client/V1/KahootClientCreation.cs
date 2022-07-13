@@ -34,10 +34,10 @@ public partial class KahootClient
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="KahootClient"/> class
+    /// Initializes a new instance of the <seealso cref="KahootClient"/> class
     /// </summary>
     /// <param name="logger">A logger for the client</param>
-    /// <param name="httpClientFactory">An factory to produce <see cref="HttpClient"/> so that we don't starve our threads</param>
+    /// <param name="httpClientFactory">An factory to produce <seealso cref="HttpClient"/> so that we don't starve our threads</param>
     public KahootClient(ILogger<IKahootClient> logger, IHttpClientFactory httpClientFactory)
     {
         Logger = logger;

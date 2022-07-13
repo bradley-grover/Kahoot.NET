@@ -3,7 +3,7 @@
 /// <summary>
 /// The types that can be included in the <see cref="Data.Type"/> field
 /// </summary>
-internal static class Types
+public static class Types
 {
     /// <summary>
     /// Data type used for when the user is logging in/authenticating to the game
@@ -28,7 +28,7 @@ internal static class Types
     /// <summary>
     /// Represents errors that have occured contained within the data
     /// </summary>
-    internal static class Errors
+    public static class Errors
     {
         /// <summary>
         /// Represents when the user input is bad, like a duplicate user name

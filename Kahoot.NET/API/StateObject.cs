@@ -3,9 +3,9 @@
 namespace Kahoot.NET.API;
 
 /// <summary>
-/// State object for storing the websocket information
+/// Internal state object for storing the websocket information
 /// </summary>
-internal class StateObject
+public class StateObject
 {
     /// <summary>
     /// The size of the buffer to be used to store messages
@@ -41,7 +41,7 @@ internal class StateObject
     /// Get the timesync used for certain objects
     /// </summary>
     /// <returns>A timesync used for websocket messages</returns>
-    internal ExtOnlyTimesync OnlyTimeFromState()
+    public ExtOnlyTimesync OnlyTimeFromState()
     {
         return new()
         {

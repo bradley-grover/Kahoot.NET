@@ -1,9 +1,9 @@
 ﻿namespace Kahoot.NET.API.Shared;
 
 /// <summary>
-/// Represents as a struct, because this is a cheap object
+/// Represents a screen object as a struct, because this is a cheap object
 /// </summary>
-internal struct Screen
+public struct Screen
 {
     /// <summary>
     /// The length of the user's screen

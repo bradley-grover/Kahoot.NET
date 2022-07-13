@@ -8,6 +8,7 @@ public partial class KahootClient
     public KahootClient()
     {
         Client = new();
+        Socket = new();
     }
     /// <summary>
     /// Initializes a new instance of the <see cref="KahootClient"/> class
@@ -17,6 +18,7 @@ public partial class KahootClient
     {
         Logger = logger;
         Client = new();
+        Socket = new();
     }
 
     /// <summary>
@@ -28,6 +30,7 @@ public partial class KahootClient
     {
         Logger = logger;
         Client = client;
+        Socket = new();
     }
 
     /// <summary>
@@ -39,5 +42,6 @@ public partial class KahootClient
     {
         Logger = logger;
         Client = httpClientFactory.CreateClient();
+        Socket = new();
     }
 }

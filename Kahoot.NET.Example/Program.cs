@@ -1,6 +1,6 @@
 ﻿using Kahoot.NET;
 using Kahoot.NET.Client;
-using Kahoot.NET.FluentBuilder;
+using Kahoot.NET.Client.Data;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Example;
@@ -26,14 +26,70 @@ public class Program
             Console.WriteLine($"Could not get numeric code, try again");
         }
 
+        kahootClient.Joined += KahootClient_OnJoined;
+        kahootClient.ClientError += KahootClient_ClientError;
+        kahootClient.Left += KahootClient_Left;
+
        
-        await kahootClient.JoinAsync(result);
+        var validGame = await kahootClient.JoinAsync(result);
+
+        if (!validGame)
+        {
+            Console.WriteLine("Could not find game");
+            return;
+        }
+
+        while (true)
+        {
+            string? input = Console.ReadLine();
+
+            if (input is not null)
+            {
+                switch (input)
+                {
+                    case "leave":
+                        await kahootClient.LeaveAsync();
+                        break;
+                }
+            }
+        }
     }
 
-
-    private static async Task Client_OnJoined(object? sender, EventArgs e)
+    private static Task KahootClient_Left(object? sender, LeftEventArgs args)
     {
-        Console.WriteLine("Stuff");
-        await Task.Delay(1000);
+        switch (args.Reason)
+        {
+            case ReasonForLeaving.UserKicked:
+                Console.WriteLine("I was kicked from the game");
+                break;
+            case ReasonForLeaving.UserRequested:
+                Console.WriteLine("I have left the game");
+                break;
+            case ReasonForLeaving.GameLocked:
+                Console.WriteLine("The game is locked");
+                break;
+        }
+        return Task.CompletedTask;
+    }
+
+    private static Task KahootClient_ClientError(object? sender, ClientErrorEventArgs arg)
+    {
+        Console.WriteLine(arg.Error);
+        return Task.CompletedTask;
+    }
+
+    private static Task KahootClient_OnJoined(object? sender, JoinEventArgs args)
+    {
+        if (args.Success)
+        {
+            Console.WriteLine("Joined the game");
+            Console.WriteLine($"Is2fa");
+        }
+        else 
+        {
+            Console.WriteLine("Failed to join game");
+        }
+
+        return Task.CompletedTask;
     }
 }

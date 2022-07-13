@@ -23,15 +23,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="C:\Users\bradl\.nuget\packages\flee\2.0.0\contentFiles\any\net6.0\Resources\DocComments.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Flee" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="NuGet.Build" Version="2.12.1" />
     <PackageReference Include="OneOf" Version="3.0.216" />
     <PackageReference Include="RandomUserAgent" Version="1.1.2" />
+    <PackageReference Include="SpanExtensions" Version="1.0.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="F:\repos\Kahoot.NET\Kahoot.NET\.editorconfig" />
+    <Folder Include="API\Responses\Json\" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@
 /// <summary>
 /// Represents data where it contains an integer id and content that could be a JSON string within the content field to further deserialize
 /// </summary>
-internal class ContentData : Data
+public class ContentData : Data
 {
     /// <summary>
     /// Integer identifer for the data

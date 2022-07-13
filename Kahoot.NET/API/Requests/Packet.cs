@@ -5,7 +5,7 @@ namespace Kahoot.NET.API.Requests;
 /// <summary>
 /// Lets the server know that the client is still connected
 /// </summary>
-internal class Packet : ClientMessage
+public class Packet : ClientMessage
 {
     /// <summary>
     /// Extra data used which only contains time data to sync with the server

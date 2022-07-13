@@ -3,7 +3,7 @@
 /// <summary>
 /// Information to send for logging into the game
 /// </summary>
-internal class LoginInformation : Data
+public class LoginInformation : Data
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="LoginInformation"/> struct

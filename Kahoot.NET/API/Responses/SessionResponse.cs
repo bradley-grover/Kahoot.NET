@@ -3,7 +3,7 @@
 /// <summary>
 /// The response we get after we HTTP GET <see cref="Connection.SessionUrl"/>
 /// </summary>
-internal class SessionResponse
+public class SessionResponse
 {
     /// <summary>
     /// The game mode of the quiz

@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a user's device information there is logic so it is a cheap object
 /// </summary>
-internal struct Device
+public struct Device
 {
     /// <summary>
     /// The user agent's of the user's browser

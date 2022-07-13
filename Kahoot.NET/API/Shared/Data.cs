@@ -7,7 +7,7 @@
 /// This is set as a nullable reference type as it might not exist within a <see cref="Message{TData}"/> but if it
 /// exists <see cref="Type"/> must exist
 /// </remarks>
-internal class Data
+public class Data
 {
 #nullable disable
     /// <summary>

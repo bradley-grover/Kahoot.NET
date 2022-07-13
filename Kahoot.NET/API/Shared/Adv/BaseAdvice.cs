@@ -1,6 +1,9 @@
 ﻿namespace Kahoot.NET.API.Shared.Adv;
 
-internal class BaseAdvice
+/// <summary>
+/// Base advice for server connection timings
+/// </summary>
+public class BaseAdvice
 {
     /// <summary>
     /// Interval between requests

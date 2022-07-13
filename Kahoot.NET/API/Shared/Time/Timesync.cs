@@ -4,7 +4,7 @@
 /// <summary>
 /// Timesync data to be used to sync the server and the client
 /// </summary>
-internal class Timesync
+public class Timesync
 {
     /// <summary>
     /// The lag between the server and the client

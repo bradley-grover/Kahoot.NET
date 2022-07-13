@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a error contained within a <see cref="Data"/>
 /// </summary>
-internal class DataErrorResponse : Data
+public class DataErrorResponse : Data
 {
     /// <summary>
     /// The type of error that occured

@@ -8,13 +8,30 @@ public static class Channels
     /// <summary>
     /// Channel used to handle connecting to the game
     /// </summary>
-    internal const string Handshake = "/meta/handshake";
-    internal const string Connection = "/meta/connect";
+    public const string Handshake = "/meta/handshake";
+
+    /// <summary>
+    /// Channel used for connecting the game as well as hearbeats
+    /// </summary>
+    public const string Connection = "/meta/connect";
+
     /// <summary>
     /// Channel used when disconnecting from the websocket/game
     /// </summary>
-    internal const string Disconnection = "/meta/disconnect";
-    internal const string Service = "/service/controller";
-    internal const string Status = "/service/status";
-    internal const string Player = "/service/player";
+    public const string Disconnection = "/meta/disconnect";
+
+    /// <summary>
+    /// Channel used for login
+    /// </summary>
+    public const string Service = "/service/controller";
+
+    /// <summary>
+    /// Channel used for status updates on the game
+    /// </summary>
+    public const string Status = "/service/status";
+
+    /// <summary>
+    /// Channel used for player updates
+    /// </summary>
+    public const string Player = "/service/player";
 }

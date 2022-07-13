@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.Internal.Data.Messages.Leaving;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 /// <summary>
 /// First version of <see cref="IKahootClient"/> to be used to connect and interact with Kahoot games
@@ -8,16 +6,21 @@ namespace Kahoot.NET.Client;
 public partial class KahootClient : IKahootClient
 {
     /// <inheritdoc></inheritdoc>
-    public async Task JoinAsync(int code, string? username = null, CancellationToken cancellationToken = default)
+    public async Task<bool> JoinAsync(int code, string? username = null, CancellationToken cancellationToken = default)
     {
         Username = username;
         GameId = code;
 
         Logger?.LogDebug("Creating handshake");
 
-        await CreateHandshakeAsync(cancellationToken);
+        var result = await SendHandshakeAsync(cancellationToken);
 
-        Logger?.LogDebug("Spawning data loop");
+        if (!result)
+        {
+            return false;
+        }
+
+        Logger?.LogDebug("Data thread spawning");
 
         var backgroundProcesser = new Thread(async () => await ReceiveAsync())
         {
@@ -25,24 +28,22 @@ public partial class KahootClient : IKahootClient
         };
 
         backgroundProcesser.Start();
+
+        return true;
     }
 
     /// <inheritdoc></inheritdoc>
     public async Task LeaveAsync(CancellationToken cancellationToken = default)
     {
-        if (Socket is null)
+        if (Socket is null || Socket.State != WebSocketState.Open)
         {
             throw new InvalidOperationException("Can't perform this operation when the client isn't connected");
         }
 
-        await SendAsync(new LiveLeaveMessage()
-        {
-            Id = _sessionObject.id.ToString(),
-            Channel = LiveMessageChannels.Disconnection,
-            ClientId = _sessionObject.clientId,
-        }, LiveLeaveMessageContext.Default.LiveLeaveMessage, cancellationToken);
-
+        await SendLeaveMessageAsync();
 
         await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, cancellationToken);
+
+        await Left.InvokeEventAsync(this, new(ReasonForLeaving.UserRequested));
     }
 }

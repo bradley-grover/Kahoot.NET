@@ -9,7 +9,7 @@ public class SuccessfulDecode
     [JsonPropertyName("header")]
     public string Header { get; set; }
 
-    [JsonPropertyName("challengeFunction")]
+    [JsonPropertyName("challenge")]
     public string Challenge { get; set; }
 
     [JsonPropertyName("expected")]

@@ -8,7 +8,14 @@ public class ChallengeTokens : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
-        foreach (var item in TestHelper.Configuration.GetValue<SuccessfulDecode[]>("successfulJoins"))
+        var decoded = TestHelper.Configuration.GetSection("successfulJoins").Get<SuccessfulDecode[]>();
+
+        if (decoded is null)
+        {
+            throw new Exception("Could not get decoded");
+        }
+
+        foreach (var item in decoded)
         {
             yield return new object[] { item.Header, item.Challenge, item.Expected };
         }

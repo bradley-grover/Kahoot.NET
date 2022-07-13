@@ -1,16 +1,14 @@
 ﻿#region ProjectLibraries
 global using Kahoot.NET.Client;
-global using Kahoot.NET.Quiz;
-global using Kahoot.NET.Shared;
-global using Kahoot.NET.Question;
-global using Kahoot.NET.Exceptions;
-global using Kahoot.NET.Internal;
-global using Kahoot.NET.Internal.Data.Messages;
-global using Kahoot.NET.Internal.Token;
-global using Kahoot.NET.Internal.Data.Responses;
-global using Kahoot.NET.Internal.Data.SourceGenerators.Messages;
-global using Kahoot.NET.Internal.Data.SourceGenerators.Other;
-global using Kahoot.NET.Internal.Data.SourceGenerators.Responses;
+global using Kahoot.NET.Client.Data;
+global using Kahoot.NET.API;
+global using Kahoot.NET.API.Responses;
+global using Kahoot.NET.API.Shared;
+global using Kahoot.NET.API.Authentication;
+global using Kahoot.NET.API.Shared.Json;
+global using Kahoot.NET.API.Authentication.Json;
+global using Kahoot.NET.API.Requests.Json;
+global using Kahoot.NET.Parsers;
 #endregion
 #region Standard Libraries
 global using System.Text;

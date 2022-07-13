@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Kahoot.NET.Client;
-using Kahoot.NET.Game.Client;
 using Microsoft.Extensions.Configuration;
 
 namespace Kahoot.NET.Tests;
@@ -17,11 +16,6 @@ public class TestHelper
             .Build();
 
         return root;
-    }
-
-    public static IQuizCreator Latest_QC()
-    {
-        return new QuizCreator(null);
     }
 
     public static IKahootClient Latest_Client()

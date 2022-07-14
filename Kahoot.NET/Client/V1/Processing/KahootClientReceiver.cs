@@ -17,9 +17,9 @@ public partial class KahootClient
 
         while (Socket.State == WebSocketState.Open)
         {
-            byte[] array = ArrayPool<byte>.Shared.Rent(StateObject.BufferSize);
-                
-            Memory<byte> buffer = array;
+            //byte[] array = ArrayPool<byte>.Shared.Rent(StateObject.BufferSize);
+
+            Memory<byte> buffer = new byte[1024];
 
             var result = await Socket.ReceiveAsync(buffer, CancellationToken.None);
 
@@ -30,7 +30,7 @@ public partial class KahootClient
 
             await ProcessDataAsync(buffer);
 
-            ArrayPool<byte>.Shared.Return(array, true);
+            //ArrayPool<byte>.Shared.Return(array, true);
         }
     }
 }

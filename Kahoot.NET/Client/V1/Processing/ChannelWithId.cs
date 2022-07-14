@@ -1,4 +1,6 @@
-﻿namespace Kahoot.NET.Client;
+﻿using Kahoot.NET.API.Requests;
+
+namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
@@ -27,6 +29,12 @@ public partial class KahootClient
                 await Task.Delay(800);
                 await SendLoginMessageAsync();
 
+                break;
+            case (4, Channels.Service):
+                Interlocked.Increment(ref State.id);
+                Interlocked.Increment(ref State.ack);
+
+                await SendPacketAsync();
                 break;
             default: 
                 await ProcessChannelAsync(data, channel, dataType);

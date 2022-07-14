@@ -11,6 +11,9 @@ public partial class KahootClient
             case Types.Status:
                 switch (statusObject.Data!.Status)
                 {
+                    case Types.Active:
+                        await Joined.InvokeEventAsync(this, new() { Success = true });
+                        break;
                     case Types.Errors.Locked:
                         await SendLeaveMessageAsync();
                         await Left.InvokeEventAsync(this, new(ReasonForLeaving.GameLocked));

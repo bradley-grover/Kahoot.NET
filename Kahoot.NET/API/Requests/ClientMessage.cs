@@ -18,4 +18,4 @@ public class ClientMessage<TData> : BaseClientMessage<TData>
 /// <summary>
 /// Non generic <see cref="ClientMessage{TData}"/> which doesn't contain any data
 /// </summary>
-public class ClientMessage : BaseClientMessage<Data> { }
+public class ClientMessage : ClientMessage<Data> { }

@@ -10,7 +10,7 @@ internal static class InternalSerializer
     /// <summary>
     /// Options for the JSON serializer
     /// </summary>
-    private static readonly JsonSerializerOptions Options = new()
+    internal static readonly JsonSerializerOptions Options = new()
     {
         WriteIndented = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull

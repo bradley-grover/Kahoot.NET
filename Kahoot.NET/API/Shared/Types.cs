@@ -26,6 +26,11 @@ public static class Types
     public const string Status = "status";
 
     /// <summary>
+    /// Status type for when the player is now active in the kahoot
+    /// </summary>
+    public const string Active = "ACTIVE";
+
+    /// <summary>
     /// Represents errors that have occured contained within the data
     /// </summary>
     public static class Errors

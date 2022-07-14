@@ -83,7 +83,6 @@ public class Program
         if (args.Success)
         {
             Console.WriteLine("Joined the game");
-            Console.WriteLine($"Is2fa");
         }
         else 
         {

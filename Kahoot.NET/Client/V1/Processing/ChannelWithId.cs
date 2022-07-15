@@ -36,6 +36,12 @@ public partial class KahootClient
 
                 await SendPacketAsync();
                 break;
+            case (_, Channels.Connection):
+                Interlocked.Increment(ref State.id);
+                Interlocked.Increment(ref State.ack);
+
+                await SendPacketAsync();
+                break;
             default: 
                 await ProcessChannelAsync(data, channel, dataType);
                 break;

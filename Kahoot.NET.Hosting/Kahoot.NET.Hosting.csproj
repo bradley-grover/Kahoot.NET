@@ -1,9 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageProjectUrl>https://github.com/ac111897/Kahoot.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ac111897/Kahoot.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Kahoot;.NET;WebSockets</PackageTags>
+    <NeutralLanguage>en-NZ</NeutralLanguage>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Authors>Bradley Grover</Authors>
+    <Version>1.0.1</Version>
+    <Description>Library to host Kahoot's, primarily for automating Paradox.Kahoot.NET</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReleaseNotes>First publish</PackageReleaseNotes>
+    <PackageId>Kahoot.NET.Hosting</PackageId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kahoot.NET\Kahoot.NET.csproj" />
+  </ItemGroup>
 
 </Project>

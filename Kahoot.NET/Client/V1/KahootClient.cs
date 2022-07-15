@@ -8,6 +8,11 @@ public partial class KahootClient : IKahootClient
     /// <inheritdoc></inheritdoc>
     public async Task<bool> JoinAsync(int code, string? username = null, CancellationToken cancellationToken = default)
     {
+        if (_inGame)
+        {
+            throw new InvalidOperationException("The client is already in a game");
+        }
+
         Username = username;
         GameId = code;
 
@@ -29,6 +34,8 @@ public partial class KahootClient : IKahootClient
 
         backgroundProcesser.Start();
 
+        _inGame = true;
+
         return true;
     }
 
@@ -45,5 +52,7 @@ public partial class KahootClient : IKahootClient
         await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, cancellationToken);
 
         await Left.InvokeEventAsync(this, new(ReasonForLeaving.UserRequested));
+
+        _inGame = false;
     }
 }

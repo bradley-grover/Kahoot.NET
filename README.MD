@@ -9,3 +9,8 @@
 Kahoot.NET, C# Library to connect to Kahoot! games and interact as a player
 
 A simple example can be found [here](https://github.com/ac111897/Kahoot.NET/blob/master/Kahoot.NET.Example)
+
+# Project Milestones
+- https://github.com/ac111897/Kahoot.NET/issues/19
+- https://github.com/ac111897/Kahoot.NET/issues/20
+- https://github.com/ac111897/Kahoot.NET/issues/21

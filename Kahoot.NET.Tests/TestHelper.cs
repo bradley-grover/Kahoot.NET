@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Kahoot.NET.Client;
+using Kahoot.NET.Hosting.Client;
 using Microsoft.Extensions.Configuration;
 
 namespace Kahoot.NET.Tests;
@@ -22,4 +23,11 @@ public class TestHelper
     {
         return new KahootClient();
     }
+
+    public static IKahootHost Create_Host()
+    {
+        return new KahootHost();
+    }
+
+
 }

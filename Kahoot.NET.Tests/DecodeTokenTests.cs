@@ -2,9 +2,10 @@
 
 namespace Kahoot.NET.Tests;
 
+[Trait(Traits.Parsers, Traits.ParsersDesc)]
 public class DecodeTokenTests
 {
-    [Theory]
+    [Theory(DisplayName = "Decodes the challenge function and header into websocket key")]
     [ClassData(typeof(ChallengeTokens))]
     public void DecodeToken(string header, string challenge, string expected)
     {

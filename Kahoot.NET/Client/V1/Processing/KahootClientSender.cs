@@ -15,11 +15,11 @@ public partial class KahootClient
 
         if (typeInfo is null)
         {
-            message = InternalSerializer.Serialize(data, out json);
+            message = Serializer.Serialize(data, out json);
         }
         else
         {
-            message = InternalSerializer.Serialize(data, typeInfo, out json);
+            message = Serializer.Serialize(data, typeInfo, out json);
         }
 
         Logger?.LogDebug("[SEND]: {json}", json.ToString());

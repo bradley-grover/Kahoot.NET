@@ -17,14 +17,14 @@ public partial class KahootHost
 
         if (typeInfo is null)
         {
-            message = InternalSerializer.Serialize(data, out json);
+            message = Serializer.Serialize(data, out json);
         }
         else
         {
-            message = InternalSerializer.Serialize(data, typeInfo, out json);
+            message = Serializer.Serialize(data, typeInfo, out json);
         }
 
-        Logger?.LogDebug("Sending: {message}", json.ToString());
+        Logger?.LogDebug("[SEND]: {message}", json.ToString());
 
         return message;
     }

@@ -27,14 +27,14 @@ public partial class KahootHost : IKahootHost
         }
     }
     
-    private ILogger<IKahootHost> Logger { get; }
+    private ILogger<IKahootHost>? Logger { get; }
     private HttpClient httpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="KahootHost"/> class with the specified logger
     /// </summary>
     /// <param name="logger">Logger to log events</param>
-    public KahootHost(ILogger<IKahootHost> logger)
+    public KahootHost(ILogger<IKahootHost>? logger = null)
     {
         Logger = logger;
         httpClient = new HttpClient();
@@ -45,7 +45,7 @@ public partial class KahootHost : IKahootHost
     /// </summary>
     /// <param name="logger"></param>
     /// <param name="client"></param>
-    public KahootHost(ILogger<IKahootHost> logger, HttpClient client)
+    public KahootHost(ILogger<IKahootHost>? logger, HttpClient client)
     {
         Logger = logger;
         httpClient = client;
@@ -57,11 +57,13 @@ public partial class KahootHost : IKahootHost
     /// <inheritdoc></inheritdoc>
     public async Task<int> CreateGameAsync(Uri quizUrl, GameConfiguration? configuration = null, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(quizUrl);
+
         configuration ??= GameConfiguration.Default;
 
         (int code, string key, bool success) = await httpClient.SendHostRequestAsync(quizUrl, configuration);
 
-        if (!success)
+        if (!success || !quizUrl.Host.Equals("play.kahoot.it", StringComparison.InvariantCultureIgnoreCase))
         {
             throw new QuizNotFoundException($"The quiz with the url '{quizUrl}' was not found");
         }

@@ -18,6 +18,8 @@ public partial class KahootHost
             return;
         }
 
-        
+        await (message.Id is null ? 
+            ChannelAsync(json, message.Channel, message?.Data?.Type) : 
+            ChannelWithIdAsync(json, int.Parse(message.Id.AsSpan()), message.Channel, message?.Data?.Type)); 
     }
 }

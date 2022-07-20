@@ -33,4 +33,22 @@ public partial class KahootHost
             }
         }, ClientHandshakeContext.Default.ClientHandshake);
     }
+
+    internal SecondClientHandshake CreateHS2()
+    {
+        return new()
+        {
+            ClientId = State.clientId,
+            Ext = new()
+            {
+                Acknowledged = Interlocked.Read(ref State.ack),
+                Time = new()
+                {
+                    L = State.l,
+                    O = State.o
+                }
+            },
+            Id = Interlocked.Read(ref State.id).ToString()
+        };
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.Hosting.Client.Errors;
+﻿using Kahoot.NET.Client.Data;
+using Kahoot.NET.Hosting.Client.Errors;
 using Kahoot.NET.Hosting.Resolver;
 
 namespace Kahoot.NET.Hosting.Client;
@@ -8,7 +9,14 @@ namespace Kahoot.NET.Hosting.Client;
 /// </summary>
 public partial class KahootHost : IKahootHost
 {
-    private StateObject State { get; } = new();
+    private StateObject State { get; } = new()
+    {
+        id = 1,
+        ack = 0,
+        l = 68,
+        o = 2999
+    };
+
     private ClientWebSocket Socket { get; } = new();
     private int _code = default;
 
@@ -28,7 +36,7 @@ public partial class KahootHost : IKahootHost
     }
     
     private ILogger<IKahootHost>? Logger { get; }
-    private HttpClient httpClient;
+    private readonly HttpClient httpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="KahootHost"/> class with the specified logger
@@ -53,6 +61,9 @@ public partial class KahootHost : IKahootHost
 
     /// <inheritdoc></inheritdoc>
     public event Func<object?, EventArgs, Task>? Created;
+
+    /// <inheritdoc></inheritdoc>
+    public event Func<object?, ClientErrorEventArgs, Task>? HostError;
 
     /// <inheritdoc></inheritdoc>
     public async Task<int> CreateGameAsync(Uri quizUrl, GameConfiguration? configuration = null, CancellationToken cancellationToken = default)
@@ -92,6 +103,12 @@ public partial class KahootHost : IKahootHost
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc></inheritdoc>
+    public Task LeaveAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     #region IDisposable
     private bool disposedValue;
     /// <inheritdoc></inheritdoc>
@@ -101,7 +118,12 @@ public partial class KahootHost : IKahootHost
         {
             if (disposing)
             {
-                // TODO: dispose managed state (managed objects)
+                if (Socket.State == WebSocketState.Connecting || Socket.State == WebSocketState.Connecting)
+                {
+                    Socket.Abort();
+                }
+
+                Socket.Dispose();
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer

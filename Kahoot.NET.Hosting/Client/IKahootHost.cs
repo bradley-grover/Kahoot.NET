@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.Hosting.Client.Errors;
+﻿using Kahoot.NET.Client.Data;
+using Kahoot.NET.Hosting.Client.Errors;
 
 namespace Kahoot.NET.Hosting.Client;
 
@@ -16,6 +17,11 @@ public interface IKahootHost : IDisposable
     /// Event is raised when <see cref="CreateGameAsync(Uri, GameConfiguration?, CancellationToken)"/> has created a game
     /// </summary>
     event Func<object?, EventArgs, Task>? Created;
+
+    /// <summary>
+    /// When the client encounters an error
+    /// </summary>
+    event Func<object?, ClientErrorEventArgs, Task>? HostError;
 
     /// <summary>
     /// Creates a game to the specified quiz url
@@ -41,4 +47,10 @@ public interface IKahootHost : IDisposable
     /// <returns>Awaitable</returns>
     /// <exception cref="InvalidOperationException"></exception>
     Task LockAsync();
+
+    /// <summary>
+    /// The host leaves the current game
+    /// </summary>
+    /// <returns>Task to await</returns>
+    Task LeaveAsync();
 }

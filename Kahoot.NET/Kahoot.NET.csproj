@@ -14,10 +14,10 @@
     <NeutralLanguage>en-NZ</NeutralLanguage>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Bradley Grover</Authors>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Description>Library to connect and interact with Kahoot's using .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReleaseNotes>First publish</PackageReleaseNotes>
+    <PackageReleaseNotes>Supports .NET 5 + 6 now</PackageReleaseNotes>
     <PackageId>Paradox.Kahoot.NET</PackageId>
   </PropertyGroup>
 

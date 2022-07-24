@@ -26,6 +26,11 @@ public static class Types
     public const string Status = "status";
 
     /// <summary>
+    /// Status type for when the player is now active in the kahoot
+    /// </summary>
+    public const string Active = "ACTIVE";
+
+    /// <summary>
     /// Represents errors that have occured contained within the data
     /// </summary>
     public static class Errors
@@ -39,5 +44,16 @@ public static class Types
         /// When the user tries to authenticate to a locked quiz
         /// </summary>
         public const string Locked = "LOCKED";
+    }
+
+    /// <summary>
+    /// Represents data types for when hosting a game
+    /// </summary>
+    public static class Hosting
+    {
+        /// <summary>
+        /// Represents that the host has created the game succesfully
+        /// </summary>
+        public const string Started = "started";
     }
 }

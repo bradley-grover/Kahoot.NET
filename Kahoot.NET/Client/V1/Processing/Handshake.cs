@@ -23,6 +23,8 @@ public partial class KahootClient
 
         Logger?.LogDebug("Connecting to socket...");
 
+        Socket.Options.KeepAliveInterval = TimeSpan.Zero;
+
         await Socket.ConnectAsync(uri, cancellationToken);
 
         await SendAsync(new ClientHandshake()

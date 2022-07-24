@@ -20,7 +20,12 @@ public partial class KahootClient
         {
             if (disposing)
             {
-                Socket?.Dispose();
+                if (Socket.State == WebSocketState.Open || Socket.State == WebSocketState.Connecting)
+                {
+                    Socket.Abort();
+                }
+
+                Socket.Dispose();
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer

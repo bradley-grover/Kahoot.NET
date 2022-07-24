@@ -6,8 +6,11 @@ namespace Kahoot.NET.API.Requests.Handshake;
 /// <summary>
 /// Handshake used to initialize connection to the server
 /// </summary>
-internal class ClientHandshake : Message
+public class ClientHandshake : Message
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ClientHandshake"/> class
+    /// </summary>
     public ClientHandshake()
     {
         Channel = Channels.Handshake;

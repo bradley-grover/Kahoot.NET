@@ -10,6 +10,12 @@ public partial class KahootClient
 
         switch (channel)
         {
+            case Channels.Connection:
+                Interlocked.Increment(ref State.id);
+                Interlocked.Increment(ref State.ack);
+
+                await SendPacketAsync();
+                break;
             case Channels.Status:
                 await StatusAsync(content, data);
                 break;

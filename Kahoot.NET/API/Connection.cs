@@ -37,6 +37,16 @@ public static class Connection
     public const string SessionUrl = "https://kahoot.it/reserve/session/{0}/?{1}";
 
     /// <summary>
+    /// Represents the url used to create a session to host a game
+    /// </summary>
+    public const string HostSessionUrl = "https://play.kahoot.it/reserve/session/?{0}";
+
+    /// <summary>
+    /// The websocket url for hosting
+    /// </summary>
+    public const string HostWebsocketUrl = "wss://play.kahoot.it/cometd/{0}/{1}";
+
+    /// <summary>
     /// The websocket url to connect to the game
     /// </summary>
     public const string WebsocketUrl = "wss://kahoot.it/cometd/{0}/{1}";

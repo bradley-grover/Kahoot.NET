@@ -52,4 +52,17 @@ public class StateObject
             }
         };
     }
+
+    /// <summary>
+    /// Gets extra data from the state object
+    /// </summary>
+    /// <returns></returns>
+    public ExtWithTimesync<long> GetExtWithTimesync()
+    {
+        return new()
+        {
+            Time = new() { L = l, O = o },
+            Acknowledged = ack
+        };
+    }
 }

@@ -18,7 +18,3 @@ global using System.Runtime.CompilerServices;
 global using System.Net.WebSockets;
 global using Microsoft.Extensions.Logging;
 #endregion
-#region External Libraries
-global using OneOf;
-#endregion
-

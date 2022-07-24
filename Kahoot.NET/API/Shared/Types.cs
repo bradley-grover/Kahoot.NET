@@ -45,4 +45,15 @@ public static class Types
         /// </summary>
         public const string Locked = "LOCKED";
     }
+
+    /// <summary>
+    /// Represents data types for when hosting a game
+    /// </summary>
+    public static class Hosting
+    {
+        /// <summary>
+        /// Represents that the host has created the game succesfully
+        /// </summary>
+        public const string Started = "started";
+    }
 }

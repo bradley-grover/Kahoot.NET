@@ -1,0 +1,10 @@
+﻿global using System.Text.Json;
+global using System.Text.Json.Serialization;
+global using System.Text.Json.Serialization.Metadata;
+global using System.Net.WebSockets;
+global using Kahoot.NET.API;
+global using Kahoot.NET.API.Requests;
+global using Kahoot.NET.API.Requests.Json;
+global using Kahoot.NET.API.Shared;
+global using Kahoot.NET.Hosting.Json;
+global using Microsoft.Extensions.Logging;

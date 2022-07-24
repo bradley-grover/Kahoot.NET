@@ -2,6 +2,7 @@
 
 namespace Kahoot.NET.Tests;
 
+[Trait(Traits.Parsers, Traits.ParsersDesc)]
 public class ParserTests
 {
     [Theory(DisplayName = "Parse Expression Test")]

@@ -23,9 +23,20 @@ public partial class KahootClient
 
         Logger?.LogDebug("Connecting to socket...");
 
+        Socket.Options.SetRequestHeader("User-Agent", userAgent);
+        Socket.Options.SetRequestHeader("Accept-Encoding", "gzip, deflate, br");
+        Socket.Options.SetBuffer(1024, 1024);
+
         Socket.Options.KeepAliveInterval = TimeSpan.Zero;
 
-        await Socket.ConnectAsync(uri, cancellationToken);
+        try
+        {
+            await Socket.ConnectAsync(uri, cancellationToken);
+        }
+        catch (WebSocketException)
+        {
+            return false;
+        }
 
         await SendAsync(new ClientHandshake()
         {

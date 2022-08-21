@@ -42,10 +42,6 @@ public class Program
         {
             Console.WriteLine(error);
         }
-        else
-        {
-            Console.WriteLine("A client has joined");
-        }
 
         return Task.CompletedTask;
     }

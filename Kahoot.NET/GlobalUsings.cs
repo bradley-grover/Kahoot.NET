@@ -11,6 +11,7 @@ global using Kahoot.NET.API.Requests.Json;
 global using Kahoot.NET.Parsers;
 #endregion
 #region Standard Libraries
+global using System.Diagnostics;
 global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;

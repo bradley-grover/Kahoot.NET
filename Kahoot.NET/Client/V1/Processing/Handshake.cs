@@ -25,6 +25,7 @@ public partial class KahootClient
 
         Socket.Options.SetRequestHeader("User-Agent", userAgent);
         Socket.Options.SetRequestHeader("Accept-Encoding", "gzip, deflate, br");
+
         Socket.Options.SetBuffer(1024, 1024);
 
         Socket.Options.KeepAliveInterval = TimeSpan.Zero;
@@ -33,8 +34,9 @@ public partial class KahootClient
         {
             await Socket.ConnectAsync(uri, cancellationToken);
         }
-        catch (WebSocketException)
+        catch (WebSocketException ex)
         {
+            Debug.WriteLine($"[KAHOOT.NET] [V1]: HANDSHAKE ERROR: {Enum.GetName(ex.WebSocketErrorCode)}");
             return false;
         }
 

@@ -26,7 +26,7 @@ public partial class KahootClient
         Socket.Options.SetRequestHeader("User-Agent", userAgent);
         Socket.Options.SetRequestHeader("Accept-Encoding", "gzip, deflate, br");
 
-        Socket.Options.SetBuffer(1024, 1024);
+        Socket.Options.SetBuffer(StateObject.BufferSize, StateObject.BufferSize);
 
         Socket.Options.KeepAliveInterval = TimeSpan.Zero;
 

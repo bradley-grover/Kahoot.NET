@@ -25,6 +25,7 @@ public partial class KahootClient
                 if (result.MessageType == WebSocketMessageType.Close)
                 {
                     await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                    return;
                 }
 
                 await ProcessDataAsync(buffer[..result.Count]);

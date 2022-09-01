@@ -5,7 +5,7 @@ namespace Kahoot.NET.Hosting.Client;
 
 public partial class KahootHost
 {
-    internal async Task ProcessDataAsync(Memory<byte> data)
+    internal async Task ProcessDataAsync(ReadOnlyMemory<byte> data)
     {
         string json = Encoding.UTF8.GetString(data.Span).AsSpan().RemoveBrackets();
 

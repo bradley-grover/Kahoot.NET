@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Kahoot.NET.API.Shared.Json;
+using Kahoot.NET.Extensions;
 
 namespace Kahoot.NET.Hosting.Client;
 

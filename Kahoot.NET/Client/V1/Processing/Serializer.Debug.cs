@@ -1,18 +1,12 @@
 ﻿using System.Text.Json.Serialization.Metadata;
 
-namespace Kahoot.NET;
+namespace Kahoot.NET.Client;
 
 /// <summary>
 /// Handles serializing data into json byte buffers
 /// </summary>
 internal static class Serializer
 {
-    internal static JsonSerializerOptions Options { get; } = new()
-    {
-        WriteIndented = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-    };
-
     /// <summary>
     /// Serializes an object of <typeparamref name="T"/> using the specified type info from a source generator
     /// </summary>
@@ -37,7 +31,7 @@ internal static class Serializer
     /// <returns>Byte buffer</returns>
     internal static Memory<byte> Serialize<T>(T data, out ReadOnlySpan<char> json)
     {
-        json = JsonSerializer.Serialize(data, Options);
+        json = JsonSerializer.Serialize(data, KahootClient.SerializerOptions);
 
         return Encoding.UTF8.GetBytes(json.ToString());
     }

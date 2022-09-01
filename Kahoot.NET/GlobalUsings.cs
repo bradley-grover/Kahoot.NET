@@ -9,9 +9,11 @@ global using Kahoot.NET.API.Shared.Json;
 global using Kahoot.NET.API.Authentication.Json;
 global using Kahoot.NET.API.Requests.Json;
 global using Kahoot.NET.Parsers;
+global using Kahoot.NET.Extensions;
 #endregion
 #region Standard Libraries
 global using System.Diagnostics;
+global using System.Diagnostics.Contracts;
 global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;

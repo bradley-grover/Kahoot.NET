@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using BenchmarkDotNet.Engines;
 using Kahoot.NET.API.Authentication.Token;
+using Kahoot.NET.Extensions;
 using Kahoot.NET.Parsers;
 
 namespace Kahoot.NET.Benchmarks.ToRun;

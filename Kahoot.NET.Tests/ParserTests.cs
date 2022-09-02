@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.Parsers;
+﻿using Kahoot.NET.Client;
+using Kahoot.NET.Parsers;
 
 namespace Kahoot.NET.Tests;
 
@@ -18,5 +19,16 @@ public class ParserTests
         IValueParser<long> parser = new OffsetArithmetic();
         
         Assert.Equal(expected, parser.Parse(expression));
+    }
+
+    [Theory]
+    [InlineData("https://kahoot.it?pin=920046&refer_method=link", 920046)]
+    [InlineData("https://kahoot.it?pin=134566", 134566)]
+    public void ParseGameTest_Works(string gameLink, int gameCode)
+    {
+        bool s = Code.TryGetCode(gameLink, out var c);
+
+        Assert.True(s);
+        Assert.Equal(gameCode, c);
     }
 }

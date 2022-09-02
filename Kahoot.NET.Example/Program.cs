@@ -31,7 +31,7 @@ public class Program
         kahootClient.Left += KahootClient_Left;
 
        
-        var validGame = await kahootClient.JoinAsync(result);
+        var validGame = await kahootClient.JoinAsync(result, Random.Shared.Next(0, 999_999_999).ToString());
 
         if (!validGame)
         {

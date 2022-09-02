@@ -6,7 +6,7 @@
 public partial class KahootClient : IKahootClient
 {
     /// <inheritdoc></inheritdoc>
-    public async Task<bool> JoinAsync(int code, string? username = null, CancellationToken cancellationToken = default)
+    public async Task<bool> JoinAsync(int code, string username, CancellationToken cancellationToken = default)
     {
         if (_inGame)
         {

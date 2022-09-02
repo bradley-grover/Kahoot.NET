@@ -28,7 +28,7 @@ public class Program
         {
             client.Joined += Client_Joined;
             client.ClientError += Client_ClientError;
-            tasks.Add(client.JoinAsync(code));
+            tasks.Add(client.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString()));
         }
 
         await Task.WhenAll(tasks);

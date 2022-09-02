@@ -25,10 +25,9 @@ internal static class Session
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri(string.Format(Connection.HostSessionUrl, Request.CalculateSeconds()))
+            RequestUri = new Uri(string.Format(Connection.HostSessionUrl, Request.CalculateSeconds())),
+            Content = new StringContent(JsonSerializer.Serialize(configuration, GameConfigurationContext.Default.GameConfiguration))
         };
-
-        request.Content = new StringContent(JsonSerializer.Serialize(configuration, GameConfigurationContext.Default.GameConfiguration));
 
         request.Headers.Referrer = uri;
 

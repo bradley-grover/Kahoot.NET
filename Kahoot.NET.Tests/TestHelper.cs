@@ -19,15 +19,13 @@ public class TestHelper
         return root;
     }
 
-    public static IKahootClient Latest_Client()
+    public static IKahootClient LatestClient()
     {
         return new KahootClient();
     }
 
-    public static IKahootHost Create_Host()
+    public static IKahootHost CreateHost()
     {
         return new KahootHost();
     }
-
-
 }

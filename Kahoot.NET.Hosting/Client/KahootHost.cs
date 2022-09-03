@@ -74,7 +74,7 @@ public partial class KahootHost : IKahootHost
 
         (int code, string key, bool success) = await httpClient.SendHostRequestAsync(quizUrl, configuration);
 
-        if (!success || !quizUrl.Host.Equals("play.kahoot.it", StringComparison.InvariantCultureIgnoreCase))
+        if (!success || !quizUrl.Host.Equals("create.kahoot.it", StringComparison.InvariantCultureIgnoreCase))
         {
             throw new QuizNotFoundException($"The quiz with the url '{quizUrl}' was not found");
         }

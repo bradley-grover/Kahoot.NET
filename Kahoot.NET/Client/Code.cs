@@ -1,4 +1,6 @@
-﻿namespace Kahoot.NET.Client;
+﻿using System.Net.NetworkInformation;
+
+namespace Kahoot.NET.Client;
 
 /// <summary>
 /// Has static methods to verify playability
@@ -41,5 +43,20 @@ public static class Code
         }
 
         return int.TryParse(chars.Slice(GameLinkLength, takeAmount), out code);
+    }
+
+    /// <summary>
+    /// Determines whether a game with the specified code exists
+    /// </summary>
+    /// <param name="code"></param>
+    /// <param name="client"></param>
+    /// <returns></returns>
+    public static async Task<bool> ExistsAsync(int code, HttpClient client)
+    {
+        ArgumentNullException.ThrowIfNull(client);
+
+        var response = await client.SendGameAsync(code);
+
+        return response.IsSuccessStatusCode;
     }
 }

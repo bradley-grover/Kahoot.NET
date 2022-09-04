@@ -14,6 +14,11 @@ public interface IKahootHost : IDisposable
     public int? GameCode { get; }
 
     /// <summary>
+    /// If the current quiz is locked
+    /// </summary>
+    public bool IsLocked { get; }
+
+    /// <summary>
     /// Event is raised when <see cref="CreateGameAsync(Uri, GameConfiguration?, CancellationToken)"/> has created a game
     /// </summary>
     event Func<object?, EventArgs, Task>? Created;
@@ -42,11 +47,10 @@ public interface IKahootHost : IDisposable
     Task StartAsync();
 
     /// <summary>
-    /// Lock's the Kahoot to prevent more players from joining
+    /// Toggles locking/unlocking the kahoot for playing to be able to join
     /// </summary>
     /// <returns>Awaitable</returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    Task LockAsync();
+    Task ToggleLockAsync();
 
     /// <summary>
     /// The host leaves the current game

@@ -15,7 +15,7 @@ internal static class Request
     {
         ArgumentNullException.ThrowIfNull(client);
 
-        return client.SendAsync(New(gameId));
+        return client.SendAsync(CreateGameRequest(gameId));
     }
 
     /// <summary>
@@ -23,7 +23,7 @@ internal static class Request
     /// </summary>
     /// <param name="gameId"></param>
     /// <returns></returns>
-    internal static HttpRequestMessage New(int gameId)
+    internal static HttpRequestMessage CreateGameRequest(int gameId)
     {
         HttpRequestMessage request = new()
         {

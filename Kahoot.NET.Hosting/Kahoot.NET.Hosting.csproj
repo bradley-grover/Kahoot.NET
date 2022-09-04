@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageProjectUrl>https://github.com/ac111897/Kahoot.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ac111897/Kahoot.NET</RepositoryUrl>
@@ -18,6 +15,10 @@
     <PackageReleaseNotes>First publish</PackageReleaseNotes>
     <PackageId>Kahoot.NET.Hosting</PackageId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.0.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kahoot.NET\Kahoot.NET.csproj" />

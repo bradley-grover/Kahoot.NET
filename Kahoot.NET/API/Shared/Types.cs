@@ -44,6 +44,11 @@ public static class Types
         /// When the user tries to authenticate to a locked quiz
         /// </summary>
         public const string Locked = "LOCKED";
+
+        /// <summary>
+        /// Represents when the game has a large amount of members and the client has to wait in a queue
+        /// </summary>
+        public const string Queue = "QUEUE";
     }
 
     /// <summary>

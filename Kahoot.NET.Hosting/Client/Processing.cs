@@ -1,11 +1,12 @@
 ﻿using System.Text;
 using Kahoot.NET.API.Shared.Json;
+using Kahoot.NET.Extensions;
 
 namespace Kahoot.NET.Hosting.Client;
 
 public partial class KahootHost
 {
-    internal async Task ProcessDataAsync(Memory<byte> data)
+    internal async Task ProcessDataAsync(ReadOnlyMemory<byte> data)
     {
         string json = Encoding.UTF8.GetString(data.Span).AsSpan().RemoveBrackets();
 

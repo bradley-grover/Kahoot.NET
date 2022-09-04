@@ -14,7 +14,7 @@ public enum JoinErrors
     /// </summary>
     DuplicateUserName,
     /// <summary>
-    /// Caused the client id is unknown to the server
+    /// Caused when the client has become unknown to the server, try rejoining
     /// </summary>
     SessionUnknown,
     /// <summary>

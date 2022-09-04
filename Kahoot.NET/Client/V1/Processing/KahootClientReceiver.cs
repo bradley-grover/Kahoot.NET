@@ -9,28 +9,36 @@ public partial class KahootClient
     {
         if (Socket.State is not WebSocketState.Open)
         {
-            if (ClientError is not null)
-            {
-                await ClientError.Invoke(this, new(new InvalidOperationException("Connection is not open for operation")));
-            }
+            await ClientError.InvokeEventAsync(this, new(new InvalidOperationException("Connection is not open for operation")));
         }
 
         while (Socket.State == WebSocketState.Open)
         {
-            //byte[] array = ArrayPool<byte>.Shared.Rent(StateObject.BufferSize);
+            byte[] array = ArrayPool<byte>.Shared.Rent(StateObject.BufferSize);
 
-            Memory<byte> buffer = new byte[1024];
-
-            var result = await Socket.ReceiveAsync(buffer, CancellationToken.None);
-
-            if (result.MessageType == WebSocketMessageType.Close)
+            try
             {
-                await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                Memory<byte> buffer = array;
+
+                var result = await Socket.ReceiveAsync(buffer, CancellationToken.None);
+
+                if (result.MessageType == WebSocketMessageType.Close)
+                {
+                    await Socket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
+                    return;
+                }
+
+                await ProcessDataAsync(buffer[..result.Count]);
             }
-
-            await ProcessDataAsync(buffer);
-
-            //ArrayPool<byte>.Shared.Return(array, true);
+            catch (Exception ex)
+            {
+                Logger?.LogError("{exception}", ex.Message);
+                throw;
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(array);
+            }
         }
     }
 }

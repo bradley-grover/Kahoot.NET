@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.Client.Data;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 /// <summary>
 /// Client to connect to a Kahoot
@@ -23,13 +21,18 @@ public interface IKahootClient : IDisposable
     event Func<object?, LeftEventArgs, Task>? Left;
 
     /// <summary>
+    /// When the client has received a question
+    /// </summary>
+    event Func<object?, QuestionReceivedEventArgs, Task> QuestionReceived;
+
+    /// <summary>
     /// Join a kahoot game with the name and code
     /// </summary>
     /// <param name="code">The code of the game</param>
-    /// <param name="username">The username of the user to join the game</param>
+    /// <param name="username">The username of the user to join the game, cannot be null</param>
     /// <param name="cancellationToken">A cancellation token to cancel the task</param>
     /// <returns>Whether the game was found or not</returns>
-    Task<bool> JoinAsync(int code, string? username = null, CancellationToken cancellationToken = default);
+    Task<bool> JoinAsync(int code, string username, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Disconnects the client from the Kahoot game

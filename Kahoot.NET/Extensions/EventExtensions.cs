@@ -1,18 +1,7 @@
-﻿namespace Kahoot.NET;
+﻿namespace Kahoot.NET.Extensions;
 
-/// <summary>
-/// Internal extension methods to minimize code duplications/helper methods
-/// </summary>
-internal static class Extensions
+internal static class EventExtensions
 {
-    internal static string RemoveBrackets(this ReadOnlySpan<char> span)
-    {
-        int start = 1;
-        int end = span.LastIndexOf(']');
-
-        return span.Slice(start, end - 1).ToString();
-    }
-
     /// <summary>
     /// Invokes an event if there are callers assigned to it
     /// </summary>

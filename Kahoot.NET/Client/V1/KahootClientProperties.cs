@@ -17,6 +17,12 @@ public partial class KahootClient
         o = 2999
     };
 
+    internal static JsonSerializerOptions SerializerOptions { get; } = new()
+    {
+        WriteIndented = true,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
     internal int GameId { get; set; }
     /// <summary>
     /// Username of the current client
@@ -31,4 +37,7 @@ public partial class KahootClient
 
     /// <inheritdoc></inheritdoc>
     public event Func<object?, LeftEventArgs, Task>? Left;
+
+    /// <inheritdoc></inheritdoc>
+    public event Func<object?, QuestionReceivedEventArgs, Task> QuestionReceived;
 }

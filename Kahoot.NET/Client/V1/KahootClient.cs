@@ -6,8 +6,13 @@
 public partial class KahootClient : IKahootClient
 {
     /// <inheritdoc></inheritdoc>
-    public async Task<bool> JoinAsync(int code, string? username = null, CancellationToken cancellationToken = default)
+    public async Task<bool> JoinAsync(int code, string username, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            throw new ArgumentNullException(nameof(username), "Username should have a value");
+        }
+
         if (_inGame)
         {
             throw new InvalidOperationException("The client is already in a game");

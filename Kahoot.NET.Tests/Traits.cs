@@ -7,4 +7,7 @@ public static class Traits
 
     internal const string Parsers = "Parsers & Decoders";
     internal const string ParsersDesc = "Ensures that parsers and decoders work as intended";
+
+    internal const string Code = nameof(Code);
+    internal const string CodeDesc = "Ensures that code methods work as intended";
 }

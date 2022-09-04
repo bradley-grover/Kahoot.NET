@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.Parsers;
+﻿using Kahoot.NET.Client;
+using Kahoot.NET.Parsers;
 
 namespace Kahoot.NET.Tests;
 
@@ -19,4 +20,5 @@ public class ParserTests
         
         Assert.Equal(expected, parser.Parse(expression));
     }
+
 }

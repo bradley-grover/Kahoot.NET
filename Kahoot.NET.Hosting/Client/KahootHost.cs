@@ -20,6 +20,8 @@ public partial class KahootHost : IKahootHost
     private ClientWebSocket Socket { get; } = new();
     private int _code = default;
 
+    /// <inheritdoc></inheritdoc>
+    public bool IsLocked { get; internal set; } = false;
 
     /// <inheritdoc></inheritdoc>
     public int? GameCode
@@ -74,7 +76,7 @@ public partial class KahootHost : IKahootHost
 
         (int code, string key, bool success) = await httpClient.SendHostRequestAsync(quizUrl, configuration);
 
-        if (!success || !quizUrl.Host.Equals("play.kahoot.it", StringComparison.InvariantCultureIgnoreCase))
+        if (!success || !quizUrl.Host.Equals("create.kahoot.it", StringComparison.InvariantCultureIgnoreCase))
         {
             throw new QuizNotFoundException($"The quiz with the url '{quizUrl}' was not found");
         }
@@ -92,7 +94,7 @@ public partial class KahootHost : IKahootHost
     }
 
     /// <inheritdoc></inheritdoc>
-    public Task LockAsync()
+    public Task ToggleLockAsync()
     {
         throw new NotImplementedException();
     }

@@ -16,5 +16,9 @@ public enum ReasonForLeaving
     /// <summary>
     /// The host kicked you
     /// </summary>
-    UserKicked
+    UserKicked,
+    /// <summary>
+    /// The queue is full so we cannot join
+    /// </summary>
+    QueueFull
 }

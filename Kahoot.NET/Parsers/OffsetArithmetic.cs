@@ -3,23 +3,21 @@ using System.Text.RegularExpressions;
 
 namespace Kahoot.NET.Parsers;
 
-/*
- * TODO: Faster implementation of calculating offset
- * 
- * .NET 7 adds support for Regex Source Generators so convert code to use that
- * Hopefully span overloads are added as well
- * 
- * The reason this class uses DataTable.Compute instead of a expression parser is because it is way cheaper
- * Flee was used initially but allocates about 10x more memory and about 10x slower as well
- */
-
 /// <summary>
 /// Calculate the offset for the function to calculate the challenge string
 /// </summary>
-internal class OffsetArithmetic : IValueParser<long>
+internal partial class OffsetArithmetic : IValueParser<long>
 {
-    // TODO: find better expression for matching
-    private static Regex InternalRegex { get; } = new(@"\d+(\.\d+)?", RegexOptions.Compiled);
+    // Uses regex source generator in .NET 7 instead
+    private static Regex InternalRegex { get; } =
+#if NET7_0_OR_GREATER
+        GenerateRegex();
+
+        [RegexGenerator(@"\d+(\.\d+)?")]
+        internal static partial Regex GenerateRegex();
+#else
+        new(@"\d+(\.\d+)?", RegexOptions.Compiled);
+#endif
     private static DataTable Table { get; } = new();
 
     public long Parse(ReadOnlySpan<char> input)

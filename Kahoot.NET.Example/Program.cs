@@ -1,5 +1,5 @@
-﻿using Kahoot.NET;
-using Kahoot.NET.Client;
+﻿using Kahoot.NET.Client;
+using Kahoot.NET.Client.Data.Errors;
 using Kahoot.NET.Client.Data;
 using Microsoft.Extensions.Logging;
 
@@ -7,88 +7,54 @@ namespace Kahoot.NET.Example;
 
 public class Program
 {
+    internal static readonly HttpClient httpClient = new();
     public static async Task Main(string[] args)
     {
         // simple console app
+
+        // create a factory to produce a standard ILogger<T>
         var factory = LoggerFactory.Create(x => {
             x.AddConsole();
             x.SetMinimumLevel(LogLevel.Debug);
         });
 
-        // has using statement
+        // has using statement to dispose underlying resources
 
-        using IKahootClient kahootClient = new KahootClient(factory.CreateLogger<IKahootClient>(), new HttpClient());
+        using IKahootClient kahootClient = new KahootClient(factory.CreateLogger<IKahootClient>(), httpClient);
 
-        int result;
+        var code = await GetValidCodeAsync();
 
-        while (!int.TryParse(Console.ReadLine(), out result))
-        {
-            Console.WriteLine($"Could not get numeric code, try again");
-        }
-
-        kahootClient.Joined += KahootClient_OnJoined;
-        kahootClient.ClientError += KahootClient_ClientError;
-        kahootClient.Left += KahootClient_Left;
+        // bind delegates to events from ClientEvents class, customise how you want to handle events in your own way
+        kahootClient.Joined += ClientEvents.KahootClient_OnJoined;
+        kahootClient.ClientError += ClientEvents.KahootClient_ClientError;
+        kahootClient.Left += ClientEvents.KahootClient_Left;
 
        
-        var validGame = await kahootClient.JoinAsync(result);
+        var validGame = await kahootClient.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString());
 
-        if (!validGame)
-        {
-            Console.WriteLine("Could not find game");
-            return;
-        }
+        await Task.Delay(-1);
+    }
 
+    public static async Task<int> GetValidCodeAsync()
+    {
         while (true)
         {
-            string? input = Console.ReadLine();
+            int result;
 
-            if (input is not null)
+            while (!int.TryParse(Console.ReadLine(), out result))
             {
-                switch (input)
-                {
-                    case "leave":
-                        await kahootClient.LeaveAsync();
-                        break;
-                }
+                Console.WriteLine($"Could not get numeric code, try again");
             }
-        }
-    }
 
-    private static Task KahootClient_Left(object? sender, LeftEventArgs args)
-    {
-        switch (args.Reason)
-        {
-            case ReasonForLeaving.UserKicked:
-                Console.WriteLine("I was kicked from the game");
-                break;
-            case ReasonForLeaving.UserRequested:
-                Console.WriteLine("I have left the game");
-                break;
-            case ReasonForLeaving.GameLocked:
-                Console.WriteLine("The game is locked");
-                break;
-        }
-        return Task.CompletedTask;
-    }
+            if (!await Code.ExistsAsync(result, httpClient))
+            {
+                Console.WriteLine("Code is not an active game");
+                continue;
+            }
 
-    private static Task KahootClient_ClientError(object? sender, ClientErrorEventArgs arg)
-    {
-        Console.WriteLine(arg.Error);
-        return Task.CompletedTask;
-    }
+            Console.WriteLine("Found the game");
 
-    private static Task KahootClient_OnJoined(object? sender, JoinEventArgs args)
-    {
-        if (args.Success)
-        {
-            Console.WriteLine("Joined the game");
+            return result;
         }
-        else 
-        {
-            Console.WriteLine("Failed to join game");
-        }
-
-        return Task.CompletedTask;
     }
 }

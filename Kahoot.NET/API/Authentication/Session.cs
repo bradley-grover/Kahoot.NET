@@ -15,7 +15,17 @@ internal static class Session
     /// <returns>Session response which may have failed</returns>
     internal static async Task<SessionResponse> CreateAsync(HttpClient client, int gameId)
     {
-        HttpResponseMessage response = await client.SendGameAsync(gameId);
+        HttpResponseMessage response;
+
+        try
+        {
+            response = await client.SendGameAsync(gameId);
+        }
+        catch (HttpRequestException ex)
+        {
+            Debug.WriteLine(ex.ToString());
+            return Failed();
+        }
 
         if (!response.IsSuccessStatusCode || 
             !response.Headers.TryGetValues(Connection.SessionHeader, out var headers))

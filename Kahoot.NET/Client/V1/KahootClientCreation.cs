@@ -3,18 +3,10 @@
 public partial class KahootClient
 {
     /// <summary>
-    /// Initilizes a new instance of the <see cref="KahootClient"/> class
-    /// </summary>
-    public KahootClient()
-    {
-        Client = new();
-        Socket = new();
-    }
-    /// <summary>
     /// Initializes a new instance of the <see cref="KahootClient"/> class
     /// </summary>
     /// <param name="logger">A logger for the client</param>
-    public KahootClient(ILogger<IKahootClient>? logger)
+    public KahootClient(ILogger<IKahootClient>? logger = null)
     {
         Logger = logger;
         Client = new();

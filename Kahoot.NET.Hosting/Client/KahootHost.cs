@@ -20,6 +20,8 @@ public partial class KahootHost : IKahootHost
     private ClientWebSocket Socket { get; } = new();
     private int _code = default;
 
+    /// <inheritdoc></inheritdoc>
+    public bool IsLocked { get; internal set; } = false;
 
     /// <inheritdoc></inheritdoc>
     public int? GameCode
@@ -92,7 +94,7 @@ public partial class KahootHost : IKahootHost
     }
 
     /// <inheritdoc></inheritdoc>
-    public Task LockAsync()
+    public Task ToggleLockAsync()
     {
         throw new NotImplementedException();
     }

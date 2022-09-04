@@ -10,7 +10,7 @@
     <NeutralLanguage>en-NZ</NeutralLanguage>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Bradley Grover</Authors>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Description>Library to connect and interact with Kahoot's using .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReleaseNotes>Joining is fully functional</PackageReleaseNotes>

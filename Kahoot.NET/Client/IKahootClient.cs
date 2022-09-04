@@ -21,6 +21,11 @@ public interface IKahootClient : IDisposable
     event Func<object?, LeftEventArgs, Task>? Left;
 
     /// <summary>
+    /// When the client has received a question
+    /// </summary>
+    event Func<object?, QuestionReceivedEventArgs, Task> QuestionReceived;
+
+    /// <summary>
     /// Join a kahoot game with the name and code
     /// </summary>
     /// <param name="code">The code of the game</param>

@@ -3,17 +3,17 @@
 /// <summary>
 /// Represents a user's device information there is logic so it is a cheap object
 /// </summary>
-public struct Device
+public readonly struct Device
 {
     /// <summary>
     /// The user agent's of the user's browser
     /// </summary>
     [JsonPropertyName("userAgent")]
-    public string UserAgent { get; set; }
+    public string UserAgent { get; init; }
 
     /// <summary>
     /// The screen of the user
     /// </summary>
     [JsonPropertyName("screen")]
-    public Screen Screen { get; set; }
+    public Screen Screen { get; init; }
 }

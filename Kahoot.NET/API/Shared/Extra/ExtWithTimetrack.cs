@@ -3,11 +3,11 @@
 /// <summary>
 /// Extra data with only timetrack included
 /// </summary>
-public struct ExtWithTimetrack
+public readonly struct ExtWithTimetrack
 {
     /// <summary>
     /// Unix milliseconds timestamp
     /// </summary>
     [JsonPropertyName("timetrack")]
-    public long Timetrack { get; set; }
+    public long Timetrack { get; init; }
 }

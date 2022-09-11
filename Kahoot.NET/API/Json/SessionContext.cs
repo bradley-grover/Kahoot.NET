@@ -1,4 +1,4 @@
-﻿namespace Kahoot.NET.API.Authentication.Json;
+﻿namespace Kahoot.NET.API.Json;
 
 /// <summary>
 /// JSON source generator for <see cref="Responses.SessionResponse"/> for more effecient JSON Serializations/Deserializations

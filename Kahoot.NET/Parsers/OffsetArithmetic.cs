@@ -13,7 +13,7 @@ internal partial class OffsetArithmetic : IValueParser<long>
 #if NET7_0_OR_GREATER
         GenerateRegex();
 
-        [RegexGenerator(@"\d+(\.\d+)?")]
+        [GeneratedRegex(@"\d+(\.\d+)?")]
         internal static partial Regex GenerateRegex();
 #else
         new(@"\d+(\.\d+)?", RegexOptions.Compiled);

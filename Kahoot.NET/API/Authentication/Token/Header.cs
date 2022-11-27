@@ -12,6 +12,10 @@ internal static class Header
     /// <returns>Portion for websocket key to be combined</returns>
     public static ReadOnlySpan<char> Create(ReadOnlySpan<char> header)
     {
-        return Encoding.UTF8.GetString(Convert.FromBase64String(header.ToString()).AsSpan());
+        Span<byte> bytes = stackalloc byte[1024];
+
+        _ = Convert.TryFromBase64Chars(header, bytes, out int written);
+
+        return Encoding.UTF8.GetString(bytes[..written]);
     }
 }

@@ -6,6 +6,12 @@
 public class SessionResponse
 {
     /// <summary>
+    /// Represents a failed session response
+    /// </summary>
+    [JsonIgnore]
+    public static SessionResponse Failed { get; } = new() { Success = false };
+
+    /// <summary>
     /// The game mode of the quiz
     /// </summary>
     [JsonPropertyName("gameMode")]

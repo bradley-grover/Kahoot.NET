@@ -24,20 +24,20 @@ internal static class Session
         catch (HttpRequestException ex)
         {
             Debug.WriteLine(ex.ToString());
-            return Failed();
+            return SessionResponse.Failed;
         }
 
         if (!response.IsSuccessStatusCode || 
             !response.Headers.TryGetValues(Connection.SessionHeader, out var headers))
         {
-            return Failed();
+            return SessionResponse.Failed;
         }
 
         var header = headers.FirstOrDefault();
 
         if (header is null)
         {
-            return Failed();
+            return SessionResponse.Failed;
         }
 
         var session = JsonSerializer.Deserialize(
@@ -45,21 +45,12 @@ internal static class Session
 
         if (session is null)
         {
-            return Failed();
+            return SessionResponse.Failed;
         }
 
         session.WebSocketKey = Key.Create(header, session.Challenge);
         session.Success = true;
 
         return session;
-    }
-
-    /// <summary>
-    /// Returns a failed sessio response
-    /// </summary>
-    /// <returns>Failed response</returns>
-    private static SessionResponse Failed()
-    {
-        return new() { Success = false };
     }
 }

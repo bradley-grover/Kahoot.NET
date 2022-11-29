@@ -4,7 +4,7 @@ namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
-    private async Task SendLeaveMessageAsync()
+    private async ValueTask SendLeaveMessageAsync()
     {
         await SendAsync(new LeaveMessage()
         {

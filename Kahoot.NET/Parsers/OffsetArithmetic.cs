@@ -9,7 +9,7 @@ namespace Kahoot.NET.Parsers;
 internal partial class OffsetArithmetic : IValueParser<long>
 {
     // Uses regex source generator in .NET 7 instead
-    private static Regex InternalRegex { get; } =
+    private static readonly Regex _regex =
 #if NET7_0_OR_GREATER
         GenerateRegex();
 
@@ -22,14 +22,14 @@ internal partial class OffsetArithmetic : IValueParser<long>
 
     public long Parse(ReadOnlySpan<char> input)
     {
-        var result = Table.Compute(SanitiseToDecimal(input).ToString(), null);
+        var result = Table.Compute(SanitiseToDecimal(input), null);
 
         return Convert.ToInt64((decimal)result);
     }
 
-    internal static ReadOnlySpan<char> SanitiseToDecimal(ReadOnlySpan<char> value)
+    internal static string SanitiseToDecimal(ReadOnlySpan<char> value)
     {
-        return InternalRegex.Replace(value.ToString(), m =>
+        return _regex.Replace(value.ToString(), m =>
         {
             var slice = m.ValueSpan;
             return slice.Contains('.') ? slice.ToString() : string.Format("{0}.0", slice.ToString());

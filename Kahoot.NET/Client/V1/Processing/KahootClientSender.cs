@@ -31,18 +31,12 @@ public partial class KahootClient
 #elif RELEASE
     private static Memory<byte> LogSend<T>(T data, JsonTypeInfo<T>? typeInfo = null)
     {
-        Memory<byte> memory;
-        
         if (typeInfo is null)
         {
-            memory = JsonSerializer.SerializeToUtf8Bytes(data, SerializerOptions);
+            return JsonSerializer.SerializeToUtf8Bytes(data, SerializerOptions);
         }
-        else
-        {
-            memory = JsonSerializer.SerializeToUtf8Bytes(data, typeInfo);
-        }
-
-        return memory;
+            
+        return JsonSerializer.SerializeToUtf8Bytes(data, typeInfo);
     }
 #endif
 }

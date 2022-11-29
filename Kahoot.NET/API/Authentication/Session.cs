@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.API.Authentication.Token;
+﻿using System.Net.Sockets;
+using Kahoot.NET.API.Authentication.Token;
 
 namespace Kahoot.NET.API.Authentication;
 
@@ -52,5 +53,19 @@ internal static class Session
         session.Success = true;
 
         return session;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static ClientWebSocket GetConfiguredWebSocket()
+    {
+        ClientWebSocket socket = new();
+
+        socket.Options.SetRequestHeader("Accept-Encoding", "gzip, deflate, br");
+
+        socket.Options.SetBuffer(StateObject.BufferSize, StateObject.BufferSize);
+
+        socket.Options.KeepAliveInterval = TimeSpan.Zero;
+
+        return socket;
     }
 }

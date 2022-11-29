@@ -28,7 +28,7 @@ internal static class Request
         HttpRequestMessage request = new()
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri(string.Format(Connection.SessionUrl, gameId, CalculateSeconds()))
+            RequestUri = new Uri(string.Format(Connection.SessionUrl, gameId, DateTimeOffset.UtcNow.ToUnixTimeSeconds()))
         };
 
         request.Headers.Add("Accept-Language", "en-US,en;q=0.8");
@@ -36,14 +36,5 @@ internal static class Request
         request.Headers.Add("Accept", "*/*");
 
         return request;
-    }
-
-    /// <summary>
-    /// Calculates the current seconds used in the request
-    /// </summary>
-    /// <returns>Current seconds since 1970</returns>
-    internal static double CalculateSeconds()
-    {
-        return Math.Floor((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds * 1000);
     }
 }

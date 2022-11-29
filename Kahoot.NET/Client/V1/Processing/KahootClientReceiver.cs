@@ -10,6 +10,7 @@ public partial class KahootClient
         if (Socket.State is not WebSocketState.Open)
         {
             await ClientError.InvokeEventAsync(this, new(new InvalidOperationException("Connection is not open for operation")));
+            return;
         }
 
         while (Socket.State == WebSocketState.Open)

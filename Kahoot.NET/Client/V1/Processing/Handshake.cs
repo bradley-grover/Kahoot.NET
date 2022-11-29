@@ -24,11 +24,6 @@ public partial class KahootClient
         Logger?.LogDebug("Connecting to socket...");
 
         Socket.Options.SetRequestHeader("User-Agent", userAgent);
-        Socket.Options.SetRequestHeader("Accept-Encoding", "gzip, deflate, br");
-
-        Socket.Options.SetBuffer(StateObject.BufferSize, StateObject.BufferSize);
-
-        Socket.Options.KeepAliveInterval = TimeSpan.Zero;
 
         try
         {

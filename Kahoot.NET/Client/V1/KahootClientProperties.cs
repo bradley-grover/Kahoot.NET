@@ -39,5 +39,5 @@ public partial class KahootClient
     public event Func<object?, LeftEventArgs, Task>? Left;
 
     /// <inheritdoc></inheritdoc>
-    public event Func<object?, QuestionReceivedEventArgs, Task> QuestionReceived;
+    public event Func<object?, QuestionReceivedEventArgs, Task>? QuestionReceived;
 }

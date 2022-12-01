@@ -1,4 +1,4 @@
-﻿namespace Kahoot.NET.API.Shared.Json;
+﻿namespace Kahoot.NET.API.Json;
 
 [JsonSerializable(typeof(Message))]
 internal partial class MessageContext : JsonSerializerContext

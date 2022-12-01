@@ -5,9 +5,7 @@ global using Kahoot.NET.API;
 global using Kahoot.NET.API.Responses;
 global using Kahoot.NET.API.Shared;
 global using Kahoot.NET.API.Authentication;
-global using Kahoot.NET.API.Shared.Json;
 global using Kahoot.NET.API.Json;
-global using Kahoot.NET.API.Requests.Json;
 global using Kahoot.NET.Parsers;
 global using Kahoot.NET.Extensions;
 #endregion

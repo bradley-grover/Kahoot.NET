@@ -1,4 +1,4 @@
-﻿namespace Kahoot.NET.API.Requests.Json;
+﻿namespace Kahoot.NET.API.Json;
 
 [JsonSourceGenerationOptions(DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, WriteIndented = true)]
 [JsonSerializable(typeof(BaseClientMessage))]

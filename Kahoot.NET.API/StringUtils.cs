@@ -1,9 +1,8 @@
-﻿namespace Kahoot.NET.Extensions;
+﻿using System.Diagnostics.Contracts;
 
-/// <summary>
-/// Extensions involving <see cref="ReadOnlySpan{T}"/>
-/// </summary>
-internal static class ReadOnlySpanExtensions
+namespace Kahoot.NET.API;
+
+internal static class StringUtils
 {
     /// <summary>
     /// Removes all the whitespace from a <see cref="ReadOnlySpan{T}"/> of <see cref="char"/>
@@ -64,13 +63,5 @@ internal static class ReadOnlySpanExtensions
         }
 
         return new string(source, 0, destinationIndex);
-    }
-
-    internal static string RemoveBrackets(this ReadOnlySpan<char> span)
-    {
-        int start = 1;
-        int end = span.LastIndexOf(']');
-
-        return span.Slice(start, end - 1).ToString();
     }
 }

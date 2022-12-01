@@ -1,12 +1,9 @@
-﻿using System.Net.Sockets;
-using Kahoot.NET.API.Authentication.Token;
-
-namespace Kahoot.NET.API.Authentication;
+﻿namespace Kahoot.NET.API.Authentication;
 
 /// <summary>
 /// Static class to create a session
 /// </summary>
-internal static class Session
+public static class Session
 {
     /// <summary>
     /// Creates the session used to connect to the game
@@ -20,7 +17,7 @@ internal static class Session
 
         try
         {
-            response = await client.SendGameAsync(gameId);
+            response = await Request.QueryGameAsync(client, gameId);
         }
         catch (HttpRequestException ex)
         {
@@ -29,7 +26,7 @@ internal static class Session
         }
 
         if (!response.IsSuccessStatusCode || 
-            !response.Headers.TryGetValues(Connection.SessionHeader, out var headers))
+            !response.Headers.TryGetValues(ConnectionInfo.SessionHeader, out var headers))
         {
             return SessionResponse.Failed;
         }
@@ -41,8 +38,12 @@ internal static class Session
             return SessionResponse.Failed;
         }
 
+#if NET5_0
+        var session = JsonSerializer.Deserialize<SessionResponse>(await response.Content.ReadAsStringAsync());
+#else
         var session = JsonSerializer.Deserialize(
             await response.Content.ReadAsStringAsync(), SessionContext.Default.SessionResponse);
+#endif
 
         if (session is null)
         {
@@ -55,14 +56,28 @@ internal static class Session
         return session;
     }
 
+    /// <summary>
+    /// Configures a <see cref="ClientWebSocket"/> that uses the optimal settings for Kahoot
+    /// </summary>
+    /// <remarks>
+    /// Recommended value is the minimum value for both buffer size is 1024
+    /// </remarks>
+    /// <param name="receiveBufferSize"></param>
+    /// <param name="sendBufferSize"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static ClientWebSocket GetConfiguredWebSocket()
+    public static ClientWebSocket GetConfiguredWebSocket(int receiveBufferSize, int sendBufferSize)
     {
+        if (receiveBufferSize < 1024 | sendBufferSize < 1024)
+        {
+            throw new ArgumentException(null, nameof(receiveBufferSize));
+        }
+
         ClientWebSocket socket = new();
 
         socket.Options.SetRequestHeader("Accept-Encoding", "gzip, deflate, br");
 
-        socket.Options.SetBuffer(StateObject.BufferSize, StateObject.BufferSize);
+        socket.Options.SetBuffer(receiveBufferSize, sendBufferSize);
 
         socket.Options.KeepAliveInterval = TimeSpan.Zero;
 

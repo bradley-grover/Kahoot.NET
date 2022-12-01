@@ -12,7 +12,7 @@ public partial class KahootClient
             Channel = Channels.Connection,
             Ext = State.ExtWithTimesync,
             ClientId = State.clientId,
-            ConnectionType = Connection.ConnectionType
+            ConnectionType = ConnectionInfo.ConnectionType
         });
     }
 }

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net7.0;net6.0;net5.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+  </PropertyGroup>
+  
+  <!-- Exclude source generators if its .NET 5 -->
+
+  <ItemGroup>
+    <Compile Remove="Json\**" />
+    <Compile Include="Json\**" Condition="'$(TargetFramework)' != 'net5.0'" />
+  </ItemGroup>
+  
+</Project>

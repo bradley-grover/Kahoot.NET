@@ -1,9 +1,15 @@
-﻿namespace Kahoot.NET.API.Authentication.Token;
+﻿using Kahoot.NET.API.Authentication.Token;
+
+namespace Kahoot.NET.API.Authentication;
+
+// TODO: Rework/Improve this code [Key.cs]
 
 /// <summary>
-/// Creates the websocket key
+/// Creates the websocket key used to connect to the Kahoot
 /// </summary>
-internal class Key
+/// <remarks>
+/// </remarks>
+public static class Key
 {
     /// <summary>
     /// Creates the WebSocket key by using x-kahoot-session-token and the challenge function
@@ -11,7 +17,7 @@ internal class Key
     /// <param name="sessionHeaderToken"></param>
     /// <param name="challengeFunction"></param>
     /// <returns>The WebSocket key used to connection</returns>
-    internal static string Create(ReadOnlySpan<char> sessionHeaderToken, ReadOnlySpan<char> challengeFunction)
+    public static string Create(ReadOnlySpan<char> sessionHeaderToken, ReadOnlySpan<char> challengeFunction)
     {
         var header = Header.Create(sessionHeaderToken);
         var challenge = Challenge.CreateToken(challengeFunction);
@@ -19,7 +25,7 @@ internal class Key
         // new span to allocate for the token
         Span<char> merged = new char[header.Length];
 
-        for (int i = 0; i < header.Length; i++) // loop every character in the header
+        for (var i = 0; i < header.Length; i++) // loop every character in the header
         {
             // black magic stuff
             var character = (int)header[i];
@@ -27,6 +33,7 @@ internal class Key
             var decoded = character ^ mod;
             merged[i] = Convert.ToChar(decoded);
         }
+
         return new string(merged); // allocate into a string
     }
 }

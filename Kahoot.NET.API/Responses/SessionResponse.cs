@@ -1,7 +1,9 @@
-﻿namespace Kahoot.NET.API.Responses;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Kahoot.NET.API.Responses;
 
 /// <summary>
-/// The response we get after we HTTP GET <see cref="Connection.SessionUrl"/>
+/// The response we get after we HTTP GET <see cref="ConnectionInfo.SessionUrl"/>
 /// </summary>
 public class SessionResponse
 {
@@ -69,5 +71,6 @@ public class SessionResponse
     /// The Websocket Key used for connecting decoded from the response
     /// </summary>
     [JsonIgnore]
+    [MemberNotNullWhen(true, nameof(Success))]
     public string? WebSocketKey { get; set; }
 }

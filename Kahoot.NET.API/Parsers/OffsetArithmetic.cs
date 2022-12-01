@@ -27,12 +27,14 @@ internal partial class OffsetArithmetic : IValueParser<long>
         return Convert.ToInt64((decimal)result);
     }
 
+
     internal static string SanitiseToDecimal(ReadOnlySpan<char> value)
     {
         return _regex.Replace(value.ToString(), m =>
         {
-            var slice = m.ValueSpan;
-            return slice.Contains('.') ? slice.ToString() : string.Format("{0}.0", slice.ToString());
+            var match = m.Value;
+
+            return match.Contains('.') ? match : string.Format("{0}.0", match);
         });
     }
 }

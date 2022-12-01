@@ -28,4 +28,8 @@
     <PackageReference Include="RandomUserAgent" Version="1.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kahoot.NET.API\Kahoot.NET.API.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -11,7 +11,7 @@ public partial class KahootHost
     {
         _code = code;
 
-        Uri uri = new(string.Format(Connection.HostWebsocketUrl, code, key));
+        Uri uri = new(string.Format(ConnectionInfo.HostWebsocketUrl, code, key));
 
         Logger?.LogDebug("{url}", uri);
 

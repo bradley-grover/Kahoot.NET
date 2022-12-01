@@ -3,7 +3,7 @@
 /// <summary>
 /// Connection constants that the websocket uses
 /// </summary>
-public static class Connection
+public static class ConnectionInfo
 {
     /// <summary>
     /// The minimum version of the connection

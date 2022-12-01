@@ -14,7 +14,7 @@ public class FinalLoginInformation : Data
     {
         Type = Types.Message;
         GameId = gameId;
-        Host = Connection.Host;
+        Host = ConnectionInfo.Host;
         Content = content;
         Id = 16;
     }

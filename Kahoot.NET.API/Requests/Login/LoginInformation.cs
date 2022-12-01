@@ -13,7 +13,7 @@ public class LoginInformation : Data
         Name = name;
         Content = content;
         GameId = gameId;
-        Host = Connection.Host;
+        Host = ConnectionInfo.Host;
         Type = Types.Login;
     }
 

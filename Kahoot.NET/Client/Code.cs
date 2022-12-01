@@ -1,6 +1,4 @@
-﻿using System.Net.NetworkInformation;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 /// <summary>
 /// Has static methods to verify playability
@@ -55,7 +53,7 @@ public static class Code
     {
         ArgumentNullException.ThrowIfNull(client);
 
-        var response = await client.SendGameAsync(code);
+        var response = await Request.QueryGameAsync(client, code);
 
         return response.IsSuccessStatusCode;
     }

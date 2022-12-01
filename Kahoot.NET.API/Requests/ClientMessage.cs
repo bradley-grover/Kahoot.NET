@@ -12,7 +12,7 @@ public class ClientMessage<TData> : BaseClientMessage<TData>
     /// the default is <see cref="Connection.ConnectionType"/>
     /// </summary>
     [JsonPropertyName("connectionType")]
-    public string? ConnectionType { get; set; } = Connection.ConnectionType;
+    public string? ConnectionType { get; set; } = ConnectionInfo.ConnectionType;
 }
 
 /// <summary>

@@ -1,6 +1,6 @@
 ﻿using Kahoot.NET.API.Shared.Extra;
 
-namespace Kahoot.NET.API;
+namespace Kahoot.NET;
 
 /// <summary>
 /// Internal state object for storing the websocket information

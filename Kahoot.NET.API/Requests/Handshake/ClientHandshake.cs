@@ -30,19 +30,19 @@ public class ClientHandshake : Message
     /// </summary>
 
     [JsonPropertyName("minimumVersion")]
-    public string? MinimumVersion { get; set; } = Connection.MinVersion;
+    public string? MinimumVersion { get; set; } = ConnectionInfo.MinVersion;
 
     /// <summary>
     /// The version of the handshake
     /// </summary>
     [JsonPropertyName("version")]
-    public string? Version { get; set; } = Connection.Version;
+    public string? Version { get; set; } = ConnectionInfo.Version;
 
     /// <summary>
     /// The connection types that our websocket supports
     /// </summary>
     [JsonPropertyName("supportedConnectionTypes")]
-    public string[]? SupportedConnectionTypes { get; set; } = Connection.SupportedConnectionTypes.ToArray();
+    public string[]? SupportedConnectionTypes { get; set; } = ConnectionInfo.SupportedConnectionTypes.ToArray();
 
     /// <summary>
     /// Ext data for the client, this also includes timesync data with default values

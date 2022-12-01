@@ -1,6 +1,5 @@
 ﻿using Kahoot.NET.API.Authentication;
 using Kahoot.NET.API.Requests.Handshake;
-using Kahoot.NET.API.Requests.Json;
 
 namespace Kahoot.NET.Client;
 
@@ -17,7 +16,7 @@ public partial class KahootClient
 
         usingNamerator = session.Namerator;
 
-        Uri uri = new(string.Format(Connection.WebsocketUrl, GameId, session.WebSocketKey));
+        Uri uri = new(string.Format(ConnectionInfo.WebsocketUrl, GameId, session.WebSocketKey));
 
         Logger?.LogDebug("{url}", uri);
 

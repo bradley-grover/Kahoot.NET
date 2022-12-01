@@ -10,7 +10,7 @@ public partial class KahootClient
         {
             Id = State.id.ToString(),
             Channel = Channels.Connection,
-            Ext = State.GetExtWithTimesync(),
+            Ext = State.ExtWithTimesync,
             ClientId = State.clientId,
             ConnectionType = Connection.ConnectionType
         });

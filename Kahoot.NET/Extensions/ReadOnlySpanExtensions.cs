@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace Kahoot.NET.Extensions;
+﻿namespace Kahoot.NET.Extensions;
 
 /// <summary>
 /// Extensions involving <see cref="ReadOnlySpan{T}"/>
@@ -20,7 +18,7 @@ internal static class ReadOnlySpanExtensions
     {
         if (str.IsEmpty)
         {
-            return new string(str);
+            return string.Empty;
         }
 
         char[] source = str.ToArray();

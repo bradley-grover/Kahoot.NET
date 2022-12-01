@@ -41,28 +41,22 @@ public class StateObject
     /// Get the timesync used for certain objects
     /// </summary>
     /// <returns>A timesync used for websocket messages</returns>
-    public ExtOnlyTimesync OnlyTimeFromState()
+    public ExtOnlyTimesync OnlyTime => new()
     {
-        return new()
+        Timesync = new()
         {
-            Timesync = new()
-            {
-                L = l,
-                O = o
-            }
-        };
-    }
+            L = l,
+            O = o
+        }
+    };
 
     /// <summary>
     /// Gets extra data from the state object
     /// </summary>
     /// <returns></returns>
-    public ExtWithTimesync<long> GetExtWithTimesync()
+    public ExtWithTimesync<long> ExtWithTimesync => new()
     {
-        return new()
-        {
-            Time = new() { L = l, O = o },
-            Acknowledged = ack
-        };
-    }
+        Time = new() { L = l, O = o },
+        Acknowledged = ack
+    };
 }

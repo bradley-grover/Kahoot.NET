@@ -10,7 +10,7 @@ public partial class KahootClient
         {
             Id = Interlocked.Increment(ref State.id).ToString(),
             ClientId = State.clientId,
-            Ext = State.OnlyTimeFromState()
+            Ext = State.OnlyTime
         });
     }
 }

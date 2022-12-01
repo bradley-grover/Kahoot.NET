@@ -10,7 +10,7 @@ public partial class KahootClient
     {
         Logger = logger;
         Client = new();
-        Socket = Session.GetConfiguredWebSocket();
+        Socket = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize);
     }
 
     /// <summary>
@@ -22,7 +22,7 @@ public partial class KahootClient
     {
         Logger = logger;
         Client = client;
-        Socket = Session.GetConfiguredWebSocket();
+        Socket = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize);
     }
 
     /// <summary>
@@ -34,6 +34,6 @@ public partial class KahootClient
     {
         Logger = logger;
         Client = httpClientFactory.CreateClient();
-        Socket = Session.GetConfiguredWebSocket();
+        Socket = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize);
     }
 }

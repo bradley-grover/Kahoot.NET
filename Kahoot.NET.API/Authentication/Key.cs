@@ -16,7 +16,7 @@ public static class Key
     /// </summary>
     /// <param name="sessionHeaderToken"></param>
     /// <param name="challengeFunction"></param>
-    /// <returns>The WebSocket key used to connection</returns>
+    /// <returns>The WebSocket key used for the connection</returns>
     public static string Create(ReadOnlySpan<char> sessionHeaderToken, ReadOnlySpan<char> challengeFunction)
     {
         var header = Header.Create(sessionHeaderToken);

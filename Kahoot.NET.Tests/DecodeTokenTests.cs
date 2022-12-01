@@ -1,4 +1,4 @@
-﻿using Kahoot.NET.API.Authentication.Token;
+﻿using Kahoot.NET.API.Authentication;
 
 namespace Kahoot.NET.Tests;
 

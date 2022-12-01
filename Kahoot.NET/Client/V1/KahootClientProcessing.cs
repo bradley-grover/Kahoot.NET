@@ -4,7 +4,9 @@ public partial class KahootClient
 {
     internal async Task ProcessDataAsync(ReadOnlyMemory<byte> data)
     {
-        string json = Encoding.UTF8.GetString(data.Span).AsSpan().RemoveBrackets();
+        string partialJson = Encoding.UTF8.GetString(data.Span);
+
+        string json = new(partialJson.AsSpan(1, partialJson.Length-2));
 
         Logger?.LogDebug("[RECEIVED]: {json}", json);
 

@@ -14,7 +14,8 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        BenchmarkRunner.Run<DecodeBenchmarks>();
+        //BenchmarkRunner.Run<DecodeBenchmarks>();
+        BenchmarkRunner.Run<KeyCreationBenchmarks>();
     }
     /*
      * using Kahoot.NET.[X]

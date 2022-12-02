@@ -27,6 +27,6 @@ public class KeyCreationBenchmarks
     [Benchmark]
     public void CreateKey_Modified()
     {
-        //_ = TestKey.Create(SessionHeader, ChallengeFunction);
+        _ = WebSocketKey.Create(SessionHeader, ChallengeFunction);
     }
 }

@@ -6,34 +6,11 @@ namespace Kahoot.NET.Benchmarks;
 
 internal static class Mock
 {
+    public const string ChallengeFunction = "decode.call(this, 'LILuzw5MdnKGByXfauCcwRk8FVEhbG4GisXISV463KUS6gXOROnjUoh3uQZlk8vrB5ElK0swOfup0bG7BNBZgS0zfMiahYEroPxE'); function decode(message) {var offset = ((67\t + 92\t *   73\t *   93)\t + (4\t *   92)); if( this \t . angular   . isString \t ( offset   ))\t console\t .   log\t (\"Offset derived as: {\", offset, \"}\"); return  _\t . \t replace\t ( message,/./g, function(char, position) {return String.fromCharCode((((char.charCodeAt(0)*position)+ offset ) % 77) + 48);});}";
+    public const string SessionHeader = "Bw8EUT5OLglrCkd+NWdaUX9XQW4PY1tGAAplV1xAM1wLbQN+SjFHbVMIbmxRKV8sJWc+ezk8Cz4gDBlMbmlbMgsVLwU1CV0UURBSfT4LWW1de2YIYl5cBlJbQl5mXDFE";
+
     internal static class Auth
     {
-        public static string Create(ReadOnlySpan<char> sessionHeaderToken, ReadOnlySpan<char> challengeFunction)
-        {
-            var header = Header.Create(sessionHeaderToken);
-            var challenge = Challenge.CreateToken(challengeFunction);
 
-            ref char headerRef = ref MemoryMarshal.GetReference(header);
-            ref char challengeRef = ref MemoryMarshal.GetReference(challenge);
-
-            // new span to allocate for the token
-            Span<char> merged = stackalloc char[header.Length];
-
-            ref char mergedRef = ref MemoryMarshal.GetReference(merged);
-
-            for (var i = 0; i < header.Length; i++) // loop every character in the header
-            {
-                // black magic stuff
-                var character = (int)Unsafe.Add(ref headerRef, i);
-
-                var mod = (int)Unsafe.Add(ref challengeRef, i % challenge.Length);
-
-                var decoded = character ^ mod;
-
-                Unsafe.Add(ref mergedRef, i) = Convert.ToChar(decoded);
-            }
-
-            return new string(merged); // allocate into a string
-        }
     }
 }

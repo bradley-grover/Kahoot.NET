@@ -9,7 +9,7 @@ public class DecodeTokenTests
     [ClassData(typeof(ChallengeTokens))]
     public void DecodeToken(string header, string challenge, string expected)
     {
-        var actual = Key.Create(header, challenge);
+        var actual = WebSocketKey.Create(header, challenge);
 
         Assert.Equal(expected, actual);
     }

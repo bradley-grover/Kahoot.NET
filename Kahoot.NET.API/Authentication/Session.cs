@@ -39,10 +39,10 @@ public static class Session
         }
 
 #if NET5_0
-        var session = JsonSerializer.Deserialize<SessionResponse>(await response.Content.ReadAsStringAsync());
+        var session = await JsonSerializer.DeserializeAsync<SessionResponse>(await response.Content.ReadAsStreamAsync()).ConfigureAwait(false);
 #else
-        var session = JsonSerializer.Deserialize(
-            await response.Content.ReadAsStringAsync(), SessionContext.Default.SessionResponse);
+        var session = await JsonSerializer.DeserializeAsync(
+            await response.Content.ReadAsStreamAsync(), SessionContext.Default.SessionResponse);
 #endif
 
         if (session is null)

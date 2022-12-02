@@ -27,6 +27,6 @@ public class KeyCreationBenchmarks
     [Benchmark]
     public void CreateKey_Modified()
     {
-        _ = Mock.Auth.Create(SessionHeader, ChallengeFunction);
+        //_ = TestKey.Create(SessionHeader, ChallengeFunction);
     }
 }

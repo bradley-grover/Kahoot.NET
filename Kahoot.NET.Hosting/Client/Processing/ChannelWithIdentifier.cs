@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.API.Requests.Json;
+﻿using Kahoot.NET.API.Requests;
+using Kahoot.NET.API.Json;
 using Kahoot.NET.Client.Data.Errors;
 using Kahoot.NET.Extensions;
 

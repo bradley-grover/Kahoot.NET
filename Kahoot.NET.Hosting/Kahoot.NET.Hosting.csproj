@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kahoot.NET.API\Kahoot.NET.API.csproj" />
     <ProjectReference Include="..\Kahoot.NET\Kahoot.NET.csproj" />
   </ItemGroup>
 

@@ -19,5 +19,6 @@ global using System.Net.WebSockets;
 global using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Kahoot.NET")]
+[assembly: InternalsVisibleTo("Kahoot.NET.Hosting")]
 [assembly: InternalsVisibleTo("Kahoot.NET.Tests")]
 [assembly: InternalsVisibleTo("Kahoot.NET.Benchmarks")]

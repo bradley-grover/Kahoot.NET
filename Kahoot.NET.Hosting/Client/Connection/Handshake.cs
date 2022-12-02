@@ -1,6 +1,5 @@
 ﻿using Kahoot.NET.API;
 using Kahoot.NET.API.Requests.Handshake;
-using Kahoot.NET.API.Requests.Json;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Hosting.Client;

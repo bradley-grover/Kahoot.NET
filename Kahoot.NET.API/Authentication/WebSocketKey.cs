@@ -1,4 +1,5 @@
 ﻿using System.Buffers.Text;
+using System.Runtime.InteropServices;
 using Kahoot.NET.API.Authentication.Token;
 using Kahoot.NET.Parsers;
 
@@ -21,14 +22,21 @@ public static class WebSocketKey
 
         challenge = challenge[..challengeWritten];
 
+        // enumerate using refs to eliminate bound checks
+
+        ref char headerRef = ref MemoryMarshal.GetReference(header);
+        ref char challengeRef = ref MemoryMarshal.GetReference(challenge);
 
         for (var i = 0; i < header.Length; i++) // loop every character in the header
         {
             // black magic stuff
-            var character = (int)header[i];
-            var mod = (int)challenge[i % challenge.Length];
+            var character = (int)Unsafe.Add(ref headerRef, i);
+
+            var mod = (int)Unsafe.Add(ref challengeRef, i % challenge.Length);
+
             var decoded = character ^ mod;
-            header[i] = Convert.ToChar(decoded);
+
+            Unsafe.Add(ref headerRef, i) = Convert.ToChar(decoded);
         }
 
         return new string(header); // allocate into a string
@@ -109,6 +117,6 @@ public static class WebSocketKey
         long result = ((combined + offset) % 77) + 48;
 
         // convert back to a character
-        return Convert.ToChar(result);
+        return (char)(ulong)result;
     }
 }

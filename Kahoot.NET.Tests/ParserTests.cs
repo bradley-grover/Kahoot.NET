@@ -1,5 +1,5 @@
-﻿using Kahoot.NET.Client;
-using Kahoot.NET.Parsers;
+﻿using Kahoot.NET.API.Authentication;
+using Kahoot.NET.Client;
 
 namespace Kahoot.NET.Tests;
 
@@ -16,9 +16,6 @@ public class ParserTests
     [InlineData("(90*90*90*90*90)+(10*8)", 5_904_900_080)]
     public void AssertThatParser_Works(string expression, long expected)
     {
-        IValueParser<long> parser = new OffsetArithmetic();
-        
-        Assert.Equal(expected, parser.Parse(expression));
+        Assert.Equal(Challenge.CalculateOffset(expression), expected);
     }
-
 }

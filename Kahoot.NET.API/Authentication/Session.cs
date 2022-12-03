@@ -50,7 +50,7 @@ public static class Session
             return SessionResponse.Failed;
         }
 
-        session.WebSocketKey = Key.Create(header, session.Challenge);
+        session.WebSocketKey = WebSocketKey.Create(header, session.Challenge!);
         session.Success = true;
 
         return session;

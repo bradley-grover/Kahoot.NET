@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Kahoot.NET.API.Authentication.Token;
 
 namespace Kahoot.NET.Benchmarks;
 

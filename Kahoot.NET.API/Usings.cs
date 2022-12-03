@@ -1,5 +1,4 @@
 ﻿global using Kahoot.NET.API.Shared;
-global using Kahoot.NET.Parsers;
 global using Kahoot.NET.API.Requests;
 global using Kahoot.NET.API.Responses;
 global using Kahoot.NET.API.Requests.Login;

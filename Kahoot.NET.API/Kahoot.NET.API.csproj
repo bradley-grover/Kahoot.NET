@@ -14,5 +14,9 @@
     <Compile Remove="Json\**" />
     <Compile Include="Json\**" Condition="'$(TargetFramework)' != 'net5.0'" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jace" Version="1.0.0" />
+  </ItemGroup>
   
 </Project>

@@ -9,6 +9,7 @@ using Kahoot.NET.API.Authentication;
 namespace Kahoot.NET.Benchmarks.ToRun;
 
 [MemoryDiagnoser]
+[BenchmarkModule("KeyCreation", "Benchmarks creating the websocket key used to connect to a Kahoot!")]
 [Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
 [SimpleJob(RunStrategy.Throughput, runtimeMoniker: RuntimeMoniker.Net60, targetCount: 50)]
 [SimpleJob(RunStrategy.Throughput, runtimeMoniker: RuntimeMoniker.Net70, targetCount: 50)]
@@ -20,12 +21,6 @@ public class KeyCreationBenchmarks
 
     [Benchmark]
     public void CreateKey()
-    {
-        _ = Key.Create(SessionHeader, ChallengeFunction);
-    }
-
-    [Benchmark]
-    public void CreateKey_Modified()
     {
         _ = WebSocketKey.Create(SessionHeader, ChallengeFunction);
     }

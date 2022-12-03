@@ -1,14 +1,13 @@
 ﻿using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Jobs;
 using Kahoot.NET.API.Authentication;
-using Kahoot.NET.API.Authentication.Token;
-using Kahoot.NET.Parsers;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection.PortableExecutable;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
 
 [MemoryDiagnoser]
+[BenchmarkModule("KeyCreationSteps", "Benchmarks the methods involved with creating the websocket key used to connect to a Kahoot!")]
 [Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.Declared)]
 [SimpleJob(RunStrategy.Throughput, runtimeMoniker: RuntimeMoniker.Net60, targetCount: 50)]
 [SimpleJob(RunStrategy.Throughput, runtimeMoniker: RuntimeMoniker.Net70, targetCount: 50)]
@@ -26,9 +25,9 @@ public class WebSocketKeyBenchmarks
     {
         // from WebSoccketKey.Create(str, str);
 
-        Span<char> header = stackalloc char[512];
+        Span<char> header = stackalloc char[256];
 
-        int written = WebSocketKey.GetHeader(Mock.SessionHeader, header);
+        int written = Header.GetHeader(Mock.SessionHeader, header);
 
         header = header[..written];
     }
@@ -38,9 +37,9 @@ public class WebSocketKeyBenchmarks
     {
         /// from WebSocketKey.Create(str, str)
 
-        Span<char> challenge = stackalloc char[512];
+        Span<char> challenge = stackalloc char[256];
 
-        int challengeWritten = WebSocketKey.GetChallenge(Mock.ChallengeFunction, challenge);
+        int challengeWritten = Challenge.GetChallenge(Mock.ChallengeFunction, challenge);
 
         challenge = challenge[..challengeWritten];
     }
@@ -50,17 +49,21 @@ public class WebSocketKeyBenchmarks
     {
         Span<char> offsetString = stackalloc char[128];
 
-        int writtenToOffsetString = WebSocketKey.GetOffsetString(Mock.ChallengeFunction, offsetString);
+        int writtenToOffsetString = Challenge.GetOffsetString(Mock.ChallengeFunction, offsetString);
 
         offsetString = offsetString[..writtenToOffsetString];
     }
 
-    private static readonly OffsetArithmetic _arithmetic = new();
-
     [Benchmark]
     public void Calculate_Offset()
     {
-        _arithmetic.Parse(Mock.OffsetString);
+        _ = Challenge.CalculateOffset(Mock.OffsetString);
+    }
+
+    [Benchmark]
+    public void Find_Token()
+    {
+        _ = Challenge.FindToken(Mock.ChallengeFunction);
     }
 
     [Benchmark]
@@ -68,7 +71,7 @@ public class WebSocketKeyBenchmarks
     {
         Span<char> bytes = stackalloc char[256];
 
-        int written = WebSocketKey.Decode(Mock.Token, bytes, Mock.Offset); // pre-calculated
+        int written = Challenge.Decode(Mock.Token, bytes, Mock.Offset); // pre-calculated
 
         bytes = bytes[..written];
     }

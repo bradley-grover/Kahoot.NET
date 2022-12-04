@@ -96,14 +96,9 @@ internal static class Challenge
         return value.Length;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static char Repl(char character, int position, long offset)
     {
-        int combined = character * position;
-
-        // use kahoots challenge method to decode it
-        long result = ((combined + offset) % 77) + 48;
-
-        // convert back to a character
-        return (char)(ulong)result;
+        return (char)(ulong)(((character * position + offset) % 77) + 48);
     }
 }

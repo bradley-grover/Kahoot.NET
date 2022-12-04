@@ -2,16 +2,28 @@
 
 namespace Kahoot.NET.API.Authentication;
 
+/// <summary>
+/// Static class to create the websocket key used for connection to the socket
+/// </summary>
 public static class WebSocketKey
 {
+    /// <summary>
+    /// Creates the WebSocket key used for connecting to the WebSocket
+    /// </summary>
+    /// <param name="sessionHeader">The header <see cref="ConnectionInfo.SessionHeader"/> from a request</param>
+    /// <param name="challengeFunction"><see cref="SessionResponse.Challenge"/></param>
+    /// <remarks>
+    /// Combine with <see cref="ConnectionInfo.WebsocketUrl"/> and a game code to connect to the socket
+    /// </remarks>
     public static string Create(string sessionHeader, string challengeFunction)
     {
-        // header
-        Span<char> header = stackalloc char[256];
+        Span<char> header = stackalloc char[256]; // allocate a stack buffer to hold the data extracted from the header
 
         int written = Header.GetHeader(sessionHeader, header);
 
-        header = header[..written];
+        header = header[..written]; // trim down to the written size
+
+        // repeat for the challenge section
 
         Span<char> challenge = stackalloc char[256];
 
@@ -19,12 +31,12 @@ public static class WebSocketKey
 
         challenge = challenge[..challengeWritten];
 
-        // enumerate using refs to eliminate bound checks
+        // loop using references to avoid bound checks
 
         ref char headerRef = ref MemoryMarshal.GetReference(header);
         ref char challengeRef = ref MemoryMarshal.GetReference(challenge);
 
-        for (var i = 0; i < header.Length; i++) // loop every character in the header
+        for (int i = 0; i < header.Length; i++) // the length of websocket key is the same size as the decoded header
         {
             // black magic stuff
             var character = (int)Unsafe.Add(ref headerRef, i);
@@ -33,9 +45,9 @@ public static class WebSocketKey
 
             var decoded = character ^ mod;
 
-            Unsafe.Add(ref headerRef, i) = Convert.ToChar(decoded);
+            Unsafe.Add(ref headerRef, i) = (char)(uint)decoded;
         }
 
-        return new string(header); // allocate into a string
+        return new string(header); // allocate a new string from the span for the caller to use
     }
 }

@@ -6,7 +6,7 @@ internal static class Challenge
 {
     // TODO: look into more math libaries that could support faster operations to yield less allocs or speed improvements
 
-    internal static readonly CalculationEngine _engine = new();
+    internal static readonly CalculationEngine _engine = new(); // calculation engine from Jace.NET to eval the string
 
 
     internal const string OffsetName = "var offset = ";
@@ -27,7 +27,12 @@ internal static class Challenge
     }
 
     internal const char Identifier = '\'';
-
+    
+    /// <summary>
+    /// Finds the token and creates a new span over it, the token is always encased between two <see cref="Identifier"/>
+    /// characters so we just have to find the indexes. The span also never contains any other <see cref="Identifier"/>
+    /// so it should always produce the same result
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ReadOnlySpan<char> FindToken(ReadOnlySpan<char> source)
     {
@@ -37,18 +42,29 @@ internal static class Challenge
         return source.Slice(++first, last - first);
     }
 
+    /// <summary>
+    /// Calculates the offset from the offset string, this method by far has the most allocations and slows down the 
+    /// decoding of the websocket key the most, a lightweight alternative would be preffered
+    /// </summary>
+    /// <param name="str"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long CalculateOffset(ReadOnlySpan<char> str) => (long)Evaluator.Evaluate(str);
 
+    /// <summary>
+    /// Finds the offset string to calculate and puts the characters in the output span because they are not in order
+    /// </summary>
     public static int GetOffsetString(ReadOnlySpan<char> input, Span<char> output)
     {
-        // set input
+        // find the variable method declaration start index and set the span to start at the assignment
 
         input = input[(input.IndexOf(OffsetName) + OffsetName.Length)..];
 
+        // then trim off the end to where the statement ends at the semi colon
         input = input[..input.IndexOf(';')];
 
-        // end
+        // copy all characters that aren't whitespace into the output span and return the amount of written
+        // characters for the caller to access
 
         int outputIndex = 0;
 
@@ -67,6 +83,9 @@ internal static class Challenge
         return outputIndex;
     }
 
+    /// <summary>
+    /// Decode the characters using the offset and store the characters in the output
+    /// </summary>
     internal static int Decode(ReadOnlySpan<char> value, Span<char> output, long offset)
     {
         for (int i = 0; i < value.Length; i++)
@@ -78,14 +97,9 @@ internal static class Challenge
         return value.Length;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static char Repl(char character, int position, long offset)
     {
-        int combined = character * position;
-
-        // use kahoots challenge method to decode it
-        long result = ((combined + offset) % 77) + 48;
-
-        // convert back to a character
-        return (char)(ulong)result;
+        return (char)(ulong)(((character * position + offset) % 77) + 48);
     }
 }

@@ -70,7 +70,8 @@ public static class Session
     {
         if (receiveBufferSize < 1024 | sendBufferSize < 1024)
         {
-            throw new ArgumentException(null, nameof(receiveBufferSize));
+            throw new ArgumentException("The receive buffer should be at least 1024 to handle messages", 
+                nameof(receiveBufferSize));
         }
 
         ClientWebSocket socket = new();

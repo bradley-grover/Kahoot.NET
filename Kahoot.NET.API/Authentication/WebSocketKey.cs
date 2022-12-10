@@ -2,6 +2,9 @@
 
 namespace Kahoot.NET.API.Authentication;
 
+/// <summary>
+/// Static class to create the websocket key used for connection to the socket
+/// </summary>
 public static class WebSocketKey
 {
     /// <summary>
@@ -34,7 +37,9 @@ public static class WebSocketKey
 
         int written = Header.GetHeader(sessionHeader, header);
 
-        header = header[..written];
+        header = header[..written]; // trim down to the written size
+
+        // repeat for the challenge section
 
         Span<char> challenge = stackalloc char[256];
 
@@ -42,12 +47,12 @@ public static class WebSocketKey
 
         challenge = challenge[..challengeWritten];
 
-        // enumerate using refs to eliminate bound checks
+        // loop using references to avoid bound checks
 
         ref char headerRef = ref MemoryMarshal.GetReference(header);
         ref char challengeRef = ref MemoryMarshal.GetReference(challenge);
 
-        for (var i = 0; i < header.Length; i++) // loop every character in the header
+        for (int i = 0; i < header.Length; i++) // the length of websocket key is the same size as the decoded header
         {
             // black magic stuff
             var character = (int)Unsafe.Add(ref headerRef, i);
@@ -59,6 +64,6 @@ public static class WebSocketKey
             Unsafe.Add(ref headerRef, i) = (char)(uint)decoded;
         }
 
-        return new string(header); // allocate into a string
+        return new string(header); // allocate a new string from the span for the caller to use
     }
 }

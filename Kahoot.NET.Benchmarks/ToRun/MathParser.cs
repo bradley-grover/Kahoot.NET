@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Jace;
 using Kahoot.NET.API;
+using Kahoot.NET.Mathematics;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
 
@@ -11,7 +12,7 @@ public class MathParser
     [Benchmark]
     public void Eval()
     {
-        Evaluator.Evaluate(Mock.OffsetString);
+        SimpleExpression.Evaluate(Mock.OffsetString);
     }
 
     internal static readonly CalculationEngine _engine = new();

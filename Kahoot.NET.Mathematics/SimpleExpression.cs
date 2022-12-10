@@ -1,6 +1,8 @@
-﻿namespace Kahoot.NET.API;
+﻿using System.Text;
 
-public static class Evaluator
+namespace Kahoot.NET.Mathematics;
+
+public static class SimpleExpression
 {
     private static double ApplyOperation(char op, double left, double right)
     {
@@ -67,8 +69,6 @@ public static class Evaluator
         var rpnQueue = new Queue<string>(expression.Length / 2);
         var operatorStack = new Stack<char>(expression.Length / 2);
 
-        StringBuilder builder = new();
-
         for (int i = 0; i < expression.Length; i++)
         {
             char c = expression[i];
@@ -76,16 +76,17 @@ public static class Evaluator
             // If the character is a digit, parse it as a double and enqueue it to the RPN queue.
             if (char.IsDigit(c))
             {
+                int start = i;
+                int take = 0;
+
                 while (i < expression.Length && (char.IsDigit(expression[i]) || expression[i] == '.'))
                 {
-                    builder.Append(expression[i]);
+                    take++;
                     i++;
                 }
 
                 i--;
-                rpnQueue.Enqueue(builder.ToString());
-
-                builder.Clear();
+                rpnQueue.Enqueue(new(expression.Slice(start, take)));
             }
             // If the character is an opening bracket, push it onto the operator stack.
             else if (c == '(')
@@ -146,7 +147,14 @@ public static class Evaluator
             // If the token is an operand, parse it as a double and push it onto the stack.
             else
             {
-                operandStack.Push(double.Parse(token.AsSpan()));
+                if (double.TryParse(token.AsSpan(), out double result))
+                {
+                    operandStack.Push(result);
+                }
+                else
+                {
+                    throw new ArgumentException("Could not parse this numeric value");
+                }
             }
         }
 

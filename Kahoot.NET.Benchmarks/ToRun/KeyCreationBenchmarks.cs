@@ -8,11 +8,7 @@ using Kahoot.NET.API.Authentication;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
 
-[MemoryDiagnoser]
 [BenchmarkModule("KeyCreation", "Benchmarks creating the websocket key used to connect to a Kahoot!")]
-[Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
-[SimpleJob(RunStrategy.Throughput, runtimeMoniker: RuntimeMoniker.Net60, targetCount: 50)]
-[SimpleJob(RunStrategy.Throughput, runtimeMoniker: RuntimeMoniker.Net70, targetCount: 50)]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Benchmark class, has to be instance methods")]
 public class KeyCreationBenchmarks
 {

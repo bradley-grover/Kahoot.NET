@@ -4,7 +4,7 @@ internal static class Header
 {
     public static int GetHeader(ReadOnlySpan<char> sessionHeader, Span<char> chars)
     {
-        Span<byte> bytes = stackalloc byte[512];
+        Span<byte> bytes = stackalloc byte[sessionHeader.Length * 4 / 3];
 
         _ = Convert.TryFromBase64Chars(sessionHeader, bytes, out int written);
 

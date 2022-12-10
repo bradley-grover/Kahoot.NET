@@ -1,7 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-namespace Kahoot.NET.Benchmarks;
+﻿namespace Kahoot.NET.Benchmarks;
 
 internal static class Mock
 {

@@ -8,16 +8,32 @@ namespace Kahoot.NET.API.Authentication;
 public static class WebSocketKey
 {
     /// <summary>
-    /// Creates the WebSocket key used for connecting to the WebSocket
+    /// A sizeable amount of length for a session header to be, if the amount exceeds this <see cref="Create(string, string)"/> will throw <see cref="ArgumentOutOfRangeException"/>
     /// </summary>
-    /// <param name="sessionHeader">The header <see cref="ConnectionInfo.SessionHeader"/> from a request</param>
-    /// <param name="challengeFunction"><see cref="SessionResponse.Challenge"/></param>
+    public const int MaxHeaderLength = 256;
+
+
+    /// <summary>
+    /// Decodes the strings and returns a websocket key
+    /// </summary>
     /// <remarks>
-    /// Combine with <see cref="ConnectionInfo.WebsocketUrl"/> and a game code to connect to the socket
+    /// The header must be Base64 and comes from the response headers <see cref="Request.QueryGameAsync(HttpClient, int)"/> with the key <see cref="ConnectionInfo.SessionHeader"/>. 
+    /// The challenge function comes from the response <see cref="Request.QueryGameAsync(HttpClient, int)"/> and is contained in the body. 
+    /// The header cannot exceed the max length 
     /// </remarks>
+    /// <param name="sessionHeader"></param>
+    /// <param name="challengeFunction"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
     public static string Create(string sessionHeader, string challengeFunction)
     {
-        Span<char> header = stackalloc char[256]; // allocate a stack buffer to hold the data extracted from the header
+        if (sessionHeader.Length % 4 != 0 || sessionHeader.Length > MaxHeaderLength)
+        {
+            throw new ArgumentException($"The header cannot exceed {MaxHeaderLength} and must be a multiple of 4", nameof(sessionHeader));
+        }
+
+        // header
+        Span<char> header = stackalloc char[256];
 
         int written = Header.GetHeader(sessionHeader, header);
 

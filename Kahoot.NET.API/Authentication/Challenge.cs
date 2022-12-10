@@ -12,6 +12,7 @@ internal static class Challenge
 
     internal static readonly CalculationEngine _engine = new(); // calculation engine from Jace.NET to eval the string
 
+
     internal const string OffsetName = "var offset = ";
 
     public static int GetChallenge(ReadOnlySpan<char> challengeFunction, Span<char> chars)
@@ -52,7 +53,7 @@ internal static class Challenge
     /// <param name="str"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long CalculateOffset(ReadOnlySpan<char> str) => (long)_engine.Calculate(new(str));
+    public static long CalculateOffset(ReadOnlySpan<char> str) => (long)Evaluator.Evaluate(str);
 
     /// <summary>
     /// Finds the offset string to calculate and puts the characters in the output span because they are not in order

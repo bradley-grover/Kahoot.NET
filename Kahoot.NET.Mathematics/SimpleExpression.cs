@@ -1,9 +1,13 @@
-﻿using System.Text;
+﻿using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Kahoot.NET.Mathematics;
 
 public static class SimpleExpression
 {
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static double ApplyOperation(char op, double left, double right)
     {
         return op switch
@@ -106,7 +110,7 @@ public static class SimpleExpression
             // If the character is an operator, pop and enqueue everything on the operator stack that has a higher precedence. Then push the operator onto the operator stack.
             else if (TryGetPrecedence(c, out var value))
             {
-                while (operatorStack.Count > 0 && value < GetPrecedence(operatorStack.Peek()))
+                while (operatorStack.Count > 0 && value <= GetPrecedence(operatorStack.Peek()))
                 {
                     char op = operatorStack.Pop();
                     rpnQueue.Enqueue(op.ToString());

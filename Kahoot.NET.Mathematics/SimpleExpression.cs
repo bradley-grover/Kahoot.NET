@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Globalization;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -21,7 +22,6 @@ public static class SimpleExpression
         };
     }
 
-    private static ReadOnlySpan<char> Operators => new[] { '(', '+', '-', '*', '/', '^' };
 
     private static bool TryGetPrecedence(char operation, out int precedence)
     {
@@ -67,56 +67,58 @@ public static class SimpleExpression
         };
     }
 
-
     public static long Evaluate(ReadOnlySpan<char> expression)
     {
-        // Convert the infix notation to RPN.
-        var rpnQueue = new Queue<string>(expression.Length / 2);
+        // Create stacks for operands and operators.
+        var operandStack = new Stack<long>(expression.Length / 2);
         var operatorStack = new Stack<char>(expression.Length / 2);
 
-        for (int i = 0; i < expression.Length; i++)
+        int length = expression.Length;
+
+        for (int i = 0; i < length; i++)
         {
             char c = expression[i];
 
-            // If the character is a digit, parse it as a double and enqueue it to the RPN queue.
+            // If the character is a digit, parse it as a long and push it onto the operand stack.
             if (char.IsDigit(c))
             {
                 int start = i;
                 int take = 0;
 
-                while (i < expression.Length && (char.IsDigit(expression[i]) || expression[i] == '.'))
+                while (i < length && (char.IsDigit(expression[i])))
                 {
                     take++;
                     i++;
                 }
 
                 i--;
-                rpnQueue.Enqueue(new(expression.Slice(start, take)));
+                var operand = expression.Slice(start, take);
+
+                // Manually convert the operand string to a long value which is slightly more dangerous than using the in built library
+                operandStack.Push(long.Parse(operand, NumberStyles.None));
             }
             // If the character is an opening bracket, push it onto the operator stack.
             else if (c == '(')
             {
                 operatorStack.Push(c);
             }
-            // If the character is a closing bracket, pop and enqueue everything on the operator stack until we reach the matching opening bracket.
+            // If the character is a closing bracket, pop and apply all operators until the matching opening bracket is found.
             else if (c == ')')
             {
                 while (operatorStack.Peek() != '(')
                 {
-                    char op = operatorStack.Pop();
-                    rpnQueue.Enqueue(op.ToString());
+                    ApplyOperator(operandStack, operatorStack.Pop());
                 }
                 operatorStack.Pop();
             }
-            // If the character is an operator, pop and enqueue everything on the operator stack that has a higher precedence. Then push the operator onto the operator stack.
+            // If the character is an operator, pop and apply all operators with higher or equal precedence.
+            // Then push the operator onto the operator stack.
             else if (TryGetPrecedence(c, out var value))
             {
                 while (operatorStack.Count > 0 && value <= GetPrecedence(operatorStack.Peek()))
                 {
-                    char op = operatorStack.Pop();
-                    rpnQueue.Enqueue(op.ToString());
+                    ApplyOperator(operandStack, operatorStack.Pop());
                 }
-
                 operatorStack.Push(c);
             }
             // If the character is anything else, it is an invalid character and we throw an exception.
@@ -126,43 +128,21 @@ public static class SimpleExpression
             }
         }
 
-
-        // Pop and enqueue everything remaining on the operator stack.
+        // Pop and apply all remaining operators.
         while (operatorStack.Count > 0)
         {
-            char op = operatorStack.Pop();
-            rpnQueue.Enqueue(op.ToString());
+            ApplyOperator(operandStack, operatorStack.Pop());
         }
 
-        // Evaluate the RPN.
-        var operandStack = new Stack<long>();
-
-        while (rpnQueue.Count > 0)
-        {
-            string token = rpnQueue.Dequeue();
-
-            // If the token is an operator, pop the required number of operands from the stack and apply the operator.
-            // Then push the result back onto the stack.
-            if (TryGetPrecedence(token[0], out _))
-            {
-                var right = operandStack.Pop();
-                var left = operandStack.Pop();
-                operandStack.Push(ApplyOperation(token[0], left, right));
-            }
-            // If the token is an operand, parse it as a double and push it onto the stack.
-            else
-            {
-                if (long.TryParse(token.AsSpan(), out var result))
-                {
-                    operandStack.Push(result);
-                }
-                else
-                {
-                    throw new ArgumentException("Could not parse this numeric value");
-                }
-            }
-        }
-
+        // The final result should be the only value remaining on the operand stack.
         return operandStack.Pop();
+    }
+
+
+    private static void ApplyOperator(Stack<long> operandStack, char op)
+    {
+        var right = operandStack.Pop();
+        var left = operandStack.Pop();
+        operandStack.Push(ApplyOperation(op, left, right));
     }
 }

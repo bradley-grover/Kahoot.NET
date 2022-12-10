@@ -54,7 +54,7 @@ internal static class Challenge
     /// <param name="str"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long CalculateOffset(ReadOnlySpan<char> str) => (long)SimpleExpression.Evaluate(str);
+    public static long CalculateOffset(ReadOnlySpan<char> str) => SimpleExpression.Evaluate(str);
 
     /// <summary>
     /// Finds the offset string to calculate and puts the characters in the output span because they are not in order

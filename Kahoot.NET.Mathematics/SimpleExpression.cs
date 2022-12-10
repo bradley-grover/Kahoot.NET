@@ -70,8 +70,8 @@ public static class SimpleExpression
     public static long Evaluate(ReadOnlySpan<char> expression)
     {
         // Create stacks for operands and operators.
-        var operandStack = new Stack<long>(expression.Length / 2);
-        var operatorStack = new Stack<char>(expression.Length / 2);
+        var operandStack = new UnmanagedStack<long>(stackalloc long[expression.Length / 2]);
+        var operatorStack = new UnmanagedStack<char>(stackalloc char[expression.Length / 2]);
 
         int length = expression.Length;
 
@@ -80,12 +80,12 @@ public static class SimpleExpression
             char c = expression[i];
 
             // If the character is a digit, parse it as a long and push it onto the operand stack.
-            if (char.IsDigit(c))
+            if ((uint)(c - '0') <= 9)
             {
                 int start = i;
                 int take = 0;
 
-                while (i < length && (char.IsDigit(expression[i])))
+                while (i < length && (uint)(c - '0') <= 9)
                 {
                     take++;
                     i++;
@@ -107,7 +107,7 @@ public static class SimpleExpression
             {
                 while (operatorStack.Peek() != '(')
                 {
-                    ApplyOperator(operandStack, operatorStack.Pop());
+                    ApplyOperator(ref operandStack, operatorStack.Pop());
                 }
                 operatorStack.Pop();
             }
@@ -117,7 +117,7 @@ public static class SimpleExpression
             {
                 while (operatorStack.Count > 0 && value <= GetPrecedence(operatorStack.Peek()))
                 {
-                    ApplyOperator(operandStack, operatorStack.Pop());
+                    ApplyOperator(ref operandStack, operatorStack.Pop());
                 }
                 operatorStack.Push(c);
             }
@@ -131,15 +131,21 @@ public static class SimpleExpression
         // Pop and apply all remaining operators.
         while (operatorStack.Count > 0)
         {
-            ApplyOperator(operandStack, operatorStack.Pop());
+            ApplyOperator(ref operandStack, operatorStack.Pop());
         }
 
         // The final result should be the only value remaining on the operand stack.
-        return operandStack.Pop();
+        long ret = operandStack.Pop();
+
+        operandStack.Dispose();
+        operatorStack.Dispose();
+
+
+        return ret;
     }
 
 
-    private static void ApplyOperator(Stack<long> operandStack, char op)
+    private static void ApplyOperator(ref UnmanagedStack<long> operandStack, char op)
     {
         var right = operandStack.Pop();
         var left = operandStack.Pop();

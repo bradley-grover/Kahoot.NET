@@ -8,6 +8,7 @@ internal static class Challenge
 
     internal static readonly CalculationEngine _engine = new();
 
+
     internal const string OffsetName = "var offset = ";
 
     public static int GetChallenge(ReadOnlySpan<char> challengeFunction, Span<char> chars)
@@ -37,7 +38,7 @@ internal static class Challenge
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long CalculateOffset(ReadOnlySpan<char> str) => (long)_engine.Calculate(new(str));
+    public static long CalculateOffset(ReadOnlySpan<char> str) => (long)Evaluator.Evaluate(str);
 
     public static int GetOffsetString(ReadOnlySpan<char> input, Span<char> output)
     {

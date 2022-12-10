@@ -1,7 +1,11 @@
-﻿using Jace;
+﻿using System.Runtime.InteropServices;
+using Jace;
 using Kahoot.NET.Mathematics;
 
 namespace Kahoot.NET.API.Authentication;
+
+// this file contains the most performance impact on the WebSocketKey.Create method as it has parse a math string
+// and has to a allocate a string from the span
 
 internal static class Challenge
 {
@@ -69,16 +73,19 @@ internal static class Challenge
 
         int outputIndex = 0;
 
+        ref char inputRef = ref MemoryMarshal.GetReference(input);
+        ref char outputRef = ref MemoryMarshal.GetReference(output);
+
         for (int i = 0; i < input.Length; i++)
         {
-            char character = input[i];
+            char character = Unsafe.Add(ref inputRef, i);
 
             if (char.IsWhiteSpace(character))
             {
                 continue;
             }
 
-            output[outputIndex++] = character;
+            Unsafe.Add(ref outputRef, outputIndex++) = character;
         }
 
         return outputIndex;

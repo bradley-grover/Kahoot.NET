@@ -8,7 +8,7 @@ public static class SimpleExpression
 {
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static double ApplyOperation(char op, double left, double right)
+    private static long ApplyOperation(char op, long left, long right)
     {
         return op switch
         {
@@ -16,7 +16,7 @@ public static class SimpleExpression
             '-' => left - right,
             '*' => left * right,
             '/' => left / right,
-            '^' => Math.Pow(left, right),
+            '^' => (long)Math.Pow(left, right),
             _ => throw new ArgumentException("Invalid operator", nameof(op)),
         };
     }
@@ -67,7 +67,8 @@ public static class SimpleExpression
         };
     }
 
-    public static double Evaluate(ReadOnlySpan<char> expression)
+
+    public static long Evaluate(ReadOnlySpan<char> expression)
     {
         // Convert the infix notation to RPN.
         var rpnQueue = new Queue<string>(expression.Length / 2);
@@ -134,7 +135,7 @@ public static class SimpleExpression
         }
 
         // Evaluate the RPN.
-        var operandStack = new Stack<double>();
+        var operandStack = new Stack<long>();
 
         while (rpnQueue.Count > 0)
         {
@@ -144,14 +145,14 @@ public static class SimpleExpression
             // Then push the result back onto the stack.
             if (TryGetPrecedence(token[0], out _))
             {
-                double right = operandStack.Pop();
-                double left = operandStack.Pop();
+                var right = operandStack.Pop();
+                var left = operandStack.Pop();
                 operandStack.Push(ApplyOperation(token[0], left, right));
             }
             // If the token is an operand, parse it as a double and push it onto the stack.
             else
             {
-                if (double.TryParse(token.AsSpan(), out double result))
+                if (long.TryParse(token.AsSpan(), out var result))
                 {
                     operandStack.Push(result);
                 }

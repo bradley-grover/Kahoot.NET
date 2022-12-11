@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Text;
 
 namespace Kahoot.NET.Mathematics;
@@ -11,73 +13,44 @@ public static class SimpleExpression
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static long ApplyOperation(char op, long left, long right)
     {
-        return op switch
-        {
-            '+' => left + right,
-            '-' => left - right,
-            '*' => left * right,
-            '/' => left / right,
-            '^' => (long)Math.Pow(left, right),
-            _ => throw new ArgumentException("Invalid operator", nameof(op)),
-        };
+        return operatorFunctions[op](left, right);
     }
 
-
-    private static bool TryGetPrecedence(char operation, out int precedence)
+    private static readonly Dictionary<char, Func<long, long, long>> operatorFunctions = new()
     {
-        switch (operation)
-        {
-            case '(':
-                precedence = 0;
-                break;
-            case '+':
-                precedence = 1;
-                break;
-            case '-':
-                precedence = 1;
-                break;
-            case '*':
-                precedence = 2;
-                break;
-            case '/':
-                precedence = 2;
-                break;
-            case '^':
-                precedence = 3;
-                break;
-            default:
-                precedence = default;
-                return false;
-        }
+        { '+', (x, y) => x + y },
+        { '-', (x, y) => x - y },
+        { '*', (x, y) => x * y },
+        { '/', (x, y) => x / y },
+        { '^', (x, y) => x % y },
+        // Add more operators here as needed.
+    };
 
-        return true;
-    }
-
-    private static int GetPrecedence(char operation)
+    private static readonly Dictionary<char, int> precedences = new()
     {
-        return operation switch
-        {
-            '(' => 0,
-            '+' => 1,
-            '-' => 1,
-            '*' => 2,
-            '/' => 2,
-            '^' => 3,
-            _ => throw new ArgumentException("Unknown operator")
-        };
-    }
+        { '(', 0 },
+        { '+', 1 },
+        { '-', 1 },
+        { '*', 2 },
+        { '/', 2 },
+        { '^', 3 }
+    };
 
-    public static long Evaluate(ReadOnlySpan<char> expression)
+    public static bool TryEvaluate(ReadOnlySpan<char> expression, out long evaluated)
     {
+        evaluated = 0; // zero evaluation
+
         // Create stacks for operands and operators.
-        var operandStack = new Stack<long>(expression.Length / 2);
-        var operatorStack = new Stack<char>(expression.Length / 2);
+        var operandStack = new UnmanagedStack<long>(stackalloc long[expression.Length / 2]);
+        var operatorStack = new UnmanagedStack<char>(stackalloc char[expression.Length / 2]);
+
+        ref char expressionRef = ref MemoryMarshal.GetReference(expression);
 
         int length = expression.Length;
 
         for (int i = 0; i < length; i++)
         {
-            char c = expression[i];
+            char c = Unsafe.Add(ref expressionRef, i);
 
             // If the character is a digit, parse it as a long and push it onto the operand stack.
             if (char.IsDigit(c))
@@ -85,7 +58,7 @@ public static class SimpleExpression
                 int start = i;
                 int take = 0;
 
-                while (i < length && (char.IsDigit(expression[i])))
+                while (i < length && char.IsDigit(Unsafe.Add(ref expressionRef, i)))
                 {
                     take++;
                     i++;
@@ -93,6 +66,11 @@ public static class SimpleExpression
 
                 i--;
                 var operand = expression.Slice(start, take);
+
+                if (!long.TryParse(operand, NumberStyles.None, null, out var result))
+                {
+                    return false;
+                }
 
                 // Manually convert the operand string to a long value which is slightly more dangerous than using the in built library
                 operandStack.Push(long.Parse(operand, NumberStyles.None));
@@ -107,39 +85,51 @@ public static class SimpleExpression
             {
                 while (operatorStack.Peek() != '(')
                 {
-                    ApplyOperator(operandStack, operatorStack.Pop());
+                    ApplyOperator(ref operandStack, operatorStack.Pop());
                 }
                 operatorStack.Pop();
             }
             // If the character is an operator, pop and apply all operators with higher or equal precedence.
             // Then push the operator onto the operator stack.
-            else if (TryGetPrecedence(c, out var value))
+            else if (precedences.TryGetValue(c, out var value))
             {
-                while (operatorStack.Count > 0 && value <= GetPrecedence(operatorStack.Peek()))
+                while (operatorStack.Count > 0 && value <= precedences[operatorStack.Peek()])
                 {
-                    ApplyOperator(operandStack, operatorStack.Pop());
+                    ApplyOperator(ref operandStack, operatorStack.Pop());
                 }
                 operatorStack.Push(c);
             }
             // If the character is anything else, it is an invalid character and we throw an exception.
             else
             {
-                throw new ArgumentException("Invalid character in expression", nameof(expression));
+                return false;
             }
         }
 
         // Pop and apply all remaining operators.
         while (operatorStack.Count > 0)
         {
-            ApplyOperator(operandStack, operatorStack.Pop());
+            ApplyOperator(ref operandStack, operatorStack.Pop());
         }
 
         // The final result should be the only value remaining on the operand stack.
-        return operandStack.Pop();
+        evaluated = operandStack.Pop();
+
+        return true;
+    }
+
+    public static long Evaluate(ReadOnlySpan<char> expression)
+    {
+        if (TryEvaluate(expression, out var eval))
+        {
+            return eval;
+        }
+
+        throw new FormatException("Input string was not in correct format");
     }
 
 
-    private static void ApplyOperator(Stack<long> operandStack, char op)
+    private static void ApplyOperator(scoped ref UnmanagedStack<long> operandStack, char op)
     {
         var right = operandStack.Pop();
         var left = operandStack.Pop();

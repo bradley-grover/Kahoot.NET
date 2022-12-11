@@ -10,16 +10,16 @@ namespace Kahoot.NET.Benchmarks.ToRun;
 public class MathParser
 {
     [Benchmark]
-    public void Eval()
+    public long Eval()
     {
-        SimpleExpression.Evaluate(Mock.OffsetString);
+        return SimpleExpression.Evaluate(Mock.OffsetString);
     }
 
     internal static readonly CalculationEngine _engine = new();
 
     [Benchmark]
-    public void Jace()
+    public long Jace()
     {
-        _engine.Calculate(Mock.OffsetString);
+        return (long)_engine.Calculate(Mock.OffsetString);
     }
 }

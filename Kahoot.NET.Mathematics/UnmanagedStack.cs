@@ -1,21 +1,29 @@
-﻿using System;
-using System.Buffers;
+﻿using System.Buffers;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Kahoot.NET.Mathematics;
 
-internal ref struct UnmanagedStack<T>
+internal ref struct ValueStack<T>
     where T : unmanaged
 {
     internal Span<T> _buffer;
     internal T[]? _arrayToReturnToPool;
     internal int _pos;
 
-    public UnmanagedStack(Span<T> initialBuffer)
+
+    public ValueStack(Span<T> initialBuffer)
     {
         _buffer = initialBuffer;
+    }
+
+    public ValueStack(int initialCapacity)
+    {
+        _arrayToReturnToPool = ArrayPool<T>.Shared.Rent(initialCapacity);
+        _buffer = _arrayToReturnToPool;
+        _pos = 0;
     }
 
     public int Count
@@ -47,6 +55,20 @@ internal ref struct UnmanagedStack<T>
         }
 
         return values[size];
+    }
+
+    internal T PeekUnsafe()
+    {
+        int size = _pos - 1;
+
+        Span<T> values = _buffer;
+
+        if ((uint)size >= (uint)values.Length)
+        {
+            ThrowOnEmptyStack();
+        }
+
+        return Unsafe.Add(ref MemoryMarshal.GetReference(values), size);
     }
 
     public bool TryPeek([MaybeNullWhen(false)] out T result)
@@ -81,6 +103,23 @@ internal ref struct UnmanagedStack<T>
         return item;
     }
 
+    // version of Pop with no bounds checking for faster Popping
+    internal T PopUnsafe()
+    {
+        int size = _pos - 1;
+
+        Span<T> buffer = _buffer;
+
+        if ((uint)size >= (uint)buffer.Length)
+        {
+            ThrowOnEmptyStack();
+        }
+
+        _pos = size;
+
+        return Unsafe.Add(ref MemoryMarshal.GetReference(buffer), size);
+    }
+
     public bool TryPop([MaybeNullWhen(false)] out T result)
     {
         int size = _pos - 1;
@@ -97,6 +136,34 @@ internal ref struct UnmanagedStack<T>
         result = buffer[size];
 
         return true;
+    }
+
+    internal void PushUnsafe(T item)
+    {
+        int size = _pos;
+
+        Span<T> buffer = _buffer;
+
+        if ((uint)size < (uint)buffer.Length)
+        {
+            Unsafe.Add(ref MemoryMarshal.GetReference(buffer), size) = item;
+            _pos = size + 1;
+        }
+        else
+        {
+            PushWithResizeUnsafe(item);
+        }
+    }
+
+    internal void PushWithResizeUnsafe(T item)
+    {
+        Debug.Assert(_pos == _buffer.Length);
+
+        Grow(_pos + 1);
+
+        Unsafe.Add(ref MemoryMarshal.GetReference(_buffer), _pos) = item;
+
+        _pos++;
     }
 
     public void Push(T item)
@@ -116,7 +183,7 @@ internal ref struct UnmanagedStack<T>
     }
 
 
-    [MethodImpl(MethodImplOptions.NoInlining)]
+    [MethodImpl(MethodImplOptions.NoInlining)] // implementation comes from dotnet/runtime: ValueStringBuilder.cs
     private void Grow(int additionalCapacityBeyondPos)
     {
         Debug.Assert(additionalCapacityBeyondPos > 0);
@@ -134,7 +201,7 @@ internal ref struct UnmanagedStack<T>
         // This could also go negative if the actual required length wraps around.
         T[] poolArray = ArrayPool<T>.Shared.Rent(newCapacity);
 
-        _buffer.Slice(0, _pos).CopyTo(poolArray);
+        _buffer[.._pos].CopyTo(poolArray);
 
         T[]? toReturn = _arrayToReturnToPool;
         _buffer = _arrayToReturnToPool = poolArray;

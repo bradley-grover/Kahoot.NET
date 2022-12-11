@@ -1,75 +1,72 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Globalization;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Kahoot.NET.Mathematics;
 
-/// <summary>
-/// Class to evaluate simple expressions using <see cref="TryEvaluate(ReadOnlySpan{char}, out long)"/> 
-/// or <see cref="Evaluate(ReadOnlySpan{char})"/>. It performs this operation very fast and with no memory allocations what so ever on heap until the length of the expression
-/// reaches beyond 512 and uses <see cref="System.Buffers.ArrayPool{T}"/> instead
-/// </summary>
-/// <remarks>
-/// Expressions are very simple and designed by nature to make it faster,
-/// so only simple expressions with simple operators and brackets
-/// like + - * / ^ ( ). In NET 7 generic <see cref="SimpleExpression"/> is supported as a static generic if you would prefer to use on generic types instead
-/// </remarks>
-public static class SimpleExpression
+#if NET7_0_OR_GREATER
+public static partial class SimpleExpression<TNumber>
+    where TNumber : unmanaged, INumber<TNumber>
 {
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static long ApplyOperation(char op, long left, long right)
+    static unsafe SimpleExpression()
     {
-        return operatorFunctions[op](left, right);
+        if (sizeof(TNumber) > 8) // if the size is greater than a double we can't use standard Pow method
+        {
+            genericOpFunctions.Add('^', (left, right) =>
+            {
+                var bigLeft = BigInteger.CreateChecked(left);
+                int exponent = int.CreateChecked(right);
+
+                return TNumber.CreateChecked(BigInteger.Pow(bigLeft, exponent));
+            });
+        }
+        else
+        {
+            genericOpFunctions.Add('^', (left, right) =>
+            {
+                return TNumber.CreateChecked(Math.Pow(double.CreateChecked(left), double.CreateChecked(right)));
+            });
+        }
     }
 
-    private static readonly Dictionary<char, Func<long, long, long>> operatorFunctions = new()
+    [Pure]
+    public static TNumber Evaluate(ReadOnlySpan<char> expression)
     {
-        { '+', (x, y) => x + y },
-        { '-', (x, y) => x - y },
-        { '*', (x, y) => x * y },
-        { '/', (x, y) => x / y },
-        { '^', (x, y) => (long)Math.Pow(x, y) },
-        // Add more operators here as needed.
-    };
+        if (TryEvaluate(expression, out var eval))
+        {
+            return eval;
+        }
 
-    internal static readonly Dictionary<char, int> precedences = new()
-    {
-        { '(', 0 },
-        { '+', 1 },
-        { '-', 1 },
-        { '*', 2 },
-        { '/', 2 },
-        { '^', 3 }
-    };
+        throw new FormatException("Input string was not in correct format");
+    }
 
-    internal const int OperandStackMaxSize = 256;
-    internal const int OperatorStackMaxSize = 256;
 
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-    public static bool TryEvaluate(ReadOnlySpan<char> expression, out long evaluated)
+    public static bool TryEvaluate(ReadOnlySpan<char> expression, out TNumber evaluated, NumberStyles numberStyle = NumberStyles.None, IFormatProvider? provider = null)
     {
-        evaluated = 0; // zero evaluation
+        evaluated = TNumber.Zero; // zero evaluation
 
         if (expression.IsEmpty)
         {
             return true; // This is an edge case as it evaluates to zero
         }
 
-        int length = expression.Length;
-
-        int halfExpressionLength = length / 2;
+        int halfExpressionLength = expression.Length / 2;
 
         // Create stacks for operands and operators.
-        using var operandStack = halfExpressionLength > OperandStackMaxSize ?
-            new ValueStack<long>(halfExpressionLength) :
-            new ValueStack<long>(stackalloc long[halfExpressionLength]);
+        using var operandStack = halfExpressionLength > SimpleExpression.OperandStackMaxSize ?
+            new ValueStack<TNumber>(halfExpressionLength) :
+            new ValueStack<TNumber>(stackalloc TNumber[halfExpressionLength]);
 
-        using var operatorStack = halfExpressionLength > OperatorStackMaxSize ?
+        using var operatorStack = halfExpressionLength > SimpleExpression.OperatorStackMaxSize ?
             new ValueStack<char>(halfExpressionLength) :
             new ValueStack<char>(stackalloc char[halfExpressionLength]);
 
         ref char expressionRef = ref MemoryMarshal.GetReference(expression);
+
+        int length = expression.Length;
 
         for (int i = 0; i < length; i++)
         {
@@ -81,7 +78,7 @@ public static class SimpleExpression
                 int start = i;
                 int take = 0;
 
-                while (i < length && (uint)(Unsafe.Add(ref expressionRef, i) - '0') <= 9)
+                while (i < length && (uint)(Unsafe.Add(ref expressionRef, i) - '0') <= 9 || Unsafe.Add(ref expressionRef, i) == '.')
                 {
                     take++;
                     i++;
@@ -92,7 +89,7 @@ public static class SimpleExpression
 
                 /// use TryParse instead because it allows for error handling
 
-                if (!long.TryParse(operand, NumberStyles.None, null, out var result))
+                if (!TNumber.TryParse(operand, numberStyle, provider, out var result))
                 {
                     return false;
                 }
@@ -125,9 +122,9 @@ public static class SimpleExpression
             }
             // If the character is an operator, pop and apply all operators with higher or equal precedence.
             // Then push the operator onto the operator stack.
-            else if (precedences.TryGetValue(c, out var value))
+            else if (SimpleExpression.precedences.TryGetValue(c, out var value))
             {
-                while (operatorStack.Count > 0 && value <= precedences[operatorStack.Peek()])
+                while (operatorStack.Count > 0 && value <= SimpleExpression.precedences[operatorStack.Peek()])
                 {
                     var right = operandStack.Pop();
                     var left = operandStack.Pop();
@@ -162,14 +159,23 @@ public static class SimpleExpression
         return true;
     }
 
-    [Pure]
-    public static long Evaluate(ReadOnlySpan<char> expression)
+    private static readonly Dictionary<char, Func<TNumber, TNumber, TNumber>> genericOpFunctions = new()
     {
-        if (TryEvaluate(expression, out var eval))
-        {
-            return eval;
-        }
+        { '+', (x, y) => x + y },
+        { '-', (x, y) => x - y },
+        { '*', (x, y) => x * y },
+        { '/', (x, y) => x / y },
+        // Add more operators here as needed.
+    };
 
-        throw new FormatException("Input string was not in correct format");
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static TNumber ApplyOperation(char op, TNumber left, TNumber right)
+    {
+        return genericOpFunctions[op](left, right);
     }
+
+    internal const int OperandStackMaxSizeGeneric = 256;
+    internal const int OperatorStackMaxSizeGeneric = 256;
 }
+#endif

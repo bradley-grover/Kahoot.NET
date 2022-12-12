@@ -13,7 +13,6 @@ internal ref struct ValueStack<T>
     internal T[]? _arrayToReturnToPool;
     internal int _pos;
 
-
     public ValueStack(Span<T> initialBuffer)
     {
         _buffer = initialBuffer;

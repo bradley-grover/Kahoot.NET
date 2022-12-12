@@ -15,24 +15,25 @@ namespace Kahoot.NET.Mathematics;
 /// so only simple expressions with simple operators and brackets
 /// like + - * / ^ ( ). In NET 7 generic <see cref="SimpleExpression"/> is supported as a static generic if you would prefer to use on generic types instead
 /// </remarks>
-public static class SimpleExpression
+public unsafe static class SimpleExpression
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static long ApplyOperation(char op, long left, long right)
     {
-        return operatorFunctions[op](left, right);
+        return _operations[op].Function(left, right);
     }
 
-    private static readonly Dictionary<char, Func<long, long, long>> operatorFunctions = new()
+    // keep in sync with below
+    internal static readonly Dictionary<char, MathOperation> _operations = new()
     {
-        { '+', (x, y) => x + y },
-        { '-', (x, y) => x - y },
-        { '*', (x, y) => x * y },
-        { '/', (x, y) => x / y },
-        { '^', (x, y) => (long)Math.Pow(x, y) },
-        // Add more operators here as needed.
+        { '+', new(&MathOperations.Add) },
+        { '-', new(&MathOperations.Subtract) },
+        { '*', new(&MathOperations.Multiply) },
+        { '/', new(&MathOperations.Divide) },
+        { '^', new(&MathOperations.Pow) }
     };
 
+    // keep in sync with above
     internal static readonly Dictionary<char, int> precedences = new()
     {
         { '(', 0 },
@@ -61,13 +62,13 @@ public static class SimpleExpression
         int halfExpressionLength = length / 2;
 
         // Create stacks for operands and operators.
-        using var operandStack = halfExpressionLength > OperandStackMaxSize ?
-            new ValueStack<long>(halfExpressionLength) :
-            new ValueStack<long>(stackalloc long[halfExpressionLength]);
+        using ValueStack<long> operandStack = halfExpressionLength > OperandStackMaxSize ?
+            new(halfExpressionLength) :
+            new(stackalloc long[halfExpressionLength]);
 
-        using var operatorStack = halfExpressionLength > OperatorStackMaxSize ?
-            new ValueStack<char>(halfExpressionLength) :
-            new ValueStack<char>(stackalloc char[halfExpressionLength]);
+        using ValueStack<char> operatorStack = halfExpressionLength > OperatorStackMaxSize ?
+            new(halfExpressionLength) :
+            new(stackalloc char[halfExpressionLength]);
 
         ref char expressionRef = ref MemoryMarshal.GetReference(expression);
 

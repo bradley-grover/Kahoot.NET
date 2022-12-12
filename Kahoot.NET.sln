@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.HighLoadExample"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.API", "Kahoot.NET.API\Kahoot.NET.API.csproj", "{ADB5A7EF-54D1-4F34-B861-EA7B611CE95D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kahoot.NET.Mathematics", "Kahoot.NET.Mathematics\Kahoot.NET.Mathematics.csproj", "{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.Mathematics", "Kahoot.NET.Mathematics\Kahoot.NET.Mathematics.csproj", "{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

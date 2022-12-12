@@ -14,6 +14,8 @@ public static partial class SimpleExpression<TNumber>
     {
         if (sizeof(TNumber) > 8) // if the size is greater than a double we can't use standard Pow method
         {
+
+
             genericOpFunctions.Add('^', (left, right) =>
             {
                 var bigLeft = BigInteger.CreateChecked(left);

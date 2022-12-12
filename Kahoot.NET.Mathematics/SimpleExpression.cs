@@ -15,7 +15,7 @@ namespace Kahoot.NET.Mathematics;
 /// so only simple expressions with simple operators and brackets
 /// like + - * / ^ ( ). In NET 7 generic <see cref="SimpleExpression"/> is supported as a static generic if you would prefer to use on generic types instead
 /// </remarks>
-public unsafe static class SimpleExpression
+public static unsafe class SimpleExpression
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static long ApplyOperation(char op, long left, long right)

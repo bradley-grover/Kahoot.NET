@@ -33,16 +33,35 @@ public unsafe static class SimpleExpression
         { '^', new(&MathOperations.Pow) }
     };
 
-    // keep in sync with above
-    internal static readonly Dictionary<char, int> precedences = new()
+    public static bool TryGetPrecedence(char ch, out int precedence)
     {
-        { '(', 0 },
-        { '+', 1 },
-        { '-', 1 },
-        { '*', 2 },
-        { '/', 2 },
-        { '^', 3 }
-    };
+        switch (ch)
+        {
+            case '(':
+                precedence = 0;
+                return true;
+            case '+':
+            case '-':
+                precedence = 1;
+                return true;
+            case '*':
+            case '/':
+                precedence = 2;
+                return true;
+            case '^':
+                precedence = 3;
+                return true;
+            default:
+                precedence = -1;
+                return false;
+        }
+    }
+
+    public static int GetPrecedence(char ch)
+    {
+        _ = TryGetPrecedence(ch, out int precedence);
+        return precedence;
+    }
 
     internal const int OperandStackMaxSize = 256;
     internal const int OperatorStackMaxSize = 256;
@@ -126,9 +145,9 @@ public unsafe static class SimpleExpression
             }
             // If the character is an operator, pop and apply all operators with higher or equal precedence.
             // Then push the operator onto the operator stack.
-            else if (precedences.TryGetValue(c, out var value))
+            else if (TryGetPrecedence(c, out var value))
             {
-                while (operatorStack.Count > 0 && value <= precedences[operatorStack.Peek()])
+                while (operatorStack.Count > 0 && value <= GetPrecedence(operatorStack.Peek()))
                 {
                     var right = operandStack.Pop();
                     var left = operandStack.Pop();

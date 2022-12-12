@@ -122,9 +122,9 @@ public static partial class SimpleExpression<TNumber>
             }
             // If the character is an operator, pop and apply all operators with higher or equal precedence.
             // Then push the operator onto the operator stack.
-            else if (SimpleExpression.precedences.TryGetValue(c, out var value))
+            else if (SimpleExpression.TryGetPrecedence(c, out var value))
             {
-                while (operatorStack.Count > 0 && value <= SimpleExpression.precedences[operatorStack.Peek()])
+                while (operatorStack.Count > 0 && value <= SimpleExpression.GetPrecedence(operatorStack.Peek()))
                 {
                     var right = operandStack.Pop();
                     var left = operandStack.Pop();

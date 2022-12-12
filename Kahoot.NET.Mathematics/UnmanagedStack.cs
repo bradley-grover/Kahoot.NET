@@ -46,14 +46,12 @@ internal ref struct ValueStack<T>
     {
         int size = _pos - 1;
 
-        Span<T> values = _buffer;
-
-        if ((uint)size >= (uint)values.Length)
+        if ((uint)size >= (uint)_buffer.Length)
         {
             throw new InvalidOperationException("Stack is empty");
         }
 
-        return values[size];
+        return _buffer[size];
     }
 
     internal T PeekUnsafe()
@@ -73,31 +71,29 @@ internal ref struct ValueStack<T>
     public bool TryPeek([MaybeNullWhen(false)] out T result)
     {
         int size = _pos - 1;
-        Span<T> values = _buffer;
 
-        if ((uint)size >= (uint)values.Length)
+        if ((uint)size >= (uint)_buffer.Length)
         {
             result = default;
             return false;
         }
 
-        result = values[size];
+        result = _buffer[size];
         return true;
     }
 
     public T Pop()
     {
         int size = _pos - 1;
-        Span<T> buffer = _buffer;
 
-        if ((uint)size >= (uint)buffer.Length)
+        if ((uint)size >= (uint)_buffer.Length)
         {
             ThrowOnEmptyStack();
         }
 
         _pos = size;
 
-        T item = buffer[size];
+        T item = _buffer[size];
 
         return item;
     }
@@ -107,24 +103,21 @@ internal ref struct ValueStack<T>
     {
         int size = _pos - 1;
 
-        Span<T> buffer = _buffer;
-
-        if ((uint)size >= (uint)buffer.Length)
+        if ((uint)size >= (uint)_buffer.Length)
         {
             ThrowOnEmptyStack();
         }
 
         _pos = size;
 
-        return Unsafe.Add(ref MemoryMarshal.GetReference(buffer), size);
+        return Unsafe.Add(ref MemoryMarshal.GetReference(_buffer), size);
     }
 
     public bool TryPop([MaybeNullWhen(false)] out T result)
     {
         int size = _pos - 1;
-        Span<T> buffer = _buffer;
 
-        if ((uint)size >= (uint)buffer.Length)
+        if ((uint)size >= (uint)_buffer.Length)
         {
             result = default!;
             return false;
@@ -132,7 +125,7 @@ internal ref struct ValueStack<T>
 
         _pos = size;
 
-        result = buffer[size];
+        result = _buffer[size];
 
         return true;
     }
@@ -168,11 +161,10 @@ internal ref struct ValueStack<T>
     public void Push(T item)
     {
         int size = _pos;
-        Span<T> buffer = _buffer;
 
-        if ((uint)size < (uint)buffer.Length)
+        if ((uint)size < (uint)_buffer.Length)
         {
-            buffer[size] = item;
+            _buffer[size] = item;
             _pos = size + 1;
         }
         else

@@ -1,10 +1,8 @@
-﻿using Kahoot.NET.API;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
-    internal async Task ProcessChannelAsync(string content, string channel, string? data = null)
+    internal async Task ProcessChannelAsync(ReadOnlyMemory<byte> content, string channel, string? data = null)
     {
         if (data is null) return;
 

@@ -2,14 +2,14 @@
 
 public partial class KahootClient
 {
-    private async Task StatusAsync(string jsonContent, string dataType)
+    private async Task StatusAsync(ReadOnlyMemory<byte> jsonContent, string dataType)
     {
-        var statusObject = JsonSerializer.Deserialize<Message<StatusResponse>>(jsonContent)!;
+        var statusObject = JsonSerializer.Deserialize<Message<StatusResponse>>(jsonContent.Span);
 
         switch (dataType)
         {
             case Types.Status:
-                switch (statusObject.Data!.Status)
+                switch (statusObject!.Data!.Status)
                 {
                     case Types.Active:
                         Debug.WriteLine("[CLIENT]: ACTIVE SIGNAL RECEIVED");

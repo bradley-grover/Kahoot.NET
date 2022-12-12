@@ -1,15 +1,13 @@
-﻿using Kahoot.NET.API.Shared;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
-    private async Task ServiceAsync(string jsonContent, string dataType)
+    private async Task ServiceAsync(ReadOnlyMemory<byte> jsonContent, string dataType)
     {
         switch (dataType)
         {
             case Types.LoginResponse:
-                var error = JsonSerializer.Deserialize<Message<DataErrorResponse>>(jsonContent)!;
+                var error = JsonSerializer.Deserialize<Message<DataErrorResponse>>(jsonContent.Span)!;
 
                 // we know the data can't be null cause a login response was passed
 

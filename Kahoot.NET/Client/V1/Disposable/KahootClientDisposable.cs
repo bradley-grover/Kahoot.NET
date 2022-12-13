@@ -28,7 +28,6 @@ public partial class KahootClient
                 Socket.Dispose();
             }
 
-            // TODO: free unmanaged resources (unmanaged objects) and override finalizer
             disposedValue = true;
         }
     }

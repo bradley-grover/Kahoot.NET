@@ -1,6 +1,5 @@
 ﻿using Kahoot.NET.API;
 using Kahoot.NET.API.Requests.Handshake;
-using Kahoot.NET.API.Requests.Json;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Hosting.Client;
@@ -11,7 +10,7 @@ public partial class KahootHost
     {
         _code = code;
 
-        Uri uri = new(string.Format(Connection.HostWebsocketUrl, code, key));
+        Uri uri = new(string.Format(ConnectionInfo.HostWebsocketUrl, code, key));
 
         Logger?.LogDebug("{url}", uri);
 

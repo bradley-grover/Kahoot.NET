@@ -10,7 +10,7 @@ internal static class Session
     {
         var response = await client.SendAsync(CreateHostRequest(quizUrl, configuration));
 
-        if (!response.IsSuccessStatusCode || !response.Headers.TryGetValues(Connection.SessionHeader, out var key))
+        if (!response.IsSuccessStatusCode || !response.Headers.TryGetValues(ConnectionInfo.SessionHeader, out var key))
         {
             return (default, default!, false);
         }
@@ -25,7 +25,7 @@ internal static class Session
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri(string.Format(Connection.HostSessionUrl, DateTimeOffset.UtcNow.ToUnixTimeSeconds())),
+            RequestUri = new Uri(string.Format(ConnectionInfo.HostSessionUrl, DateTimeOffset.UtcNow.ToUnixTimeSeconds())),
             Content = new StringContent(JsonSerializer.Serialize(configuration, GameConfigurationContext.Default.GameConfiguration))
         };
 

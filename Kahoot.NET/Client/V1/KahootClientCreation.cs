@@ -1,5 +1,7 @@
 ﻿namespace Kahoot.NET.Client;
 
+// TODO: Clean up constructors because this is atrocious
+
 public partial class KahootClient
 {
     /// <summary>
@@ -10,7 +12,7 @@ public partial class KahootClient
     {
         Logger = logger;
         Client = new();
-        Socket = Session.GetConfiguredWebSocket();
+        Socket = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize);
     }
 
     /// <summary>
@@ -22,7 +24,7 @@ public partial class KahootClient
     {
         Logger = logger;
         Client = client;
-        Socket = Session.GetConfiguredWebSocket();
+        Socket = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize);
     }
 
     /// <summary>
@@ -34,6 +36,6 @@ public partial class KahootClient
     {
         Logger = logger;
         Client = httpClientFactory.CreateClient();
-        Socket = Session.GetConfiguredWebSocket();
+        Socket = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize);
     }
 }

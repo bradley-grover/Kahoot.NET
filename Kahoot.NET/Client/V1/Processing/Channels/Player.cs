@@ -2,9 +2,9 @@
 
 public partial class KahootClient
 {
-    private async Task PlayerAsync(string jsonContent, string dataType)
+    private async Task PlayerAsync(ReadOnlyMemory<byte> jsonContent, string dataType)
     {
-        var userObject = JsonSerializer.Deserialize<Message<ContentData>>(jsonContent)!;
+        var userObject = JsonSerializer.Deserialize<Message<ContentData>>(jsonContent.Span)!;
 
         switch (dataType)
         {

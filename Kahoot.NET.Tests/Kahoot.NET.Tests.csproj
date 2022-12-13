@@ -9,11 +9,15 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Expressions.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Expressions.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -35,7 +39,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kahoot.NET.API\Kahoot.NET.API.csproj" />
     <ProjectReference Include="..\Kahoot.NET.Hosting\Kahoot.NET.Hosting.csproj" />
+    <ProjectReference Include="..\Kahoot.NET.Mathematics\Kahoot.NET.Mathematics.csproj" />
     <ProjectReference Include="..\Kahoot.NET\Kahoot.NET.csproj" />
   </ItemGroup>
 

@@ -35,7 +35,7 @@ public partial class KahootClient
         {
             return JsonSerializer.SerializeToUtf8Bytes(data, SerializerOptions);
         }
-            
+
         return JsonSerializer.SerializeToUtf8Bytes(data, typeInfo);
     }
 #endif

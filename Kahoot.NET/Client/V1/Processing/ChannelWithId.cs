@@ -1,15 +1,13 @@
-﻿using Kahoot.NET.API.Requests;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
-    internal async Task ProcessChannelIdAsync(string data, int id, string channel, string? dataType = null)
+    internal async Task ProcessChannelIdAsync(ReadOnlyMemory<byte> data, int id, string channel, string? dataType = null)
     {
         switch ((id, channel))
         {
             case (1, Channels.Handshake):
-                var hsResponse = JsonSerializer.Deserialize(data, BaseCMessageContext.Default.BaseClientMessage)!;
+                var hsResponse = JsonSerializer.Deserialize(data.Span, BaseCMessageContext.Default.BaseClientMessage)!;
 
                 if (await AlertOnNull(hsResponse)) {
                     return;

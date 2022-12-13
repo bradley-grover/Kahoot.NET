@@ -1,0 +1,21 @@
+﻿* using Kahoot.NET.[X]
+* 
+* namespace Kahoot.NET.Benchmarks.[X]
+* [Orderer(BenchmarkDotNet.Order.SummaryOrderPolicy.FastestToSlowest)]
+* [SimpleJob(RunStrategy.Throughput, runtimeMoniker: RuntimeMoniker.Net60, targetCount: 50)] // set frameworks
+* [SimpleJob(RunStrategy.Throughput, runtimeMoniker: RuntimeMoniker.Net70, targetCount: 50)]
+* [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Benchmark class, has to be instance methods")]
+* [MemoryDiagnoser] // very important
+* public class [X]Benchmarks
+* {
+*     [Benchmark(Baseline = true)
+*     public void MethodOne()
+*     {
+*         // do stuff
+*     }
+*     [Benchmark]
+*     public void MethodTwo()
+*     {
+*        // do stuff
+*     }
+* }

@@ -1,23 +1,54 @@
-﻿namespace Kahoot.NET.Client;
+﻿#if DEBUG // also should only be done in DEBUG but that is up to you
+//#define VIEW_TEXT_JSON // uncomment in front to view the json representation in text through logging instead of only the message content
+#endif
+
+using System.Buffers;
+
+namespace Kahoot.NET.Client;
 
 public partial class KahootClient
 {
-    internal async Task ProcessDataAsync(ReadOnlyMemory<byte> data)
+    // this method directly deserializes the bytes to json objects as it is faster than flat out converting to a string than deserializing
+    // although for debugging it is very difficult to actually read what the data is by raw bytes so we convert it to a string when the symbol above is defined
+    internal Task ProcessDataAsync(ReadOnlyMemory<byte> data)
     {
-        string json = Encoding.UTF8.GetString(data.Span).AsSpan().RemoveBrackets();
+        data = data[1..^1]; // remove both [ ] because only one object is ever inside these arrays? why do they do this?
 
-        Logger?.LogDebug("[RECEIVED]: {json}", json);
+        ReadOnlySpan<byte> byteSpan = data.Span;
 
-        Message? message = JsonSerializer.Deserialize(json, MessageContext.Default.Message);
+        Message? message = JsonSerializer.Deserialize(byteSpan, MessageContext.Default.Message);
+
+        ViewJsonText(byteSpan);
 
         if (message is null)
         {
-            return;
+            return Task.CompletedTask;
         }
 
-        await (message.Id is null ?
-            ProcessChannelAsync(json, message.Channel, message?.Data?.Type) :
-            ProcessChannelIdAsync(json, int.Parse(message.Id), message.Channel, message?.Data?.Type));
+        Logger?.LogDebug("[RECEIVED]: {messageId} | {channel}", message.Id ?? "Unknown", message.Channel);
+
+        return (message.Id is null ?
+            ProcessChannelAsync(data, message.Channel, message?.Data?.Type) :
+            ProcessChannelIdAsync(data, int.Parse(message.Id), message.Channel, message?.Data?.Type));
+    }
+
+    [Conditional("VIEW_TEXT_JSON")]
+    internal void ViewJsonText(ReadOnlySpan<byte> data)
+    {
+        int charsRequired = Encoding.UTF8.GetCharCount(data);
+
+        char[] pooledCharacters = ArrayPool<char>.Shared.Rent(charsRequired);
+
+        try
+        {
+            int written = Encoding.UTF8.GetChars(data, pooledCharacters);
+
+            Logger?.LogInformation("[RECEIVED]: {json}", new string(pooledCharacters.AsSpan(0, written)));
+        }
+        finally
+        {
+            ArrayPool<char>.Shared.Return(pooledCharacters);
+        }
     }
 
     internal async Task<bool> AlertOnNull<T>(T value)

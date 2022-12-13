@@ -52,6 +52,11 @@ public static class ConnectionInfo
     public const string WebsocketUrl = "wss://kahoot.it/cometd/{0}/{1}";
 
     /// <summary>
+    /// <see cref="WebsocketUrl"/> with no formatting
+    /// </summary>
+    public const string WebSocketUrlNoFormat = "wss://kahoot.it/cometd/";
+
+    /// <summary>
     /// Host used in some requests and websocket events
     /// </summary>
     public const string Host = "kahoot.it";

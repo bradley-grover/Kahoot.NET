@@ -30,7 +30,7 @@ public partial class KahootHost
             }
             finally
             {
-                ArrayPool<byte>.Shared.Rent(StateObject.BufferSize);
+                ArrayPool<byte>.Shared.Return(bytes);
             }
         }
     }

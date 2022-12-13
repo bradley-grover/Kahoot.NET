@@ -41,5 +41,8 @@ public partial class KahootClient
                 ArrayPool<byte>.Shared.Return(array);
             }
         }
+
+        Logger?.LogDebug("WebSocket for Kahoot Client has closed");
+        _inGame = false;
     }
 }

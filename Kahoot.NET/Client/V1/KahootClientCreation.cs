@@ -1,5 +1,7 @@
 ﻿namespace Kahoot.NET.Client;
 
+// TODO: Clean up constructors because this is atrocious
+
 public partial class KahootClient
 {
     /// <summary>

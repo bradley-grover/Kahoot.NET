@@ -13,7 +13,7 @@ public class SecondClientHandshake : ClientMessage
     /// </summary>
     public SecondClientHandshake()
     {
-        Channel = Channels.Connection;
+        Channel = Channels.Connect;
     }
     /// <summary>
     /// Advice to send to the server

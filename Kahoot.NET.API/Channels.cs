@@ -1,5 +1,7 @@
 ﻿namespace Kahoot.NET.API;
 
+/* These channels are mirrored from the index.js when you play a kahoot game */
+
 /// <summary>
 /// Class to hold string constants that the Kahoot! API use for their internal websockets
 /// </summary>
@@ -13,7 +15,7 @@ public static class Channels
     /// <summary>
     /// Channel used for connecting the game as well as hearbeats
     /// </summary>
-    public const string Connection = "/meta/connect";
+    public const string Connect = "/meta/connect";
 
     /// <summary>
     /// Channel used when disconnecting from the websocket/game

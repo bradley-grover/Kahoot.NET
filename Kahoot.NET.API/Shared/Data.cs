@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Kahoot.NET.API.Shared;
+﻿namespace Kahoot.NET.API.Shared;
 
 /// <summary>
 /// Represents the data that could be contained in websocket messages

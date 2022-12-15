@@ -21,6 +21,7 @@ public static class ConnectionInfo
     public static IReadOnlyCollection<string> SupportedConnectionTypes => Array.AsReadOnly(_supportedConnectionTypes);
 
     private static readonly string[] _supportedConnectionTypes = new string[] { "websocket", "long-polling", "callback-polling" };
+
     /// <summary>
     /// The connection type for the game
     /// </summary>

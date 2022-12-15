@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Kahoot.NET.API.Responses;
+﻿namespace Kahoot.NET.API.Responses;
 
 /// <summary>
 /// The response we get after we HTTP GET <see cref="ConnectionInfo.SessionUrl"/>

@@ -38,12 +38,8 @@ public static class Session
             return SessionResponse.Failed;
         }
 
-#if NET5_0
-        var session = await JsonSerializer.DeserializeAsync<SessionResponse>(await response.Content.ReadAsStreamAsync()).ConfigureAwait(false);
-#else
         var session = await JsonSerializer.DeserializeAsync(
             await response.Content.ReadAsStreamAsync(), SessionContext.Default.SessionResponse);
-#endif
 
         if (session is null)
         {

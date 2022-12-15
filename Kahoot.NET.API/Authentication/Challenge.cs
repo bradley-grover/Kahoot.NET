@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using Jace;
 using Kahoot.NET.Mathematics;
 
 namespace Kahoot.NET.API.Authentication;
@@ -9,11 +8,6 @@ namespace Kahoot.NET.API.Authentication;
 
 internal static class Challenge
 {
-    // TODO: look into more math libaries that could support faster operations to yield less allocs or speed improvements
-
-    internal static readonly CalculationEngine _engine = new(); // calculation engine from Jace.NET to eval the string
-
-
     internal const string OffsetName = "var offset = ";
 
     public static int GetChallenge(ReadOnlySpan<char> challengeFunction, Span<char> chars)
@@ -48,8 +42,7 @@ internal static class Challenge
     }
 
     /// <summary>
-    /// Calculates the offset from the offset string, this method by far has the most allocations and slows down the 
-    /// decoding of the websocket key the most, a lightweight alternative would be preffered
+    /// Calculates the offset using the current math calculator, Kahoot.NET.Mathemtics which has zero allocation for strings below a certain amount of characters
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
@@ -65,7 +58,7 @@ internal static class Challenge
 
         input = input[(input.IndexOf(OffsetName) + OffsetName.Length)..];
 
-        // then trim off the end to where the statement ends at the semi colon
+        // then trim off the end to whe re the statement ends at the semi colon
         input = input[..input.IndexOf(';')];
 
         // copy all characters that aren't whitespace into the output span and return the amount of written
@@ -82,7 +75,7 @@ internal static class Challenge
 
             if (char.IsWhiteSpace(character))
             {
-                continue;
+                continue;   
             }
 
             Unsafe.Add(ref outputRef, outputIndex++) = character;

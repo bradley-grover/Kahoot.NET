@@ -12,7 +12,7 @@ public class LastHs : ClientMessage
     /// </summary>
     public LastHs()
     {
-        Channel = Channels.Connection;
+        Channel = Channels.Connect;
     }
 
     /// <summary>

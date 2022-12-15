@@ -9,7 +9,7 @@ public partial class KahootClient
         await SendAsync(new Packet()
         {
             Id = State.id.ToString(),
-            Channel = Channels.Connection,
+            Channel = Channels.Connect,
             Ext = State.ExtWithTimesync,
             ClientId = State.clientId,
             ConnectionType = ConnectionInfo.ConnectionType

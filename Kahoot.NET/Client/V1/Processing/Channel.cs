@@ -8,7 +8,7 @@ public partial class KahootClient
 
         switch (channel)
         {
-            case Channels.Connection:
+            case Channels.Connect:
                 Interlocked.Increment(ref State.id);
                 Interlocked.Increment(ref State.ack);
 

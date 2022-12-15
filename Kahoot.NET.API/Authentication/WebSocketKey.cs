@@ -12,7 +12,6 @@ public static class WebSocketKey
     /// </summary>
     public const int MaxHeaderLength = 256;
 
-
     /// <summary>
     /// Decodes the strings and returns a websocket key
     /// </summary>

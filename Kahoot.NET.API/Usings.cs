@@ -14,6 +14,7 @@ global using System.Text.Json.Serialization;
 
 
 global using System.Diagnostics;
+global using System.Diagnostics.CodeAnalysis;
 global using System.Net.WebSockets;
 global using System.Runtime.CompilerServices;
 

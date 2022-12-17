@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 
 namespace Kahoot.NET.API.Authentication;
 
@@ -48,19 +50,17 @@ public static class WebSocketKey
 
         // loop using references to avoid bound checks
 
-        ref char headerRef = ref MemoryMarshal.GetReference(header);
-        ref char challengeRef = ref MemoryMarshal.GetReference(challenge);
+        return BitwiseOrSpans(header, challenge);
+    }
 
-        for (int i = 0; i < header.Length; i++) // the length of websocket key is the same size as the decoded header
+    internal static string BitwiseOrSpans(Span<char> header, Span<char> challenge)
+    {
+        for (int i = 0; (uint)i < (uint)header.Length; i++)
         {
-            // black magic stuff
-            var character = (int)Unsafe.Add(ref headerRef, i);
+            int character = header[i];
+            int mod = challenge[i];
 
-            var mod = (int)Unsafe.Add(ref challengeRef, i % challenge.Length);
-
-            var decoded = character ^ mod;
-
-            Unsafe.Add(ref headerRef, i) = (char)(uint)decoded;
+            header[i] = (char)(uint)(character ^ mod);
         }
 
         return new string(header); // allocate a new string from the span for the caller to use

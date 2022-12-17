@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Kahoot.NET.API.Authentication;
 
@@ -53,9 +54,40 @@ public static class WebSocketKey
         return BitwiseOrSpans(header, challenge);
     }
 
+#if NET6_0
     internal static string BitwiseOrSpans(Span<char> header, Span<char> challenge)
     {
-        for (int i = 0; (uint)i < (uint)header.Length; i++)
+        if (!(challenge.Length >= header.Length))
+        {
+            throw new ArgumentException("The challenge length should result in same or higher length");
+        }
+
+        int i = 0;
+
+        if (Vector.IsHardwareAccelerated && header.Length >= Vector<ushort>.Count)
+        {
+            int length = header.Length;
+            int vectorLength = Vector<ushort>.Count;
+
+            // we need to use unsigned shorts as chars are not supported by vectors
+
+            Span<ushort> headerRaw = MemoryMarshal.Cast<char, ushort>(header);
+            Span<ushort> challengeRaw = MemoryMarshal.Cast<char, ushort>(challenge);
+
+            for (i = 0; i <= length - vectorLength; i += vectorLength)
+            {
+                var headerVec = new Vector<ushort>(headerRaw.Slice(i, vectorLength));
+                var challengeVec = new Vector<ushort>(challengeRaw.Slice(i, vectorLength));
+
+                headerVec = Vector.Xor(headerVec, challengeVec);
+
+                headerVec.CopyTo(headerRaw.Slice(i, vectorLength));
+            }
+        }
+
+        // process the remaining or unvectorized part of the function
+
+        for (; (uint)i < (uint)header.Length; i++)
         {
             int character = header[i];
             int mod = challenge[i];
@@ -65,4 +97,49 @@ public static class WebSocketKey
 
         return new string(header); // allocate a new string from the span for the caller to use
     }
+#else
+    internal static string BitwiseOrSpans(Span<char> header, Span<char> challenge)
+    {
+        if (!(challenge.Length >= header.Length))
+        {
+            throw new ArgumentException("The challenge length should result in same or higher length");
+        }
+
+        int i = 0;
+
+        if (Vector.IsHardwareAccelerated && header.Length >= Vector<ushort>.Count)
+        {
+            int length = header.Length;
+            int vectorLength = Vector256<ushort>.Count;
+
+            // we need to use unsigned shorts as chars are not supported by vectors
+
+            Span<ushort> headerRaw = MemoryMarshal.Cast<char, ushort>(header);
+            Span<ushort> challengeRaw = MemoryMarshal.Cast<char, ushort>(challenge);
+
+            ref ushort headerRawReference = ref MemoryMarshal.GetReference(headerRaw);
+            ref ushort challengeRawReference = ref MemoryMarshal.GetReference(challengeRaw);
+
+            for (i = 0; i <= length - vectorLength; i += vectorLength)
+            {
+                var headerVector = Vector256.LoadUnsafe(ref headerRawReference, (nuint)i);
+                var challengeVector = Vector256.LoadUnsafe(ref challengeRawReference, (nuint)i);
+
+                headerVector = Vector256.Xor(headerVector, challengeVector);
+
+                headerVector.CopyTo(headerRaw.Slice(i, vectorLength));
+            }
+        }
+
+        // Process the remainder of the elements using the original loop
+        for (; (uint)i < (uint)header.Length; i++)
+        {
+            int character = header[i];
+            int mod = challenge[i];
+            header[i] = (char)(uint)(character ^ mod);
+        }
+
+        return new string(header); // allocate a new string from the span for the caller to use
+    }
+#endif
 }

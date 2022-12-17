@@ -5,6 +5,7 @@ using System.Linq;
 using BenchmarkDotNet.Engines;
 using BenchmarkDotNet.Jobs;
 using Kahoot.NET.API.Authentication;
+using Kahoot.NET.Benchmarks.Alternatives;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
 
@@ -19,5 +20,11 @@ public class KeyCreationBenchmarks
     public void CreateKey()
     {
         _ = WebSocketKey.Create(SessionHeader, ChallengeFunction);
+    }
+
+    [Benchmark]
+    public void NoVectorization()
+    {
+        _ = WebSocketKeyAlternatives.Create(SessionHeader, ChallengeFunction);
     }
 }

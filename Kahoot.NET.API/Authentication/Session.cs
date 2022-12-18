@@ -64,7 +64,7 @@ public static class Session
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ClientWebSocket GetConfiguredWebSocket(int receiveBufferSize, int sendBufferSize)
     {
-        if (receiveBufferSize < 1024 | sendBufferSize < 1024)
+        if (receiveBufferSize < 1024 || sendBufferSize < 1024)
         {
             throw new ArgumentException("The receive buffer should be at least 1024 to handle messages", 
                 nameof(receiveBufferSize));

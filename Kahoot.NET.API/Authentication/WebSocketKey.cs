@@ -54,7 +54,7 @@ public static class WebSocketKey
         return BitwiseOrSpans(header, challenge);
     }
 
-#if NET6_0
+#if !NET7_0_OR_GREATER
     internal static string BitwiseOrSpans(Span<char> header, Span<char> challenge)
     {
         if (!(challenge.Length >= header.Length))
@@ -107,7 +107,7 @@ public static class WebSocketKey
 
         int i = 0;
 
-        if (Vector.IsHardwareAccelerated && header.Length >= Vector<ushort>.Count)
+        if (Vector256.IsHardwareAccelerated && header.Length >= Vector256<ushort>.Count)
         {
             int length = header.Length;
             int vectorLength = Vector256<ushort>.Count;

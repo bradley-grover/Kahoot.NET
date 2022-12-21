@@ -66,19 +66,13 @@ internal static class Challenge
 
         int outputIndex = 0;
 
-        ref char inputRef = ref MemoryMarshal.GetReference(input);
-        ref char outputRef = ref MemoryMarshal.GetReference(output);
-
-        for (int i = 0; i < input.Length; i++)
+        for (int i = 0; (uint)i < (uint)input.Length; i++)
         {
-            char character = Unsafe.Add(ref inputRef, i);
+            char character = input[i];
 
-            if (char.IsWhiteSpace(character))
-            {
-                continue;   
-            }
+            if (char.IsWhiteSpace(character)) continue;
 
-            Unsafe.Add(ref outputRef, outputIndex++) = character;
+            output[outputIndex++] = character;
         }
 
         return outputIndex;

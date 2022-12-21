@@ -1,6 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using Jace;
 using Kahoot.NET.API;
+using Kahoot.NET.Benchmarks.Alternatives;
 using Kahoot.NET.Mathematics;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
@@ -21,5 +23,11 @@ public class MathParser
     public long Jace()
     {
         return (long)_engine.Calculate(Mock.OffsetString);
+    }
+
+    [Benchmark]
+    public long DataTable_Regex()
+    {
+        return MathParserAlternatives.Parse(Mock.OffsetString);
     }
 }

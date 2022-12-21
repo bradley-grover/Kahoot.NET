@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.Client.Events;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 /// <summary>
 /// The current client used to interact and join Kahoot! games with
@@ -69,7 +67,9 @@ public partial class KahootClient : IKahootClient
     /// <param name="logger"></param>
     /// <param name="httpClient"></param>
     /// <param name="userAgent"></param>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public KahootClient(ILogger<IKahootClient>? logger = null, HttpClient? httpClient = null, string? userAgent = null)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         _logger = logger;
         _httpClient = httpClient ?? new HttpClient(); // create new as fall back

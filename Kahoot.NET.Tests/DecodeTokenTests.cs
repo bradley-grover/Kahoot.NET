@@ -2,7 +2,6 @@
 
 namespace Kahoot.NET.Tests;
 
-[Xunit.Collection("Name")]
 [Trait(Traits.Parsers, Traits.ParsersDesc)]
 public class DecodeTokenTests
 {

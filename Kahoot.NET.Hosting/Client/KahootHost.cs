@@ -1,5 +1,4 @@
-﻿using Kahoot.NET.Client.Data;
-using Kahoot.NET.Hosting.Client.Errors;
+﻿using Kahoot.NET.Hosting.Client.Errors;
 using Kahoot.NET.Hosting.Resolver;
 
 namespace Kahoot.NET.Hosting.Client;

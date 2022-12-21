@@ -5,12 +5,12 @@ namespace Kahoot.NET.API.Requests.Handshake;
 /// <summary>
 /// The last handshake message to send for the handshake part of the session
 /// </summary>
-public class LastHs : ClientMessage
+public class FinalHandshake : ClientMessage
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="LastHs"/> class
+    /// Initializes a new instance of the <see cref="FinalHandshake"/> class
     /// </summary>
-    public LastHs()
+    public FinalHandshake()
     {
         Channel = Channels.Connect;
     }

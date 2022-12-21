@@ -1,6 +1,4 @@
 ﻿using Kahoot.NET.Client;
-using Kahoot.NET.Client.Data.Errors;
-using Kahoot.NET.Client.Data;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Example;
@@ -26,10 +24,9 @@ public class Program
 
         // bind delegates to events from ClientEvents class, customise how you want to handle events in your own way
         kahootClient.Joined += ClientEvents.KahootClient_OnJoined;
-        kahootClient.ClientError += ClientEvents.KahootClient_ClientError;
         kahootClient.Left += ClientEvents.KahootClient_Left;
 
-       
+
         var validGame = await kahootClient.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString());
 
         await Task.Delay(-1);
@@ -45,14 +42,6 @@ public class Program
             {
                 Console.WriteLine($"Could not get numeric code, try again");
             }
-
-            if (!await Code.ExistsAsync(result, httpClient))
-            {
-                Console.WriteLine("Code is not an active game");
-                continue;
-            }
-
-            Console.WriteLine("Found the game");
 
             return result;
         }

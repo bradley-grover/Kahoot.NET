@@ -1,10 +1,14 @@
-﻿namespace Kahoot.NET.Client.Data.Errors;
+﻿namespace Kahoot.NET.Client.Events;
 
 /// <summary>
-/// Errors that occur when trying to join the game
+/// The result of joining a game
 /// </summary>
-public enum JoinErrors
+public enum JoinResult
 {
+    /// <summary>
+    /// A successful join
+    /// </summary>
+    Success,
     /// <summary>
     /// When you try to join the game but it requires 2fa
     /// </summary>

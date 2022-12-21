@@ -24,7 +24,7 @@ public partial class KahootHost
 
                 Interlocked.Increment(ref State.id);
 
-                await SendAsync(CreateHS2(), CH2Context.Default.SecondClientHandshake);
+                await SendAsync(CreateHS2(), SecondHandshakeContext.Default.SecondClientHandshake);
                 break;
             case (2, Channels.Connect):
 

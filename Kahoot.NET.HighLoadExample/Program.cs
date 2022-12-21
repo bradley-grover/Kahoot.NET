@@ -1,4 +1,5 @@
 ﻿using Kahoot.NET.Client;
+using Kahoot.NET.Client.Events;
 using ParadoxTerminal;
 
 namespace Kahoot.NET.HighLoadExample;
@@ -27,7 +28,6 @@ public class Program
         foreach (var client in clients)
         {
             client.Joined += Client_Joined;
-            client.ClientError += Client_ClientError;
             tasks.Add(client.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString()));
         }
 
@@ -36,19 +36,13 @@ public class Program
         await Task.Delay(-1);
     }
 
-    private static Task Client_Joined(object? sender, Client.Data.JoinEventArgs args)
+    private static Task Client_Joined(object? obj, JoinEventArgs args)
     {
-        if (args.TryGetError(out var error))
+        if (!args.IsSuccess)
         {
-            Console.WriteLine(error);
+            Console.WriteLine(Enum.GetName(args.Result));
         }
 
-        return Task.CompletedTask;
-    }
-
-    private static Task Client_ClientError(object? sender, Client.Data.ClientErrorEventArgs args)
-    {
-        Console.WriteLine(args.Error.Message);
         return Task.CompletedTask;
     }
 }

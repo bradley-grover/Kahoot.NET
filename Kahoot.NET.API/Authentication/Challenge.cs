@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Numerics;
+using System.Runtime.InteropServices;
 using Kahoot.NET.Mathematics;
 
 namespace Kahoot.NET.API.Authentication;
@@ -81,15 +82,15 @@ internal static class Challenge
     /// <summary>
     /// Decode the characters using the offset and store the characters in the output
     /// </summary>
-    internal static int Decode(ReadOnlySpan<char> value, Span<char> output, long offset)
+    internal static int Decode(ReadOnlySpan<char> input, Span<char> output, long offset)
     {
-        for (int i = 0; i < value.Length; i++)
+        for (int i = 0; (uint)i < (uint)input.Length; i++)
         {
             // add decoded characters to span
-            output[i] = Repl(value[i], i, offset);
+            output[i] = Repl(input[i], i, offset);
         }
 
-        return value.Length;
+        return input.Length;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

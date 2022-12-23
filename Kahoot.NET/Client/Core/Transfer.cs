@@ -59,7 +59,7 @@ public partial class KahootClient
                 {
                     await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
 
-                    _userName = default;
+                    _username = default;
 
                     return;
                 }
@@ -76,7 +76,7 @@ public partial class KahootClient
             }
         }
 
-        _userName = default;
+        _username = default;
     }
 
     internal async Task ReplyAsync()
@@ -86,7 +86,7 @@ public partial class KahootClient
     }
 
     // common operations
-    internal async Task SendPacketAsync() => await SendAsync(new Packet()
+    internal ValueTask SendPacketAsync() => SendAsync(new Packet()
     {
         Id = Interlocked.Read(ref _stateObject.id).ToString(),
         Channel = Channels.Connect,

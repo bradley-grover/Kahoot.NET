@@ -74,7 +74,7 @@ public partial class KahootClient
                 {
                     Id = Interlocked.Increment(ref _stateObject.id).ToString(),
                     ClientId = _stateObject.clientId,
-                    Data = new FinalLoginInformation(_gameCode, JsonSerializer.Serialize(new { _usingNamerator }))
+                    Data = new FinalLoginInformation(_code, JsonSerializer.Serialize(new { _usingNamerator }))
                 });
 
                 break;

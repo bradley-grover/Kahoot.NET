@@ -43,15 +43,15 @@ public partial class KahootClient
 
     internal async Task SendLoginMessageAsync()
     {
-        Debug.Assert(_userName != null);
+        Debug.Assert(_username != null);
 
         await SendAsync(new LoginMessage()
         {
             Id = Interlocked.Increment(ref _stateObject.id).ToString(),
             ClientId = _stateObject.clientId,
             Data = new LoginInformation(
-                _userName,
-                _gameCode.ToString(),
+                _username,
+                _code.ToString(),
                 JsonSerializer.Serialize(new
                 {
                     device = new Device() { Screen = Screen.Default, UserAgent = _userAgent }

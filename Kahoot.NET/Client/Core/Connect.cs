@@ -6,7 +6,7 @@ public partial class KahootClient
 {
     internal async Task<bool> TryConnectAsync(CancellationToken cancellationToken = default)
     {
-        var session = await Session.CreateAsync(_httpClient, _gameCode);
+        var session = await Session.CreateAsync(_httpClient, _code);
 
         if (!session.Success)
         {
@@ -15,7 +15,7 @@ public partial class KahootClient
 
         _usingNamerator = session.Namerator;
 
-        string gameUrl = UriHelper.CreateGameUrl((uint)_gameCode, session.WebSocketKey);
+        string gameUrl = UriHelper.CreateGameUrl((uint)_code, session.WebSocketKey);
 
         Uri uri = new(gameUrl);
 

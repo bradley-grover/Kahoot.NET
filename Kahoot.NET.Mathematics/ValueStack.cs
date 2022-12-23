@@ -15,6 +15,7 @@ internal ref struct ValueStack<T>
     public ValueStack(Span<T> initialBuffer)
     {
         _buffer = initialBuffer;
+        _pos = 0;
     }
 
     public ValueStack(int initialCapacity)

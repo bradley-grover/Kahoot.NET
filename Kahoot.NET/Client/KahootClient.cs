@@ -19,8 +19,8 @@ public partial class KahootClient : IKahootClient
     private readonly string _userAgent;
 
     // mutable
-    private string? _userName;
-    private int _gameCode;
+    private string? _username;
+    private int _code;
     private bool _usingNamerator;
 
     internal readonly StateObject _stateObject = new() // TODO: Investigate how to obtain proper values for this class object
@@ -36,7 +36,7 @@ public partial class KahootClient : IKahootClient
     /// </summary>
     public int GameCode
     {
-        get => _gameCode;
+        get => _code;
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public partial class KahootClient : IKahootClient
     /// </summary>
     public string? Username
     {
-        get => _userName;
+        get => _username;
     }
 
     /// <summary>
@@ -82,12 +82,12 @@ public partial class KahootClient : IKahootClient
     /// <inheritdoc/>
     public async Task<bool> JoinAsync(int gameCode, string username, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(username)) throw new ArgumentNullException(nameof(username));
+        if (string.IsNullOrWhiteSpace(username)) throw new ArgumentNullException(nameof(username));
 
         if (_socket.State == WebSocketState.Open) throw new InvalidOperationException("The client is already in another game");
 
-        _userName = username;
-        _gameCode = gameCode;
+        _username = username;
+        _code = gameCode;
 
         _logger?.LogDebug("Trying to join game");
 
@@ -114,6 +114,8 @@ public partial class KahootClient : IKahootClient
         if (_socket.State != WebSocketState.Open) return;
 
         // TODO: Implement leave logic, is there really a point to sending a leave message?
+        _username = default;
+        _code = default;
 
         await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
     }
@@ -127,18 +129,12 @@ public partial class KahootClient : IKahootClient
         {
             if (disposing)
             {
-                if (_socket.State == WebSocketState.Open || _socket.State == WebSocketState.Connecting)
-                {
-                    _socket.Abort();
-                }
-
-                _socket.Dispose();
+                _socket.Abort(); // also disposes
             }
 
             _disposedValue = true;
         }
     }
-
 
     /// <inheritdoc/>
     public void Dispose()

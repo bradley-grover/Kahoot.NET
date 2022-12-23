@@ -37,13 +37,16 @@ public partial class KahootClient
                 switch (statusResponse.Data!.Status)
                 {
                     case Types.Active: // successful join notify client
-                        
+                        Debug.WriteLine("Kahoot Client is active");
+                        await Joined.InvokeEventAsync(this, new(JoinResult.Success));
                         break;
                     case Types.Errors.Locked:
-                        await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
+                        Debug.WriteLine("Kahoot Client has tried to enter a locked game");
+                        await LeaveAsync(LeaveCondition.Locked);
                         break;
                     case Types.Errors.Queue:
-                        await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
+                        Debug.WriteLine("Kahoot client has tried entering a full game");
+                        await LeaveAsync(LeaveCondition.Full);
                         break;
                         // add more later
                 }
@@ -64,8 +67,7 @@ public partial class KahootClient
                     {
                         case Types.Errors.UserInput:
                             await Joined.InvokeEventAsync(this, new(JoinResult.DuplicateUserName));
-                            await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
-                            await Left.InvokeEventAsync(this, new(LeaveCondition.JoinFailure));
+                            await LeaveAsync(LeaveCondition.JoinFailure);
                             break;
                     }
                 }
@@ -93,9 +95,7 @@ public partial class KahootClient
                 switch (userObject.Data!.Id)
                 {
                     case 10: // TODO: Add event notifier
-                        await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
-                        await Left.InvokeEventAsync(this, new(LeaveCondition.Kicked));
-
+                        await LeaveAsync(LeaveCondition.Kicked);
                         break;
                 }
                 break;

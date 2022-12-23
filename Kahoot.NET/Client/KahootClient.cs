@@ -109,15 +109,17 @@ public partial class KahootClient : IKahootClient
     }
 
     /// <inheritdoc/>
-    public async Task LeaveAsync()
+    public Task LeaveAsync() => LeaveAsync(LeaveCondition.Requested);
+
+    internal async Task LeaveAsync(LeaveCondition condition)
     {
         if (_socket.State != WebSocketState.Open) return;
 
-        // TODO: Implement leave logic, is there really a point to sending a leave message?
         _username = default;
         _code = default;
 
         await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
+        await Left.InvokeEventAsync(this, new(condition));
     }
 
     private bool _disposedValue;

@@ -1,12 +1,11 @@
-﻿using System.Diagnostics.Contracts;
+﻿#if NET7_0_OR_GREATER
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Kahoot.NET.Mathematics;
 
-#if NET7_0_OR_GREATER
 public static partial class SimpleExpression<TNumber>
     where TNumber : unmanaged, INumber<TNumber>
 {

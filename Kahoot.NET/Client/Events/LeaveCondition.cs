@@ -1,7 +1,7 @@
 ﻿namespace Kahoot.NET.Client.Events;
 
 /// <summary>
-/// The condition on which the client left on
+/// The condition on which the client left on, note that this not apart of the Kahoot! API
 /// </summary>
 public enum LeaveCondition
 {

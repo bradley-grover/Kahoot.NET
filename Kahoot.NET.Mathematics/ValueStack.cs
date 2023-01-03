@@ -119,7 +119,7 @@ internal ref struct ValueStack<T>
 
         if ((uint)size >= (uint)_buffer.Length)
         {
-            result = default!;
+            result = default;
             return false;
         }
 

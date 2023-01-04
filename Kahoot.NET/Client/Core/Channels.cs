@@ -94,8 +94,20 @@ public partial class KahootClient
             case Types.Message:
                 switch (userObject.Data!.Id)
                 {
-                    case 10: // TODO: Add event notifier
+                    case 10: // kicked
                         await LeaveAsync(LeaveCondition.Kicked);
+                        break;
+                    case 1: // question
+                    case 2:
+                        var question = JsonSerializer.Deserialize(content.Span, QuizQuestionContext.Default.QuizQuestion);
+
+                        Debug.Assert(question != null); // question should not be null;
+                        Debug.Assert(question.Data != null);
+
+                        Console.WriteLine("Received question");
+
+                        question.Info = JsonSerializer.Deserialize(question.Data.Content, QuizQuestionDataContext.Default.QuizQuestionData);
+
                         break;
                 }
                 break;

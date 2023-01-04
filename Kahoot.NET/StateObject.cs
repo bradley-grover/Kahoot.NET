@@ -10,7 +10,7 @@ public class StateObject
     /// <summary>
     /// The size of the buffer to be used to store messages
     /// </summary>
-    public const int BufferSize = 1024;
+    public const int BufferSize = 1024; // 1 KiB
 
     /// <summary>
     /// The current message id count

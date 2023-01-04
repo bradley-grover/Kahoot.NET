@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.Client;
+﻿using System.Diagnostics;
+using Kahoot.NET.Client;
 using Kahoot.NET.Client.Events;
 
 namespace Kahoot.NET.Example;
@@ -25,6 +26,15 @@ public static class ClientEvents
         return Task.CompletedTask;
     }
 
+    public static async Task KahootClient_QuestionRec(object? sender, QuestionReceivedArgs args)
+    {
+        if (sender is not IKahootClient client)
+        {
+            return;
+        }
+
+        await client.RespondAsync(args.Question);
+    }
 
     public static Task KahootClient_OnJoined(object? sender, JoinEventArgs args)
     {

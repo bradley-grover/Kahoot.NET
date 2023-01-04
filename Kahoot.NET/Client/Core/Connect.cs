@@ -23,7 +23,7 @@ public partial class KahootClient
 
         try
         {
-            await _socket.ConnectAsync(uri, cancellationToken);
+            await _ws.ConnectAsync(uri, cancellationToken).ConfigureAwait(false);
         }
         catch (WebSocketException ex)
         {

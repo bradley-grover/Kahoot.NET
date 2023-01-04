@@ -21,6 +21,18 @@ public interface IKahootClient : IDisposable
     event Func<object?, LeftEventArgs, Task> Left;
 
     /// <summary>
+    /// Event triggered when the client receives the question
+    /// </summary>
+    event Func<object?, QuestionReceivedArgs, Task> QuestionReceived;
+
+    /// <summary>
+    /// Reply to a question
+    /// </summary>
+    /// <param name="quizQuestion"></param>
+    /// <returns></returns>
+    Task RespondAsync(QuizQuestionData quizQuestion);
+
+    /// <summary>
     /// The client begins to join the game and will report its results to the delegate property
     /// </summary>
     /// <param name="gameCode"></param>

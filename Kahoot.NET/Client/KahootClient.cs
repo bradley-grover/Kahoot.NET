@@ -14,9 +14,10 @@ public partial class KahootClient : IKahootClient
 
     // readonly fields
     private readonly HttpClient _httpClient;
-    private readonly ClientWebSocket _socket;
+    private readonly ClientWebSocket _ws;
     private readonly ILogger<IKahootClient>? _logger;
     private readonly string _userAgent;
+    private readonly SemaphoreSlim _senderLock;
 
     // mutable
     private string? _username;
@@ -52,7 +53,7 @@ public partial class KahootClient : IKahootClient
     /// </summary>
     public bool IsConnected
     {
-        get => _socket.State == WebSocketState.Open;
+        get => _ws.State == WebSocketState.Open;
     }
 
     /// <inheritdoc/>
@@ -60,6 +61,9 @@ public partial class KahootClient : IKahootClient
 
     /// <inheritdoc/>
     public event Func<object?, LeftEventArgs, Task> Left;
+
+    /// <inheritdoc/>
+    public event Func<object?, QuestionReceivedArgs, Task> QuestionReceived;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="KahootClient"/> class with an optional logger or/and HttpClient
@@ -73,9 +77,10 @@ public partial class KahootClient : IKahootClient
     {
         _logger = logger;
         _httpClient = httpClient ?? new HttpClient(); // create new as fall back
-        _userAgent = userAgent ?? RandomUserAgent.RandomUa.RandomUserAgent; 
-        _socket = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize);
-        _socket.Options.SetRequestHeader("User-Agent", _userAgent);
+        _userAgent = userAgent ?? RandomUserAgent.RandomUa.RandomUserAgent; // there might be a better alternative than using this niche library or roll our own
+        _ws = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize); // use default size for websocket
+        _ws.Options.SetRequestHeader("User-Agent", _userAgent); // set the user agent for the request
+        _senderLock = new SemaphoreSlim(1);
     }
 
 
@@ -84,12 +89,16 @@ public partial class KahootClient : IKahootClient
     {
         if (string.IsNullOrWhiteSpace(username)) throw new ArgumentNullException(nameof(username));
 
-        if (_socket.State == WebSocketState.Open) throw new InvalidOperationException("The client is already in another game");
+        if (_ws.State == WebSocketState.Open) throw new InvalidOperationException("The client is already in another game");
+
+        await _senderLock.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         _username = username;
         _code = gameCode;
 
         _logger?.LogDebug("Trying to join game");
+
+        _senderLock.Release();
 
         if (!await TryConnectAsync(cancellationToken))
         {
@@ -98,28 +107,43 @@ public partial class KahootClient : IKahootClient
 
         // TODO: Find better alternative than using old threading approach
 
-        var thread = new Thread(async () => await ReceiveAsync())
-        {
-            IsBackground = true,
-        };
-
-        thread.Start();
+        _ = Task.Run(ReceiveAsync, cancellationToken);
 
         return true;
     }
 
     /// <inheritdoc/>
+    public async Task RespondAsync(QuizQuestionData quizQuestionData)
+    {
+        if (quizQuestionData is null)
+        {
+            return;
+        }
+    }
+
+    /// <inheritdoc/>
     public Task LeaveAsync() => LeaveAsync(LeaveCondition.Requested);
 
+    // internal leave command used to leave under a range of conditions
     internal async Task LeaveAsync(LeaveCondition condition)
     {
-        if (_socket.State != WebSocketState.Open) return;
+        if (_ws.State != WebSocketState.Open) return;
 
-        _username = default;
-        _code = default;
+        await _senderLock.WaitAsync().ConfigureAwait(false);
 
-        await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
-        await Left.InvokeEventAsync(this, new(condition));
+        try
+        {
+            _username = default;
+            _code = default;
+
+            await _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
+            await Left.InvokeEventAsync(this, new(condition));
+        }
+        finally
+        {
+            _senderLock.Release();
+        }
+
     }
 
     private bool _disposedValue;
@@ -131,7 +155,7 @@ public partial class KahootClient : IKahootClient
         {
             if (disposing)
             {
-                _socket.Abort(); // also disposes
+                _ws.Abort(); // also disposes
             }
 
             _disposedValue = true;

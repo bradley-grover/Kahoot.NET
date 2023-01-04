@@ -15,7 +15,19 @@ public partial class KahootClient
     internal async ValueTask SendAsync<TData>(TData data, JsonTypeInfo<TData>? typeInfo = null, CancellationToken cancellationToken = default)
         where TData : class
     {
-        await _socket.SendAsync(GetData(data, typeInfo), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, cancellationToken);
+        Debug.Assert(_ws != null);
+        Debug.Assert(_ws.State == WebSocketState.Open);
+
+        await _senderLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            await _ws.SendAsync(GetData(data, typeInfo), WebSocketMessageType.Text, WebSocketMessageFlags.EndOfMessage, cancellationToken);
+        }
+        finally
+        {
+            _senderLock.Release();
+        }
     }
 
 
@@ -39,13 +51,13 @@ public partial class KahootClient
 
     internal async Task ReceiveAsync()
     {
-        if (_socket.State != WebSocketState.Open)
+        if (_ws.State != WebSocketState.Open)
         {
             // TODO: Add error handling
             return;
         }
 
-        while (_socket.State == WebSocketState.Open)
+        while (_ws.State == WebSocketState.Open)
         {
             byte[] bytes = ArrayPool<byte>.Shared.Rent(StateObject.BufferSize);
 
@@ -53,11 +65,11 @@ public partial class KahootClient
 
             try
             {
-                var result = await _socket.ReceiveAsync(buffer, default);
+                var result = await _ws.ReceiveAsync(buffer, default);
 
                 if (result.MessageType == WebSocketMessageType.Close)
                 {
-                    await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
+                    await _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, default, default);
 
                     _username = default;
 

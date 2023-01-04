@@ -26,11 +26,14 @@ public interface IKahootClient : IDisposable
     event Func<object?, QuestionReceivedArgs, Task> QuestionReceived;
 
     /// <summary>
-    /// Reply to a question
+    /// 
     /// </summary>
     /// <param name="quizQuestion"></param>
+    /// <param name="answerIndex"></param>
+    /// <param name="array"></param>
+    /// <param name="text"></param>
     /// <returns></returns>
-    Task RespondAsync(QuizQuestionData quizQuestion);
+    Task RespondAsync(QuizQuestionData quizQuestion, int? answerIndex = null, int[]? array = null, string? text = null);
 
     /// <summary>
     /// The client begins to join the game and will report its results to the delegate property

@@ -61,4 +61,35 @@ public static class Types
         /// </summary>
         public const string Started = "started";
     }
+
+    /// <summary>
+    /// Represents types for questions
+    /// </summary>
+    public static class Question
+    {
+        public const string Quiz = "quiz";
+        public const string MultipleSelect = "multiple_select_quiz";
+        public const string OpenEnded = "open_ended";
+        public const string WordCloud = "word_cloud";
+        public const string Survey = "survey";
+        public const string MultipleSelectPoll = "multiple_select_poll";
+        public const string Jumble = "puzzle";
+        public const string Content = "content";
+
+        public static QuestionType GetQuestionType(string type)
+        {
+            return type switch
+            {
+                Quiz => QuestionType.Quiz,
+                MultipleSelect => QuestionType.MultipleSelect,
+                OpenEnded => QuestionType.OpenEnded,
+                WordCloud => QuestionType.WordCloud,
+                Survey => QuestionType.Survey,
+                MultipleSelectPoll => QuestionType.MultipleSelectPoll,
+                Jumble => QuestionType.Jumble,
+                Content => QuestionType.Content,
+                _ => QuestionType.Content // return Content for invalid so we can just ignore it
+            };
+        }
+    }
 }

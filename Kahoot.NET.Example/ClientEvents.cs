@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Kahoot.NET.API.Shared;
 using Kahoot.NET.Client;
 using Kahoot.NET.Client.Events;
 
@@ -28,12 +29,20 @@ public static class ClientEvents
 
     public static async Task KahootClient_QuestionRec(object? sender, QuestionReceivedArgs args)
     {
+        if (args.ShouldIgnore)
+        {
+            return;
+        }
+
         if (sender is not IKahootClient client)
         {
             return;
         }
 
-        await client.RespondAsync(args.Question);
+        if (args.Question.Type == Types.Question.Quiz)
+        {
+            await client.RespondAsync(args.Question, Random.Shared.Next(args.Question.NumberOfChoices)); // pick a random answer
+        }
     }
 
     public static Task KahootClient_OnJoined(object? sender, JoinEventArgs args)

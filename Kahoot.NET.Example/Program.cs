@@ -25,12 +25,14 @@ public class Program
         // bind delegates to events from ClientEvents class, customise how you want to handle events in your own way
         kahootClient.Joined += ClientEvents.KahootClient_OnJoined;
         kahootClient.Left += ClientEvents.KahootClient_Left;
+        kahootClient.QuestionReceived += ClientEvents.KahootClient_QuestionRec;
 
 
         var validGame = await kahootClient.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString());
 
         await Task.Delay(-1);
     }
+
 
     public static async Task<int> GetValidCodeAsync()
     {

@@ -2,7 +2,7 @@
 
 [JsonSourceGenerationOptions(DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, WriteIndented = true)]
 [JsonSerializable(typeof(BaseClientMessage))]
-internal partial class BaseCMessageContext : JsonSerializerContext
+internal partial class BaseClientMessageContext : JsonSerializerContext
 {
 
 }

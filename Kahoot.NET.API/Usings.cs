@@ -3,10 +3,7 @@ global using Kahoot.NET.API.Requests;
 global using Kahoot.NET.API.Responses;
 global using Kahoot.NET.API.Requests.Login;
 global using Kahoot.NET.API.Requests.Handshake;
-
-#if NET6_0_OR_GREATER
 global using Kahoot.NET.API.Json;
-#endif
 
 global using System.Text;
 global using System.Text.Json;

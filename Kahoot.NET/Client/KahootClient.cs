@@ -1,4 +1,6 @@
-﻿namespace Kahoot.NET.Client;
+﻿using Kahoot.NET.API.Requests;
+
+namespace Kahoot.NET.Client;
 
 /// <summary>
 /// The current client used to interact and join Kahoot! games with
@@ -113,12 +115,50 @@ public partial class KahootClient : IKahootClient
     }
 
     /// <inheritdoc/>
-    public async Task RespondAsync(QuizQuestionData quizQuestionData)
+    public async Task RespondAsync(QuizQuestionData quizQuestionData, int? questionIndex = null, int[]? array = null, string? text = null)
     {
         if (quizQuestionData is null)
         {
             return;
         }
+
+        var quizAnswerContent = new QuestionAnswerContent
+        {
+            QuestionIndex = quizQuestionData.QuestionIndex,
+            Type = quizQuestionData.Type
+        };
+
+        switch (quizQuestionData.QuestionType)
+        {
+            case QuestionType.Quiz:
+            case QuestionType.Survey:
+                if (questionIndex is null) return;
+                quizAnswerContent.Choice = questionIndex;
+                break;
+            case QuestionType.OpenEnded:
+            case QuestionType.WordCloud:
+                if (text is null) return;
+                quizAnswerContent.Choice = text;
+                break;
+
+            // all use int[]
+            case QuestionType.Jumble:
+            case QuestionType.MultipleSelectPoll:
+            case QuestionType.MultipleSelect:
+                if (array is null || array.Length == 0) return;
+                quizAnswerContent.Choice = array;
+                break;
+
+            case QuestionType.Content: return; // there is no reason to answer a content question
+        }
+
+        var questionAnswer = new QuestionAnswer(quizAnswerContent, _code)
+        {
+            Id = Interlocked.Read(ref _stateObject.id).ToString(),
+            ClientId = _stateObject.clientId,
+        };
+
+        await SendAsync(questionAnswer).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>

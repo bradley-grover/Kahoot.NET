@@ -13,7 +13,7 @@ public partial class KahootClient
         switch ((id, channel))
         {
             case (1, Channels.Handshake):
-                var handshakeResponse = JsonSerializer.Deserialize(data.Span, BaseCMessageContext.Default.BaseClientMessage);
+                var handshakeResponse = JsonSerializer.Deserialize(data.Span, BaseClientMessageContext.Default.BaseClientMessage);
 
                 if (handshakeResponse is null) return; // TODO: Add better support for error correction
 

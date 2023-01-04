@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.API.Requests.Login;
+﻿using Kahoot.NET.API.Requests;
+using Kahoot.NET.API.Requests.Login;
 
 namespace Kahoot.NET.Client;
 
@@ -92,13 +93,23 @@ public partial class KahootClient
         switch (data)
         {
             case Types.Message:
-                switch (userObject.Data!.Id)
+                switch ((LiveEventId)userObject.Data!.Id)
                 {
-                    case 10: // kicked
+                    case LiveEventId.AcceptName:
+                        Debug.WriteLine("Name has been accepted");
+                        _logger?.LogDebug("Name has been accepted");
+                        break;
+                    case LiveEventId.QuizStart:
+                        _logger?.LogInformation("The quiz has started");
+                        break;
+                    case LiveEventId.QuizEnd: // kicked or left
                         await LeaveAsync(LeaveCondition.Kicked);
                         break;
-                    case 1: // question
-                    case 2:
+                    case LiveEventId.TimeUp:
+                        Debug.WriteLine("Question to respond to has timed out");
+                        _logger?.LogDebug("Question has timed out");
+                        break;
+                    case LiveEventId.QuestionStart:
                         var question = JsonSerializer.Deserialize(content.Span, QuizQuestionContext.Default.QuizQuestion);
 
                         Debug.Assert(question != null); // question should not be null;
@@ -107,6 +118,12 @@ public partial class KahootClient
                         Console.WriteLine("Received question");
 
                         question.Info = JsonSerializer.Deserialize(question.Data.Content, QuizQuestionDataContext.Default.QuizQuestionData);
+
+                        Debug.Assert(question.Info != null);
+                        
+                        question.Info.QuestionType = Types.Question.GetQuestionType(question.Info.Type);
+
+                        await QuestionReceived.InvokeEventAsync(this, new() { Question = question.Info });
 
                         break;
                 }

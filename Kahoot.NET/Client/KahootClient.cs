@@ -1,4 +1,5 @@
 ﻿using Kahoot.NET.API.Requests;
+using Kahoot.NET.RandomUserAgent;
 
 namespace Kahoot.NET.Client;
 
@@ -79,7 +80,7 @@ public partial class KahootClient : IKahootClient
     {
         _logger = logger;
         _httpClient = httpClient ?? new HttpClient(); // create new as fall back
-        _userAgent = userAgent ?? RandomUserAgent.RandomUa.RandomUserAgent; // there might be a better alternative than using this niche library or roll our own
+        _userAgent = userAgent ?? UserAgent.Generate(); // there might be a better alternative than using this niche library or roll our own
         _ws = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize); // use default size for websocket
         _ws.Options.SetRequestHeader("User-Agent", _userAgent); // set the user agent for the request
         _senderLock = new SemaphoreSlim(1);

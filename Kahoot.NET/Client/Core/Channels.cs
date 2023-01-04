@@ -115,8 +115,6 @@ public partial class KahootClient
                         Debug.Assert(question != null); // question should not be null;
                         Debug.Assert(question.Data != null);
 
-                        Console.WriteLine("Received question");
-
                         question.Info = JsonSerializer.Deserialize(question.Data.Content, QuizQuestionDataContext.Default.QuizQuestionData);
 
                         Debug.Assert(question.Info != null);

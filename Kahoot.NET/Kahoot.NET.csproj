@@ -3,6 +3,7 @@
   <PropertyGroup>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <SignAssembly>False</SignAssembly>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <PackageProjectUrl>https://github.com/ac111897/Kahoot.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ac111897/Kahoot.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

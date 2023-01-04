@@ -1,5 +1,6 @@
 ﻿using Kahoot.NET.Client;
 using Kahoot.NET.Client.Events;
+using Kahoot.NET.API.Shared;
 using ParadoxTerminal;
 
 namespace Kahoot.NET.HighLoadExample;
@@ -28,12 +29,31 @@ public class Program
         foreach (var client in clients)
         {
             client.Joined += Client_Joined;
+            client.QuestionReceived += Client_QuestionReceived;
             tasks.Add(client.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString()));
         }
 
         await Task.WhenAll(tasks);
 
         await Task.Delay(-1);
+    }
+
+    private static async Task Client_QuestionReceived(object? sender, QuestionReceivedArgs questionArgs)
+    {
+        if (questionArgs.ShouldIgnore)
+        {
+            return;
+        }
+
+        if (sender is not IKahootClient client)
+        {
+            return;
+        }
+
+        if (questionArgs.Question.QuestionType == QuestionType.Quiz)
+        {
+            await client.RespondAsync(questionArgs.Question, answerIndex: Random.Shared.Next(questionArgs.Question.NumberOfChoices));
+        }
     }
 
     private static Task Client_Joined(object? obj, JoinEventArgs args)

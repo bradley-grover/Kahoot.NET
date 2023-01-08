@@ -39,7 +39,7 @@ public partial class KahootClient
                 {
                     case Types.Active: // successful join notify client
                         Debug.WriteLine("Kahoot Client is active");
-                        await Joined.InvokeEventAsync(this, new(JoinResult.Success));
+                        await Joined.InvokeEventAsync(this, new(JoinResult.Success, _code));
                         break;
                     case Types.Errors.Locked:
                         Debug.WriteLine("Kahoot Client has tried to enter a locked game");

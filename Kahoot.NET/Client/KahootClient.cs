@@ -105,6 +105,7 @@ public partial class KahootClient : IKahootClient
 
         if (!await TryConnectAsync(cancellationToken))
         {
+            Debug.WriteLine("Failed to connect");
             return false;
         }
 

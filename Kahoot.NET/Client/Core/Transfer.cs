@@ -16,7 +16,6 @@ public partial class KahootClient
         where TData : class
     {
         Debug.Assert(_ws != null);
-        Debug.Assert(_ws.State == WebSocketState.Open);
 
         await _senderLock.WaitAsync(cancellationToken).ConfigureAwait(false);
 

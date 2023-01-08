@@ -18,6 +18,22 @@ public static class Request
         return client.SendAsync(CreateGameRequest(gameId));
     }
 
+    public static async Task<bool> GameExistsAsync(this HttpClient client, int gameCode)
+    {
+        try
+        {
+            var res = await QueryGameAsync(client, gameCode);
+
+            if (res.IsSuccessStatusCode) return true;
+        }
+        catch
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /// <summary>
     /// Creates the request to send to Kahoot
     /// </summary>

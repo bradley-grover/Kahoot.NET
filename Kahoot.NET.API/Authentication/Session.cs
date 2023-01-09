@@ -19,9 +19,8 @@ public static class Session
         {
             response = await Request.QueryGameAsync(client, gameId);
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
-            Debug.WriteLine(ex.ToString());
             return SessionResponse.Failed;
         }
 

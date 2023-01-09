@@ -38,7 +38,6 @@ public partial class KahootClient
                 switch (statusResponse.Data!.Status)
                 {
                     case Types.Active: // successful join notify client
-                        Debug.WriteLine("Kahoot Client is active");
                         await Joined.InvokeEventAsync(this, new(JoinResult.Success, _code));
                         break;
                     case Types.Errors.Locked:
@@ -96,7 +95,6 @@ public partial class KahootClient
                 switch ((LiveEventId)userObject.Data!.Id)
                 {
                     case LiveEventId.AcceptName:
-                        Debug.WriteLine("Name has been accepted");
                         _logger?.LogDebug("Name has been accepted");
                         break;
                     case LiveEventId.QuizStart:

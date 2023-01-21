@@ -36,6 +36,8 @@ internal static class Challenge
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ReadOnlySpan<char> FindToken(ReadOnlySpan<char> source)
     {
+        Debug.Assert(!source.IsEmpty);
+
         int first = source.IndexOf(Identifier);
         int last = source.LastIndexOf(Identifier);
 
@@ -55,6 +57,9 @@ internal static class Challenge
     /// </summary>
     public static int GetOffsetString(ReadOnlySpan<char> input, Span<char> output)
     {
+        Debug.Assert(!input.IsEmpty);
+        Debug.Assert(!output.IsEmpty);
+
         // find the variable method declaration start index and set the span to start at the assignment
 
         input = input[(input.IndexOf(OffsetName) + OffsetName.Length)..];

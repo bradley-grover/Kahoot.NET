@@ -11,7 +11,7 @@ public static class Session
     /// <param name="client">Http client to be used for sending the request</param>
     /// <param name="gameId">The game id to use</param>
     /// <returns>Session response which may have failed</returns>
-    internal static async Task<SessionResponse> CreateAsync(HttpClient client, int gameId)
+    internal static async Task<SessionResponse> CreateAsync(HttpClient client, uint gameId)
     {
         HttpResponseMessage response;
 

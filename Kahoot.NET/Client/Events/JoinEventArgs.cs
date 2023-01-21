@@ -1,7 +1,7 @@
 ﻿namespace Kahoot.NET.Client.Events;
 
 /// <summary>
-/// Event data for the result of <see cref="IKahootClient.JoinAsync(int, string, CancellationToken)"></see> and the event <see cref="IKahootClient.Joined"/>
+/// Event data for the result of <see cref="IKahootClient.JoinAsync(uint, string, CancellationToken)"></see> and the event <see cref="IKahootClient.Joined"/>
 /// </summary>
 public sealed class JoinEventArgs : EventArgs
 {
@@ -18,14 +18,14 @@ public sealed class JoinEventArgs : EventArgs
     /// <summary>
     /// The code of the game
     /// </summary>
-    public int Code { get; set; }
+    public uint Code { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JoinEventArgs"/> class
     /// </summary>
     /// <param name="result"></param>
     /// <param name="code"></param>
-    public JoinEventArgs(JoinResult result, int code = default)
+    public JoinEventArgs(JoinResult result, uint code = default)
     {
         Result = result;
         Code = code;

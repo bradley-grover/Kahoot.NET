@@ -2,13 +2,13 @@
 
 public class QuestionAnswer : BaseClientMessage<GameContentData>
 {
-    public QuestionAnswer(QuestionAnswerContent content, int gameId)
+    public QuestionAnswer(QuestionAnswerContent content, uint gameId)
     {
         Data = new()
         {
             Content = JsonSerializer.Serialize(content),
             GameId = gameId.ToString(),
-            Id = (int)LiveEventId.AnswerQuestion,
+            Id = (uint)LiveEventId.AnswerQuestion,
             Type = Types.Message
         };
 

@@ -15,7 +15,7 @@ public partial class KahootClient
 
         _usingNamerator = session.Namerator;
 
-        string gameUrl = UriHelper.CreateGameUrl((uint)_code, session.WebSocketKey);
+        string gameUrl = UriHelper.CreateGameUrl(_code, session.WebSocketKey);
 
         Uri uri = new(gameUrl);
 

@@ -122,6 +122,13 @@ public partial class KahootClient
                         await QuestionReceived.InvokeEventAsync(this, new() { Question = question.Info });
 
                         break;
+                    case LiveEventId.QuestionEnd: // question has ended
+                        break;
+
+                    case LiveEventId.RequestFeedback: // the host has asked for feedback
+                        await Task.Delay(500); // slight delay to be able to send feedback
+                        await FeedbackRequested.InvokeEventAsync(this, EventArgs.Empty); // this event has no specific data but we include EventArgs for consistancy
+                        break;
                 }
                 break;
         }

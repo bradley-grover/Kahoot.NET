@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Kahoot.NET.API.Shared;
+using Kahoot.NET.API.Requests;
 using Kahoot.NET.Client;
 using Kahoot.NET.Client.Events;
 
@@ -41,7 +42,7 @@ public static class ClientEvents
 
         if (args.Question.Type == Types.Question.Quiz)
         {
-            await client.RespondAsync(args.Question, Random.Shared.Next(args.Question.NumberOfChoices)); // pick a random answer
+            await client.AnswerAsync(args.Question, Random.Shared.Next(args.Question.NumberOfChoices)); // pick a random answer
         }
     }
 
@@ -72,5 +73,21 @@ public static class ClientEvents
         }
 
         return Task.CompletedTask;
+    }
+
+    public static async Task KahootClient_OnFeedbackRequest(object? sender, EventArgs args)
+    {
+        if (sender is not IKahootClient client)
+        {
+            return;
+        }
+
+        await client.SendFeedbackAsync(new()
+        {
+            Fun = 1,
+            Learning = true,
+            Overall = 1,
+            Recommend = false,
+        });
     }
 }

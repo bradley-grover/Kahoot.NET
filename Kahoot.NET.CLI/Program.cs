@@ -40,7 +40,7 @@ public class Program
 
     internal static async Task RunAsync()
     {
-        int gameCode = AnsiConsole.Prompt(new TextPrompt<int>("Enter a Kahoot game code:\n")
+        uint gameCode = AnsiConsole.Prompt(new TextPrompt<uint>("Enter a Kahoot game code:\n")
             .PromptStyle("green"));
 
 
@@ -56,7 +56,7 @@ public class Program
         }
     }
 
-    internal static async Task SingleClientAsync(int gameCode)
+    internal static async Task SingleClientAsync(uint gameCode)
     {
         string username = AnsiConsole.Prompt(new TextPrompt<string>("Enter a username for this one client:\n")
             .PromptStyle("green"));

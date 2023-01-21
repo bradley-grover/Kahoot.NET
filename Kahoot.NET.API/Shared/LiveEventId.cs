@@ -3,7 +3,7 @@
 /// <summary>
 /// The identifier for the message data, used for <see cref="ContentData"/> purposes usually
 /// </summary>
-public enum LiveEventId
+public enum LiveEventId : uint
 {
     GetReady = 1,
     QuestionStart = 2,

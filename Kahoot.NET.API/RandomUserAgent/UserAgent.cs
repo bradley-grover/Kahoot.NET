@@ -43,6 +43,8 @@ public static class UserAgent
     /// </summary>
     public static string Generate()
     {
+        Debug.Assert(_userAgents != null);
+
         ref string str = ref MemoryMarshal.GetArrayDataReference(_userAgents);
 
         return Unsafe.Add(ref str, Random.Shared.Next(_userAgents.Length));

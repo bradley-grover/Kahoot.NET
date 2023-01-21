@@ -1,4 +1,6 @@
-﻿namespace Kahoot.NET.Client;
+﻿using Kahoot.NET.API.Requests;
+
+namespace Kahoot.NET.Client;
 
 /// <summary>
 /// Client used to connect and interact to a Kahoot!
@@ -11,7 +13,7 @@ public interface IKahootClient : IDisposable
     bool IsConnected { get; }
 
     /// <summary>
-    /// Event triggered when the <see cref="JoinAsync(int, string, CancellationToken)"/> action completes its task
+    /// Event triggered when the <see cref="JoinAsync(uint, string, CancellationToken)"/> action completes its task
     /// </summary>
     event Func<object?, JoinEventArgs, Task> Joined;
 
@@ -26,6 +28,11 @@ public interface IKahootClient : IDisposable
     event Func<object?, QuestionReceivedArgs, Task> QuestionReceived;
 
     /// <summary>
+    /// Event triggered when the host wants feedback from the players
+    /// </summary>
+    event Func<object?, EventArgs, Task> FeedbackRequested;
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="quizQuestion"></param>
@@ -33,7 +40,7 @@ public interface IKahootClient : IDisposable
     /// <param name="array"></param>
     /// <param name="text"></param>
     /// <returns></returns>
-    Task RespondAsync(QuizQuestionData quizQuestion, int? answerIndex = null, int[]? array = null, string? text = null);
+    ValueTask AnswerAsync(QuizQuestionData quizQuestion, int? answerIndex = null, int[]? array = null, string? text = null);
 
     /// <summary>
     /// The client begins to join the game and will report its results to the delegate property
@@ -42,7 +49,14 @@ public interface IKahootClient : IDisposable
     /// <param name="username"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<bool> JoinAsync(int code, string username, CancellationToken cancellationToken = default);
+    Task<bool> JoinAsync(uint code, string username, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Use this function when <see cref="FeedbackRequested"/> is triggered
+    /// </summary>
+    /// <param name="feedback"></param>
+    /// <returns></returns>
+    ValueTask SendFeedbackAsync(Feedback feedback);
 
     /// <summary>
     /// Disconnects the client from the Kahoot! game

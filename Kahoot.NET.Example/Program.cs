@@ -27,6 +27,7 @@ public class Program
         kahootClient.Joined += ClientEvents.KahootClient_OnJoined;
         kahootClient.Left += ClientEvents.KahootClient_Left;
         kahootClient.QuestionReceived += ClientEvents.KahootClient_QuestionRec;
+        kahootClient.FeedbackRequested += ClientEvents.KahootClient_OnFeedbackRequest;
 
         var validGame = await kahootClient.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString());
 
@@ -34,15 +35,15 @@ public class Program
     }
 
 
-    public static async Task<int> GetValidCodeAsync()
+    public static async Task<uint> GetValidCodeAsync()
     {
         Console.WriteLine("Enter game code:");
 
         while (true)
         {
-            int result;
+            uint result;
 
-            while (!int.TryParse(Console.ReadLine(), out result))
+            while (!uint.TryParse(Console.ReadLine(), out result))
             {
                 Console.WriteLine($"Could not get numeric code, try again");
             }

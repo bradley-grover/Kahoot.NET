@@ -9,7 +9,7 @@ namespace Kahoot.NET.Client;
 public partial class KahootClient : IKahootClient
 {
     // static
-    internal static readonly JsonSerializerOptions _serializerOptions = new()
+    internal static readonly JsonSerializerOptions _serializerOptions = new() // use these serialize options when source generation is not possible
     {
         WriteIndented = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
@@ -24,8 +24,9 @@ public partial class KahootClient : IKahootClient
 
     // mutable
     private string? _username;
-    private int _code;
+    private uint _code;
     private bool _usingNamerator;
+    private bool _disposedValue;
 
     internal readonly StateObject _stateObject = new() // TODO: Investigate how to obtain proper values for this class object
     {
@@ -38,7 +39,7 @@ public partial class KahootClient : IKahootClient
     /// <summary>
     /// The integer game code of the currently in game, 0 is none
     /// </summary>
-    public int GameCode
+    public uint GameCode
     {
         get => _code;
     }
@@ -68,6 +69,9 @@ public partial class KahootClient : IKahootClient
     /// <inheritdoc/>
     public event Func<object?, QuestionReceivedArgs, Task> QuestionReceived;
 
+    /// <inheritdoc/>
+    public event Func<object?, EventArgs, Task> FeedbackRequested;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="KahootClient"/> class with an optional logger or/and HttpClient
     /// </summary>
@@ -80,7 +84,7 @@ public partial class KahootClient : IKahootClient
     {
         _logger = logger;
         _httpClient = httpClient ?? new HttpClient(); // create new as fall back
-        _userAgent = userAgent ?? UserAgent.Generate(); // there might be a better alternative than using this niche library or roll our own
+        _userAgent = userAgent ?? UserAgent.Generate(); // if the caller doesn't provide an agent generate our own
         _ws = Session.GetConfiguredWebSocket(StateObject.BufferSize, StateObject.BufferSize); // use default size for websocket
         _ws.Options.SetRequestHeader("User-Agent", _userAgent); // set the user agent for the request
         _senderLock = new SemaphoreSlim(1);
@@ -88,7 +92,7 @@ public partial class KahootClient : IKahootClient
 
 
     /// <inheritdoc/>
-    public async Task<bool> JoinAsync(int code, string username, CancellationToken cancellationToken = default)
+    public async Task<bool> JoinAsync(uint code, string username, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(username)) throw new ArgumentNullException(nameof(username));
 
@@ -109,15 +113,13 @@ public partial class KahootClient : IKahootClient
             return false;
         }
 
-        // TODO: Find better alternative than using old threading approach
-
         _ = Task.Run(ReceiveAsync, cancellationToken);
 
         return true;
     }
 
     /// <inheritdoc/>
-    public async Task RespondAsync(QuizQuestionData quizQuestionData, int? questionIndex = null, int[]? array = null, string? text = null)
+    public async ValueTask AnswerAsync(QuizQuestionData quizQuestionData, int? questionIndex = null, int[]? array = null, string? text = null)
     {
         if (quizQuestionData is null)
         {
@@ -160,7 +162,7 @@ public partial class KahootClient : IKahootClient
             ClientId = _stateObject.clientId,
         };
 
-        await SendAsync(questionAnswer).ConfigureAwait(false);
+        await SendAsync(questionAnswer, QuestionAnswerContext.Default.QuestionAnswer).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
@@ -188,7 +190,21 @@ public partial class KahootClient : IKahootClient
 
     }
 
-    private bool _disposedValue;
+    /// <inheritdoc/>
+    public async ValueTask SendFeedbackAsync(Feedback feedback)
+    {
+        ArgumentNullException.ThrowIfNull(feedback); // there is no point in answering this if this is null
+
+        feedback.Nickname = _username;
+
+        var request = new FeedbackMessage(feedback, _code)
+        {
+            Id = Interlocked.Read(ref _stateObject.id).ToString(),
+            ClientId = _stateObject.clientId
+        };
+
+        await SendAsync(request, FeedbackContext.Default.FeedbackMessage).ConfigureAwait(false);
+    }
 
     /// <inheritdoc/>
     protected virtual void Dispose(bool disposing)

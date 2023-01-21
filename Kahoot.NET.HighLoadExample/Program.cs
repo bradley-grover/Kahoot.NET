@@ -13,7 +13,7 @@ public class Program
     {
         Console.WriteLine("Enter game code: ");
 
-        int code = Terminal.ReadInt32();
+        uint code = Terminal.ReadUInt32();
 
         Console.WriteLine("Enter number of clients");
 
@@ -64,7 +64,7 @@ public class Program
 
         if (questionArgs.Question.QuestionType == QuestionType.Quiz)
         {
-            await client.RespondAsync(questionArgs.Question, answerIndex: Random.Shared.Next(questionArgs.Question.NumberOfChoices));
+            await client.AnswerAsync(questionArgs.Question, answerIndex: Random.Shared.Next(questionArgs.Question.NumberOfChoices));
         }
     }
 

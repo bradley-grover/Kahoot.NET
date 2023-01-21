@@ -11,14 +11,14 @@ public static class Request
     /// <param name="client"><see cref="HttpClient"/> to be used to send the request</param>
     /// <param name="gameId">The id of the game</param>
     /// <returns><see cref="HttpResponseMessage"/> from sending the request</returns>
-    public static Task<HttpResponseMessage> QueryGameAsync(this HttpClient client, int gameId)
+    public static Task<HttpResponseMessage> QueryGameAsync(this HttpClient client, uint gameId)
     {
         Debug.Assert(client != null);
 
         return client.SendAsync(CreateGameRequest(gameId));
     }
 
-    public static async Task<bool> GameExistsAsync(this HttpClient client, int gameCode)
+    public static async Task<bool> GameExistsAsync(this HttpClient client, uint gameCode)
     {
         try
         {
@@ -39,7 +39,7 @@ public static class Request
     /// </summary>
     /// <param name="gameId"></param>
     /// <returns></returns>
-    internal static HttpRequestMessage CreateGameRequest(int gameId)
+    internal static HttpRequestMessage CreateGameRequest(uint gameId)
     {
         HttpRequestMessage request = new()
         {

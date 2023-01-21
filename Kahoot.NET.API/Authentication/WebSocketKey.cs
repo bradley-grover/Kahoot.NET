@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics;
-using System.Runtime.Intrinsics.X86;
 
 namespace Kahoot.NET.API.Authentication;
 
@@ -53,6 +51,7 @@ public static class WebSocketKey
 
         return BitwiseOrSpans(header, challenge);
     }
+
     internal static string BitwiseOrSpans(Span<char> header, Span<char> challenge)
     {
         if (!(challenge.Length >= header.Length))
@@ -77,9 +76,7 @@ public static class WebSocketKey
                 var headerVec = new Vector<ushort>(headerRaw.Slice(i, vectorLength));
                 var challengeVec = new Vector<ushort>(challengeRaw.Slice(i, vectorLength));
 
-                headerVec = Vector.Xor(headerVec, challengeVec);
-
-                headerVec.CopyTo(headerRaw.Slice(i, vectorLength));
+                Vector.Xor(headerVec, challengeVec).CopyTo(headerRaw.Slice(i, vectorLength));
             }
         }
 

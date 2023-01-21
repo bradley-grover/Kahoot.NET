@@ -31,7 +31,7 @@ public static unsafe class SimpleExpression
         { '^', new(&MathOperations.Pow) }
     };
 
-    public static bool TryGetPrecedence(char ch, out int precedence)
+    internal static bool TryGetPrecedence(char ch, out int precedence)
     {
         switch (ch)
         {
@@ -55,7 +55,7 @@ public static unsafe class SimpleExpression
         }
     }
 
-    public static int GetPrecedence(char ch)
+    internal static int GetPrecedence(char ch)
     {
         _ = TryGetPrecedence(ch, out int precedence);
         return precedence;

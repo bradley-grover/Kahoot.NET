@@ -1,9 +1,10 @@
 ﻿namespace Kahoot.NET.API.Responses;
 
-// not really needed but why not
-
 #nullable disable
 
+/// <summary>
+/// Sends the <see cref="ContentData"/> with the game code included as a property
+/// </summary>
 public class GameContentData : ContentData
 {
     /// <summary>

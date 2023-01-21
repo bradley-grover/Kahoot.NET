@@ -9,9 +9,15 @@ namespace Kahoot.NET.API.Responses;
 /// </summary>
 public class QuizQuestion : Message<GameContentData>
 {
+    /// <summary>
+    /// The info extracted from the question data
+    /// </summary>
     [JsonIgnore]
     public QuizQuestionData? Info { get; set; }
 
+    /// <summary>
+    /// The current timetrack
+    /// </summary>
     [JsonPropertyName("ext")]
     public ExtWithTimetrack TimetrackExt { get; set; }
 }

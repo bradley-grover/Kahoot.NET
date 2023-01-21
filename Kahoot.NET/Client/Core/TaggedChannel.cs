@@ -1,7 +1,4 @@
-﻿using Kahoot.NET.API.Requests.Handshake;
-using Kahoot.NET.API.Requests.Login;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 // this file contains the code to handle a tagged channel message, eg we should handle it in a fast path case, so most of these are for joining the game initially as the
 // the number Id should be the same 

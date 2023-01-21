@@ -1,10 +1,9 @@
 ﻿using System.Numerics;
-using System.Runtime.InteropServices;
 
 namespace Kahoot.NET.API.Authentication;
 
 /// <summary>
-/// Static class to create the websocket key used for connection to the socket
+/// Static class to create the websocket key used for connection to the socket, on platforms that support <see cref="Vector{T}"/> the decoding will perform faster due to vectorization of decoding
 /// </summary>
 public static class WebSocketKey
 {
@@ -14,17 +13,17 @@ public static class WebSocketKey
     public const int MaxHeaderLength = 256;
 
     /// <summary>
-    /// Decodes the strings and returns a websocket key
+    /// Decodes the strings and returns a websocket key, this method has very limited checking, so be careful to only pass something valid. Cannot exceed <see cref="MaxHeaderLength"/>
     /// </summary>
     /// <remarks>
     /// The header must be Base64 and comes from the response headers <see cref="Request.QueryGameAsync(HttpClient, uint)"/> with the key <see cref="ConnectionInfo.SessionHeader"/>. 
     /// The challenge function comes from the response <see cref="Request.QueryGameAsync(HttpClient, uint)"/> and is contained in the body. 
     /// The header cannot exceed the max length 
     /// </remarks>
-    /// <param name="sessionHeader"></param>
-    /// <param name="challengeFunction"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="sessionHeader"><see cref="ConnectionInfo.SessionHeader"/> header during game request</param>
+    /// <param name="challengeFunction">JavaScript string also provided in the body during game request</param>
+    /// <returns>A WebSocket key to be used with <see cref="ConnectionInfo.WebsocketUrl"/> or <see cref="ConnectionInfo.WebSocketUrlNoFormat"/></returns>
+    /// <exception cref="ArgumentException">Thrown if the session header is invalid</exception>
     public static string Create(string sessionHeader, string challengeFunction)
     {
         if (sessionHeader.Length % 4 != 0 || sessionHeader.Length > MaxHeaderLength)

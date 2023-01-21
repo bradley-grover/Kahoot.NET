@@ -11,12 +11,12 @@
     <NeutralLanguage>en-NZ</NeutralLanguage>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Bradley Grover</Authors>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <Description>Library to connect and interact with Kahoot's using .NET</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReleaseNotes>Support for joining, answering, giving feedback added in 2.0.0</PackageReleaseNotes>
     <PackageId>Paradox.Kahoot.NET</PackageId>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <Features>strict</Features>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">

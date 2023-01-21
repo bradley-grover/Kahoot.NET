@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.Mathematics;
-
-namespace Kahoot.NET.API.Authentication;
+﻿namespace Kahoot.NET.API.Authentication;
 
 // this file contains the most performance impact on the WebSocketKey.Create method as it has parse a math string
 // and has to a allocate a string from the span

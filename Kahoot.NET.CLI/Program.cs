@@ -82,30 +82,15 @@ public class Program
 
     private static Task Client_Left(object? sender, LeftEventArgs leftArgs)
     {
-        string message;
-
-        switch (leftArgs.Condition)
+        var message = leftArgs.Condition switch
         {
-            case LeaveCondition.Locked:
-                message = "The game is locked so I have left";
-                break;
-            case LeaveCondition.Kicked:
-                message = "I was kicked from the game";
-                break;
-            case LeaveCondition.JoinFailure:
-                message = "There was a failure joining the game, so the client has left";
-                break;
-            case LeaveCondition.Requested:
-                message = "I left the game";
-                break;
-            case LeaveCondition.Full:
-                message = "The game is full, which likely means that it has reached the 2000 game limit";
-                break;
-            default:
-                message = "Unknown reason for leaving";
-                break;
-        }
-
+            LeaveCondition.Locked => "The game is locked so I have left",
+            LeaveCondition.Kicked => "I was kicked from the game",
+            LeaveCondition.JoinFailure => "There was a failure joining the game, so the client has left",
+            LeaveCondition.Requested => "I left the game",
+            LeaveCondition.Full => "The game is full, which likely means that it has reached the 2000 game limit",
+            _ => "Unknown reason for leaving",
+        };
         AnsiConsole.Write(new Text(message, new Style(foreground: Color.Red)));
         AnsiConsole.WriteLine();
 

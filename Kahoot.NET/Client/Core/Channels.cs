@@ -1,5 +1,4 @@
-﻿using Kahoot.NET.API.Requests;
-using Kahoot.NET.API.Requests.Login;
+﻿using Kahoot.NET.API.Requests.Login;
 
 namespace Kahoot.NET.Client;
 

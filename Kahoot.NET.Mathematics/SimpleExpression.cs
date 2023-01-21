@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Kahoot.NET.Mathematics;
 
@@ -70,6 +68,12 @@ public static unsafe class SimpleExpression
     internal const int OperandStackMaxSize = 256;
     internal const int OperatorStackMaxSize = 256;
 
+    /// <summary>
+    /// Tries to evaluate a long from a <see cref="ReadOnlySpan{T}"/> with a ideal 0 amount of heap allocations
+    /// </summary>
+    /// <param name="expression"></param>
+    /// <param name="evaluated"></param>
+    /// <returns>Whether a value could be evaluated or not</returns>
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public static bool TryEvaluate(ReadOnlySpan<char> expression, out long evaluated)
     {
@@ -184,6 +188,12 @@ public static unsafe class SimpleExpression
         return true;
     }
 
+    /// <summary>
+    /// Evaluates a simple mathematical string and returns the result, throws on format errors
+    /// </summary>
+    /// <param name="expression"></param>
+    /// <returns></returns>
+    /// <exception cref="FormatException"></exception>
     [Pure]
     public static long Evaluate(ReadOnlySpan<char> expression)
     {

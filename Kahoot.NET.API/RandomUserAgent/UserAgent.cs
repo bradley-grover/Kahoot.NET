@@ -3,7 +3,7 @@
 namespace Kahoot.NET.RandomUserAgent;
 
 /// <summary>
-/// Class to generate a random user agent, useful for browsers
+/// Class to generate a random user agent, useful for browsers, and used by default for the Kahoot.NET.Client user agent generation
 /// </summary>
 public static class UserAgent
 {
@@ -39,7 +39,7 @@ public static class UserAgent
     };
 
     /// <summary>
-    /// Returns a random user agent as a string
+    /// Fetches a user agent
     /// </summary>
     public static string Generate()
     {

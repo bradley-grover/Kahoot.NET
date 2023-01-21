@@ -5,6 +5,10 @@ using System.Runtime.InteropServices;
 
 namespace Kahoot.NET.Mathematics;
 
+/// <summary>
+/// A lightweight stack for a small amount of blittable structs and falls back to <see cref="ArrayPool{T}"/> when needed
+/// </summary>
+/// <typeparam name="T"></typeparam>
 internal ref struct ValueStack<T>
     where T : unmanaged
 {

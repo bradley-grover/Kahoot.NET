@@ -1,5 +1,4 @@
-﻿using Kahoot.NET.API.Requests;
-using Kahoot.NET.RandomUserAgent;
+﻿using Kahoot.NET.RandomUserAgent;
 
 namespace Kahoot.NET.Client;
 
@@ -39,7 +38,7 @@ public partial class KahootClient : IKahootClient
     /// <summary>
     /// The integer game code of the currently in game, 0 is none
     /// </summary>
-    public uint GameCode
+    public uint? Code
     {
         get => _code;
     }

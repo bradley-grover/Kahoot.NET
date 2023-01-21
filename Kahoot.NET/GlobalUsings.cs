@@ -1,14 +1,12 @@
-﻿global using Kahoot.NET.Client;
-global using Kahoot.NET.API;
+﻿global using Kahoot.NET.API;
 global using Kahoot.NET.Client.Events;
 global using Kahoot.NET.API.Responses;
+global using Kahoot.NET.API.Requests;
 global using Kahoot.NET.API.Shared;
 global using Kahoot.NET.API.Authentication;
 global using Kahoot.NET.API.Json;
 global using Kahoot.NET.Extensions;
 global using System.Diagnostics;
-global using System.Diagnostics.Contracts;
-global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using System.Text.Json.Serialization.Metadata;

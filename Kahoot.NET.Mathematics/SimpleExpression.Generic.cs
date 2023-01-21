@@ -6,7 +6,8 @@ using System.Runtime.InteropServices;
 
 namespace Kahoot.NET.Mathematics;
 
-public static partial class SimpleExpression<TNumber>
+// unsafe adaptive feature, could be used to parse larger strings but is unreliable right now
+internal static partial class SimpleExpression<TNumber>
     where TNumber : unmanaged, INumber<TNumber>
 {
     static unsafe SimpleExpression()

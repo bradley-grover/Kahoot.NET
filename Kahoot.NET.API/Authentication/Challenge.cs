@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using System.Runtime.InteropServices;
-using Kahoot.NET.Mathematics;
+﻿using Kahoot.NET.Mathematics;
 
 namespace Kahoot.NET.API.Authentication;
 

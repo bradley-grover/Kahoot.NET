@@ -5,7 +5,7 @@ namespace Kahoot.NET;
 /// <summary>
 /// Internal state object for storing the websocket information
 /// </summary>
-public class StateObject
+internal class StateObject
 {
     /// <summary>
     /// The size of the buffer to be used to store messages

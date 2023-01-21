@@ -1,4 +1,6 @@
-﻿namespace Kahoot.NET.API.Shared;
+﻿using Kahoot.NET.Client;
+
+namespace Kahoot.NET.API.Shared;
 
 /// <summary>
 /// The types that can be included in the <see cref="Data.Type"/> field
@@ -67,15 +69,75 @@ public static class Types
     /// </summary>
     public static class Question
     {
+        /// <summary>
+        /// Standard quiz mode (default) usually by Kahoot!
+        /// </summary>
+        /// <remarks>
+        /// Answer the overload with a number in <see cref="IKahootClient.AnswerAsync(QuizQuestionData, int?, int[], string?)"/>
+        /// </remarks>
         public const string Quiz = "quiz";
+
+        /// <summary>
+        /// The question can have multiple answers, if necessary
+        /// </summary>
+        /// <remarks>
+        /// Answer the question with an array in <see cref="IKahootClient.AnswerAsync(QuizQuestionData, int?, int[], string?)"/>
+        /// </remarks>
         public const string MultipleSelect = "multiple_select_quiz";
+
+        /// <summary>
+        /// A text input question
+        /// </summary>
+        /// <remarks>
+        /// Answer the question with an string in <see cref="IKahootClient.AnswerAsync(QuizQuestionData, int?, int[], string?)"/>
+        /// </remarks>
         public const string OpenEnded = "open_ended";
+
+        /// <summary>
+        /// Text input poll
+        /// </summary>
+        /// <remarks>
+        /// Answer the question with a string in <see cref="IKahootClient.AnswerAsync(QuizQuestionData, int?, int[], string?)"/>
+        /// </remarks>
         public const string WordCloud = "word_cloud";
+
+        /// <summary>
+        /// A multiple select poll
+        /// </summary>
+        /// <remarks>
+        /// Answer the question with a number in <see cref="IKahootClient.AnswerAsync(QuizQuestionData, int?, int[], string?)"/>
+        /// </remarks>
         public const string Survey = "survey";
+
+        /// <summary>
+        /// Multiple select poll with 1 or more choices
+        /// </summary>
+        /// <remarks>
+        /// Answer the question with an array in <see cref="IKahootClient.AnswerAsync(QuizQuestionData, int?, int[], string?)"/>
+        /// </remarks>
         public const string MultipleSelectPoll = "multiple_select_poll";
+
+        /// <summary>
+        /// A puzzle
+        /// </summary>
+        /// <remarks>
+        /// Answer the question with a array in <see cref="IKahootClient.AnswerAsync(QuizQuestionData, int?, int[], string?)"/>
+        /// </remarks>
         public const string Jumble = "puzzle";
+
+        /// <summary>
+        /// The question is just content, could be a video, no action is needed, prefer null during
+        /// </summary>
+        /// <remarks>
+        /// Don't use any overload for <see cref="IKahootClient.AnswerAsync(QuizQuestionData, int?, int[], string?)"/>
+        /// </remarks>
         public const string Content = "content";
 
+        /// <summary>
+        /// Parses the string representation, into an enumeration for easier code flow
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static QuestionType GetQuestionType(string type)
         {
             return type switch

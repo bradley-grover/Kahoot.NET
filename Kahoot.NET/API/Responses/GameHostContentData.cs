@@ -1,5 +1,8 @@
 ﻿namespace Kahoot.NET.API.Responses;
 
+/// <summary>
+/// <see cref="GameContentData"/> with an additional 'host' property
+/// </summary>
 public class GameHostContentData : GameContentData
 {
     /// <summary>

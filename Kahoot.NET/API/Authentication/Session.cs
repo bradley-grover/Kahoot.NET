@@ -1,17 +1,17 @@
 ﻿namespace Kahoot.NET.API.Authentication;
 
 /// <summary>
-/// Static class to create a session
+/// Static class used to retrieve game meta data so that we can initialize a websocket connection to Kahoot!
 /// </summary>
 public static class Session
 {
     /// <summary>
-    /// Creates the session used to connect to the game
+    /// Sends an HTTP request to the specified Kahoot! code url, and receives a response to use further
     /// </summary>
-    /// <param name="client">Http client to be used for sending the request</param>
-    /// <param name="gameId">The game id to use</param>
-    /// <returns>Session response which may have failed</returns>
-    internal static async Task<SessionResponse> CreateAsync(HttpClient client, uint gameId)
+    /// <param name="client">An http client to send requests to the Kahoot! url</param>
+    /// <param name="gameId">The code of the game</param>
+    /// <returns>A <see cref="SessionResponse"/> containing information used to join the game</returns>
+    public static async Task<SessionResponse> CreateAsync(HttpClient client, uint gameId)
     {
         HttpResponseMessage response;
 
@@ -52,14 +52,12 @@ public static class Session
     }
 
     /// <summary>
-    /// Configures a <see cref="ClientWebSocket"/> that uses the optimal settings for Kahoot
+    /// Gets a configured WebSocket that can be used to communicate with the Kahoot live game
     /// </summary>
-    /// <remarks>
-    /// Recommended value is the minimum value for both buffer size is 1024
-    /// </remarks>
-    /// <param name="receiveBufferSize"></param>
-    /// <param name="sendBufferSize"></param>
-    /// <returns></returns>
+    /// <param name="receiveBufferSize">The amount of bytes that can be received at a time</param>
+    /// <param name="sendBufferSize">The amount of bytes that can be sent at a time</param>
+    /// <returns>A configure <see cref="ClientWebSocket"/></returns>
+    /// <exception cref="ArgumentException">If the buffers are below 1024, the min amount it will throw an argument exception</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ClientWebSocket GetConfiguredWebSocket(int receiveBufferSize, int sendBufferSize)
     {

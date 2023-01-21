@@ -18,6 +18,12 @@ public static class Request
         return client.SendAsync(CreateGameRequest(gameId));
     }
 
+    /// <summary>
+    /// Tries to ping the game code to see if it exists
+    /// </summary>
+    /// <param name="client">Provided HttpClient</param>
+    /// <param name="gameCode">Game code</param>
+    /// <returns>If the game exists <c>true</c> else <c>false</c></returns>
     public static async Task<bool> GameExistsAsync(this HttpClient client, uint gameCode)
     {
         try

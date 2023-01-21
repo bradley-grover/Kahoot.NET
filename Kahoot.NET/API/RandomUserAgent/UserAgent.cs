@@ -41,6 +41,7 @@ public static class UserAgent
     /// <summary>
     /// Fetches a user agent
     /// </summary>
+    /// <returns>A user agent from a pool</returns>
     public static string Generate()
     {
         Debug.Assert(_userAgents != null);

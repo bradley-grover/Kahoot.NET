@@ -1,6 +1,4 @@
-﻿using Kahoot.NET.RandomUserAgent;
-
-namespace Kahoot.NET.Client;
+﻿namespace Kahoot.NET.Client;
 
 /// <summary>
 /// The current client used to interact and join Kahoot! games with

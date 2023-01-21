@@ -6,7 +6,10 @@
 ![Lines of code](https://img.shields.io/tokei/lines/github/ac111897/Kahoot.NET)
 
 ## Overview
-Kahoot.NET C# Library to connect to Kahoot! games and interact as a player
+Kahoot.NET is a C# Library to connect to Kahoot! games and interact as a player
 
-## Documentation
-Work in progress, but see Kahoot.NET.Example or Kahoot.NET.HighLoadExample or Kahoot.NET.CLI for examples that I use in testing that you could use
+## Documentation📄
+<ul>
+<li>https://ac111897.github.io/</li>
+</ul>
+ 

@@ -89,7 +89,7 @@ internal static partial class SimpleExpression<TNumber>
                 i--;
                 var operand = expression.Slice(start, take);
 
-                /// use TryParse instead because it allows for error handling
+                // use TryParse instead because it allows for error handling
 
                 if (!TNumber.TryParse(operand, numberStyle, provider, out var result))
                 {

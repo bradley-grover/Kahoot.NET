@@ -7,6 +7,7 @@ global using Kahoot.NET.API.Authentication;
 global using Kahoot.NET.API.Json;
 global using Kahoot.NET.Extensions;
 global using System.Diagnostics;
+global using System.Text;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using System.Text.Json.Serialization.Metadata;
@@ -14,3 +15,7 @@ global using System.Buffers;
 global using System.Runtime.CompilerServices;
 global using System.Net.WebSockets;
 global using Microsoft.Extensions.Logging;
+global using System.Diagnostics.CodeAnalysis;
+global using Kahoot.NET.API.Requests.Login;
+global using Kahoot.NET.API.Requests.Handshake;
+

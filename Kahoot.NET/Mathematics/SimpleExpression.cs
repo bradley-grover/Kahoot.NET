@@ -116,7 +116,7 @@ public static unsafe class SimpleExpression
                 i--;
                 var operand = expression.Slice(start, take);
 
-                /// use TryParse instead because it allows for error handling
+                // use TryParse instead because it allows for error handling
 
                 if (!long.TryParse(operand, NumberStyles.None, null, out var result))
                 {

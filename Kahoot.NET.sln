@@ -13,11 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.Benchmarks", "Ka
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.HighLoadExample", "Kahoot.NET.HighLoadExample\Kahoot.NET.HighLoadExample.csproj", "{1214A7F9-A031-49C5-AE8D-E8D1CBE6ED37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.API", "Kahoot.NET.API\Kahoot.NET.API.csproj", "{ADB5A7EF-54D1-4F34-B861-EA7B611CE95D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.Mathematics", "Kahoot.NET.Mathematics\Kahoot.NET.Mathematics.csproj", "{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kahoot.NET.CLI", "Kahoot.NET.CLI\Kahoot.NET.CLI.csproj", "{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.CLI", "Kahoot.NET.CLI\Kahoot.NET.CLI.csproj", "{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,14 +41,6 @@ Global
 		{1214A7F9-A031-49C5-AE8D-E8D1CBE6ED37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1214A7F9-A031-49C5-AE8D-E8D1CBE6ED37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1214A7F9-A031-49C5-AE8D-E8D1CBE6ED37}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADB5A7EF-54D1-4F34-B861-EA7B611CE95D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADB5A7EF-54D1-4F34-B861-EA7B611CE95D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADB5A7EF-54D1-4F34-B861-EA7B611CE95D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADB5A7EF-54D1-4F34-B861-EA7B611CE95D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}.Release|Any CPU.ActiveCfg = Release|Any CPU

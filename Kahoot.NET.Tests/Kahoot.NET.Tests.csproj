@@ -39,8 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kahoot.NET.API\Kahoot.NET.API.csproj" />
-    <ProjectReference Include="..\Kahoot.NET.Mathematics\Kahoot.NET.Mathematics.csproj" />
     <ProjectReference Include="..\Kahoot.NET\Kahoot.NET.csproj" />
   </ItemGroup>
 

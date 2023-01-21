@@ -17,8 +17,8 @@ public static class WebSocketKey
     /// Decodes the strings and returns a websocket key
     /// </summary>
     /// <remarks>
-    /// The header must be Base64 and comes from the response headers <see cref="Request.QueryGameAsync(HttpClient, int)"/> with the key <see cref="ConnectionInfo.SessionHeader"/>. 
-    /// The challenge function comes from the response <see cref="Request.QueryGameAsync(HttpClient, int)"/> and is contained in the body. 
+    /// The header must be Base64 and comes from the response headers <see cref="Request.QueryGameAsync(HttpClient, uint)"/> with the key <see cref="ConnectionInfo.SessionHeader"/>. 
+    /// The challenge function comes from the response <see cref="Request.QueryGameAsync(HttpClient, uint)"/> and is contained in the body. 
     /// The header cannot exceed the max length 
     /// </remarks>
     /// <param name="sessionHeader"></param>

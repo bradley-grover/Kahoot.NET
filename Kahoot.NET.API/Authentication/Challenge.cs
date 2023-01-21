@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Numerics;
+using System.Runtime.InteropServices;
 using Kahoot.NET.Mathematics;
 
 namespace Kahoot.NET.API.Authentication;
@@ -35,6 +36,8 @@ internal static class Challenge
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ReadOnlySpan<char> FindToken(ReadOnlySpan<char> source)
     {
+        Debug.Assert(!source.IsEmpty);
+
         int first = source.IndexOf(Identifier);
         int last = source.LastIndexOf(Identifier);
 
@@ -54,6 +57,9 @@ internal static class Challenge
     /// </summary>
     public static int GetOffsetString(ReadOnlySpan<char> input, Span<char> output)
     {
+        Debug.Assert(!input.IsEmpty);
+        Debug.Assert(!output.IsEmpty);
+
         // find the variable method declaration start index and set the span to start at the assignment
 
         input = input[(input.IndexOf(OffsetName) + OffsetName.Length)..];
@@ -66,19 +72,13 @@ internal static class Challenge
 
         int outputIndex = 0;
 
-        ref char inputRef = ref MemoryMarshal.GetReference(input);
-        ref char outputRef = ref MemoryMarshal.GetReference(output);
-
-        for (int i = 0; i < input.Length; i++)
+        for (int i = 0; (uint)i < (uint)input.Length; i++)
         {
-            char character = Unsafe.Add(ref inputRef, i);
+            char character = input[i];
 
-            if (char.IsWhiteSpace(character))
-            {
-                continue;   
-            }
+            if (char.IsWhiteSpace(character)) continue;
 
-            Unsafe.Add(ref outputRef, outputIndex++) = character;
+            output[outputIndex++] = character;
         }
 
         return outputIndex;
@@ -87,15 +87,15 @@ internal static class Challenge
     /// <summary>
     /// Decode the characters using the offset and store the characters in the output
     /// </summary>
-    internal static int Decode(ReadOnlySpan<char> value, Span<char> output, long offset)
+    internal static int Decode(ReadOnlySpan<char> input, Span<char> output, long offset)
     {
-        for (int i = 0; i < value.Length; i++)
+        for (int i = 0; (uint)i < (uint)input.Length; i++)
         {
             // add decoded characters to span
-            output[i] = Repl(value[i], i, offset);
+            output[i] = Repl(input[i], i, offset);
         }
 
-        return value.Length;
+        return input.Length;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

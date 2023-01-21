@@ -1,43 +1,66 @@
-﻿namespace Kahoot.NET.Client;
+﻿using Kahoot.NET.API.Requests;
+
+namespace Kahoot.NET.Client;
 
 /// <summary>
-/// Client to connect to a Kahoot
+/// Client used to connect and interact to a Kahoot!
 /// </summary>
 public interface IKahootClient : IDisposable
 {
     /// <summary>
-    /// When the client has failed to or joined a game, make sure to check if <see cref="JoinEventArgs.Success"/> is true before accessing fields
+    /// Status of whether a client is in a game or not
     /// </summary>
-    event Func<object?, JoinEventArgs, Task>? Joined;
+    bool IsConnected { get; }
 
     /// <summary>
-    /// When the client encounters an error
+    /// Event triggered when the <see cref="JoinAsync(uint, string, CancellationToken)"/> action completes its task
     /// </summary>
-    event Func<object?, ClientErrorEventArgs, Task>? ClientError;
+    event Func<object?, JoinEventArgs, Task> Joined;
 
     /// <summary>
-    /// When the client has left the game/socket
+    /// Event triggered when the client leaves the game
     /// </summary>
-    event Func<object?, LeftEventArgs, Task>? Left;
+    event Func<object?, LeftEventArgs, Task> Left;
 
     /// <summary>
-    /// When the client has received a question
+    /// Event triggered when the client receives the question
     /// </summary>
-    event Func<object?, QuestionReceivedEventArgs, Task> QuestionReceived;
+    event Func<object?, QuestionReceivedArgs, Task> QuestionReceived;
 
     /// <summary>
-    /// Join a kahoot game with the name and code
+    /// Event triggered when the host wants feedback from the players
     /// </summary>
-    /// <param name="code">The code of the game</param>
-    /// <param name="username">The username of the user to join the game, cannot be null</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the task</param>
-    /// <returns>Whether the game was found or not</returns>
-    Task<bool> JoinAsync(int code, string username, CancellationToken cancellationToken = default);
+    event Func<object?, EventArgs, Task> FeedbackRequested;
 
     /// <summary>
-    /// Disconnects the client from the Kahoot game
+    /// 
     /// </summary>
-    /// <param name="cancellationToken">Cancellation token to cancel the task</param>
-    /// <returns>Awaitable</returns>
-    Task LeaveAsync(CancellationToken cancellationToken = default);
+    /// <param name="quizQuestion"></param>
+    /// <param name="answerIndex"></param>
+    /// <param name="array"></param>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    ValueTask AnswerAsync(QuizQuestionData quizQuestion, int? answerIndex = null, int[]? array = null, string? text = null);
+
+    /// <summary>
+    /// The client begins to join the game and will report its results to the delegate property
+    /// </summary>
+    /// <param name="code"></param>
+    /// <param name="username"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<bool> JoinAsync(uint code, string username, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Use this function when <see cref="FeedbackRequested"/> is triggered
+    /// </summary>
+    /// <param name="feedback"></param>
+    /// <returns></returns>
+    ValueTask SendFeedbackAsync(Feedback feedback);
+
+    /// <summary>
+    /// Disconnects the client from the Kahoot! game
+    /// </summary>
+    /// <returns></returns>
+    Task LeaveAsync();
 }

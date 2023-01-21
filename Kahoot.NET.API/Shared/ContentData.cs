@@ -11,7 +11,7 @@ public class ContentData : Data
     /// Integer identifer for the data
     /// </summary>
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public uint Id { get; set; }
 
     /// <summary>
     /// JSON content embedded within the message

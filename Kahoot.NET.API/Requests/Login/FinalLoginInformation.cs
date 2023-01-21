@@ -10,7 +10,7 @@ public class FinalLoginInformation : Data
     /// </summary>
     /// <param name="gameId">The identifier (game code) of the game</param>
     /// <param name="content">The content included within the message</param>
-    public FinalLoginInformation(int gameId, string content)
+    public FinalLoginInformation(uint gameId, string content)
     {
         Type = Types.Message;
         GameId = gameId;
@@ -23,7 +23,7 @@ public class FinalLoginInformation : Data
     /// The identifier (game code) of the game
     /// </summary>
     [JsonPropertyName("gameid")]
-    public int GameId { get; set; }
+    public uint GameId { get; set; }
 
     /// <summary>
     /// The host of the request
@@ -35,7 +35,7 @@ public class FinalLoginInformation : Data
     /// The identifier of the message
     /// </summary>
     [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public uint Id { get; set; }
 
     /// <summary>
     /// The content embedded within the message

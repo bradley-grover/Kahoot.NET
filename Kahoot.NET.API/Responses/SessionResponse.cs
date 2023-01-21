@@ -63,12 +63,12 @@ public class SessionResponse
     /// If the HTTP GET sent back a game
     /// </summary>
     [JsonIgnore]
+    [MemberNotNullWhen(true, nameof(WebSocketKey))]
     public bool Success { get; set; }
 
     /// <summary>
     /// The Websocket Key used for connecting decoded from the response
     /// </summary>
     [JsonIgnore]
-    [MemberNotNullWhen(true, nameof(Success))]
     public string? WebSocketKey { get; set; }
 }

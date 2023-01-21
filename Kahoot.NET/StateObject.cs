@@ -10,17 +10,17 @@ public class StateObject
     /// <summary>
     /// The size of the buffer to be used to store messages
     /// </summary>
-    public const int BufferSize = 1024;
+    public const int BufferSize = 1024; // 1 KiB
 
     /// <summary>
     /// The current message id count
     /// </summary>
-    public long id;
+    public ulong id;
 
     /// <summary>
     /// The number of acknowledgements
     /// </summary>
-    public long ack;
+    public ulong ack;
 
     /// <summary>
     /// The lag of the connection
@@ -57,6 +57,6 @@ public class StateObject
     public ExtWithTimesync<long> ExtWithTimesync => new()
     {
         Time = new() { L = l, O = o },
-        Acknowledged = ack
+        Acknowledged = (long)ack
     };
 }

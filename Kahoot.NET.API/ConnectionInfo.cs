@@ -6,6 +6,11 @@
 public static class ConnectionInfo
 {
     /// <summary>
+    /// The max amount of clients possible in a game, anything over will be stuck in a queue
+    /// </summary>
+    public const int GameMaxConnectionCount = 2000;
+
+    /// <summary>
     /// The minimum version of the connection
     /// </summary>
     public const string MinVersion = "1.0";

@@ -11,15 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.Tests", "Kahoot.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.Benchmarks", "Kahoot.NET.Benchmarks\Kahoot.NET.Benchmarks.csproj", "{C50C4FD3-3238-4268-898E-8DF44DF77F6C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.Hosting", "Kahoot.NET.Hosting\Kahoot.NET.Hosting.csproj", "{65644BEF-3E69-41D4-96E8-F070DEFE3340}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.Example.Hosting", "Kahoot.NET.Example.Hosting\Kahoot.NET.Example.Hosting.csproj", "{98DAD228-301F-49C5-8FE9-7691F7FF3120}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.HighLoadExample", "Kahoot.NET.HighLoadExample\Kahoot.NET.HighLoadExample.csproj", "{1214A7F9-A031-49C5-AE8D-E8D1CBE6ED37}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.API", "Kahoot.NET.API\Kahoot.NET.API.csproj", "{ADB5A7EF-54D1-4F34-B861-EA7B611CE95D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kahoot.NET.Mathematics", "Kahoot.NET.Mathematics\Kahoot.NET.Mathematics.csproj", "{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kahoot.NET.CLI", "Kahoot.NET.CLI\Kahoot.NET.CLI.csproj", "{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,14 +41,6 @@ Global
 		{C50C4FD3-3238-4268-898E-8DF44DF77F6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C50C4FD3-3238-4268-898E-8DF44DF77F6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C50C4FD3-3238-4268-898E-8DF44DF77F6C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65644BEF-3E69-41D4-96E8-F070DEFE3340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65644BEF-3E69-41D4-96E8-F070DEFE3340}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65644BEF-3E69-41D4-96E8-F070DEFE3340}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65644BEF-3E69-41D4-96E8-F070DEFE3340}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98DAD228-301F-49C5-8FE9-7691F7FF3120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98DAD228-301F-49C5-8FE9-7691F7FF3120}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98DAD228-301F-49C5-8FE9-7691F7FF3120}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98DAD228-301F-49C5-8FE9-7691F7FF3120}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1214A7F9-A031-49C5-AE8D-E8D1CBE6ED37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1214A7F9-A031-49C5-AE8D-E8D1CBE6ED37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1214A7F9-A031-49C5-AE8D-E8D1CBE6ED37}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +53,10 @@ Global
 		{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A245A867-4CB6-4B85-B9D4-EEAF129A65A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD3A4B83-EF3B-43A3-86A4-924E6D25D086}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

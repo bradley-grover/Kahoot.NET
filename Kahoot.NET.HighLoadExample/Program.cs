@@ -1,19 +1,23 @@
 ﻿using Kahoot.NET.Client;
+using Kahoot.NET.Client.Events;
+using Kahoot.NET.API.Shared;
 using ParadoxTerminal;
 
 namespace Kahoot.NET.HighLoadExample;
 
 public class Program
 {
+    private const int BatchAmount = 30;
+
     public static async Task Main(string[] args)
     {
         Console.WriteLine("Enter game code: ");
 
-        int code = Terminal.ReadInt32();
+        uint code = Terminal.ReadUInt32();
 
         Console.WriteLine("Enter number of clients");
 
-        var count = Terminal.ReadInt32(1, int.MaxValue);
+        var count = Terminal.ReadInt32(1, 10_000); // decent limit
 
         var clients = new List<IKahootClient>(count);
 
@@ -27,28 +31,50 @@ public class Program
         foreach (var client in clients)
         {
             client.Joined += Client_Joined;
-            client.ClientError += Client_ClientError;
+            client.QuestionReceived += Client_QuestionReceived;
             tasks.Add(client.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString()));
+
+            if (tasks.Count == BatchAmount)
+            {
+                await Task.WhenAll(tasks);
+                await Task.Delay(800);
+                tasks.Clear();
+            }
         }
 
-        await Task.WhenAll(tasks);
+        if (tasks.Count > 0)
+        {
+            await Task.WhenAll(tasks);
+        }
 
         await Task.Delay(-1);
     }
 
-    private static Task Client_Joined(object? sender, Client.Data.JoinEventArgs args)
+    private static async Task Client_QuestionReceived(object? sender, QuestionReceivedArgs questionArgs)
     {
-        if (args.TryGetError(out var error))
+        if (questionArgs.ShouldIgnore)
         {
-            Console.WriteLine(error);
+            return;
         }
 
-        return Task.CompletedTask;
+        if (sender is not IKahootClient client)
+        {
+            return;
+        }
+
+        if (questionArgs.Question.QuestionType == QuestionType.Quiz)
+        {
+            await client.AnswerAsync(questionArgs.Question, answerIndex: Random.Shared.Next(questionArgs.Question.NumberOfChoices));
+        }
     }
 
-    private static Task Client_ClientError(object? sender, Client.Data.ClientErrorEventArgs args)
+    private static Task Client_Joined(object? obj, JoinEventArgs args)
     {
-        Console.WriteLine(args.Error.Message);
+        if (!args.IsSuccess)
+        {
+            Console.WriteLine(Enum.GetName(args.Result));
+        }
+
         return Task.CompletedTask;
     }
 }

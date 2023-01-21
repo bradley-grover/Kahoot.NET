@@ -63,6 +63,10 @@ public static unsafe class SimpleExpression
         return precedence;
     }
 
+    /* This stack size count assumes that half of the expression contains numerics and the other half contains
+     * operator symbols there is likely a better balanced amount because there are probably slightly more of one thing on average
+    */
+
     internal const int OperandStackMaxSize = 256;
     internal const int OperatorStackMaxSize = 256;
 
@@ -89,11 +93,9 @@ public static unsafe class SimpleExpression
             new(halfExpressionLength) :
             new(stackalloc char[halfExpressionLength]);
 
-        ref char expressionRef = ref MemoryMarshal.GetReference(expression);
-
-        for (int i = 0; i < length; i++)
+        for (int i = 0; (uint)i < (uint)length; i++)
         {
-            char c = Unsafe.Add(ref expressionRef, i);
+            char c = expression[i];
 
             // If the character is a digit, parse it as a long and push it onto the operand stack.
             if ((uint)(c - '0') <= 9)
@@ -101,7 +103,7 @@ public static unsafe class SimpleExpression
                 int start = i;
                 int take = 0;
 
-                while (i < length && (uint)(Unsafe.Add(ref expressionRef, i) - '0') <= 9)
+                while (i < length && (uint)(expression[i] - '0') <= 9)
                 {
                     take++;
                     i++;

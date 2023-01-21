@@ -1,6 +1,5 @@
-﻿using Kahoot.NET.Client;
-using Kahoot.NET.Client.Data.Errors;
-using Kahoot.NET.Client.Data;
+﻿using Kahoot.NET.API.Authentication;
+using Kahoot.NET.Client;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Example;
@@ -26,35 +25,35 @@ public class Program
 
         // bind delegates to events from ClientEvents class, customise how you want to handle events in your own way
         kahootClient.Joined += ClientEvents.KahootClient_OnJoined;
-        kahootClient.ClientError += ClientEvents.KahootClient_ClientError;
         kahootClient.Left += ClientEvents.KahootClient_Left;
+        kahootClient.QuestionReceived += ClientEvents.KahootClient_QuestionRec;
+        kahootClient.FeedbackRequested += ClientEvents.KahootClient_OnFeedbackRequest;
 
-       
         var validGame = await kahootClient.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString());
 
         await Task.Delay(-1);
     }
 
-    public static async Task<int> GetValidCodeAsync()
+
+    public static async Task<uint> GetValidCodeAsync()
     {
+        Console.WriteLine("Enter game code:");
+
         while (true)
         {
-            int result;
+            uint result;
 
-            while (!int.TryParse(Console.ReadLine(), out result))
+            while (!uint.TryParse(Console.ReadLine(), out result))
             {
                 Console.WriteLine($"Could not get numeric code, try again");
             }
 
-            if (!await Code.ExistsAsync(result, httpClient))
+            if (await Request.GameExistsAsync(httpClient, result))
             {
-                Console.WriteLine("Code is not an active game");
-                continue;
+                return result;
             }
 
-            Console.WriteLine("Found the game");
-
-            return result;
+            Console.WriteLine("Game doesn't exist");
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Kahoot.NET.Client;
-using Kahoot.NET.Client.Data;
-using Kahoot.NET.Client.Data.Errors;
+﻿using System.Diagnostics;
+using Kahoot.NET.API.Shared;
+using Kahoot.NET.API.Requests;
+using Kahoot.NET.Client;
+using Kahoot.NET.Client.Events;
 
 namespace Kahoot.NET.Example;
 
@@ -8,33 +10,45 @@ public static class ClientEvents
 {
     public static Task KahootClient_Left(object? sender, LeftEventArgs args)
     {
-        switch (args.Reason)
+        switch (args.Condition)
         {
-            case ReasonForLeaving.UserKicked:
+            case LeaveCondition.Kicked:
                 Console.WriteLine("I was kicked from the game");
                 break;
-            case ReasonForLeaving.UserRequested:
+            case LeaveCondition.Requested:
                 Console.WriteLine("I have left the game");
                 break;
-            case ReasonForLeaving.GameLocked:
+            case LeaveCondition.Locked:
                 Console.WriteLine("The game is locked");
                 break;
-            case ReasonForLeaving.QueueFull:
+            case LeaveCondition.Full:
                 Console.WriteLine("The game has too many players for the client to join");
                 break;
         }
         return Task.CompletedTask;
     }
 
-    public static Task KahootClient_ClientError(object? sender, ClientErrorEventArgs arg)
+    public static async Task KahootClient_QuestionRec(object? sender, QuestionReceivedArgs args)
     {
-        Console.WriteLine(arg.Error);
-        return Task.CompletedTask;
+        if (args.ShouldIgnore)
+        {
+            return;
+        }
+
+        if (sender is not IKahootClient client)
+        {
+            return;
+        }
+
+        if (args.Question.Type == Types.Question.Quiz)
+        {
+            await client.AnswerAsync(args.Question, Random.Shared.Next(args.Question.NumberOfChoices)); // pick a random answer
+        }
     }
 
     public static Task KahootClient_OnJoined(object? sender, JoinEventArgs args)
     {
-        if (args.Success)
+        if (args.IsSuccess)
         {
             Console.WriteLine("Joined the game");
             return Task.CompletedTask;
@@ -42,22 +56,38 @@ public static class ClientEvents
 
         Console.WriteLine("Failed to join game");
 
-        switch (args.Error)
+        switch (args.Result)
         {
-            case JoinErrors.GameRequires2fa:
+            case JoinResult.GameRequires2fa:
                 Console.WriteLine("The game requires 2FA to join");
                 break;
-            case JoinErrors.SessionUnknown:
+            case JoinResult.SessionUnknown:
                 Console.WriteLine("The session is unknown");
                 break;
-            case JoinErrors.DuplicateUserName:
+            case JoinResult.DuplicateUserName:
                 Console.WriteLine("The username is a duplicate of another");
                 break;
-            case JoinErrors.Locked:
+            case JoinResult.Locked:
                 Console.WriteLine("The game has locked by the creator");
                 break;
         }
 
         return Task.CompletedTask;
+    }
+
+    public static async Task KahootClient_OnFeedbackRequest(object? sender, EventArgs args)
+    {
+        if (sender is not IKahootClient client)
+        {
+            return;
+        }
+
+        await client.SendFeedbackAsync(new()
+        {
+            Fun = 1,
+            Learning = true,
+            Overall = 1,
+            Recommend = false,
+        });
     }
 }

@@ -1,8 +1,16 @@
 <Project>
+  
   <PropertyGroup>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>11</LangVersion>
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/*.Debug.cs</DefaultItemExcludes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="**/*Debug.cs" Condition=" '$(Configuration)' == 'Debug' " />
+  </ItemGroup>
+  
 </Project>

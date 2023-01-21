@@ -1,43 +1,111 @@
-﻿namespace Kahoot.NET.Client;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Kahoot.NET.Client;
 
 /// <summary>
-/// Client to connect to a Kahoot
+/// Client used to connect and interact to a Kahoot!
 /// </summary>
 public interface IKahootClient : IDisposable
 {
     /// <summary>
-    /// When the client has failed to or joined a game, make sure to check if <see cref="JoinEventArgs.Success"/> is true before accessing fields
+    /// Status of whether a client is in a game or not
     /// </summary>
-    event Func<object?, JoinEventArgs, Task>? Joined;
+    bool IsConnected { get; }
 
     /// <summary>
-    /// When the client encounters an error
+    /// The current username of the client, it is null when <see cref="IsConnected"/> is false
     /// </summary>
-    event Func<object?, ClientErrorEventArgs, Task>? ClientError;
+    /// <remarks>
+    /// The recommended way to check whether this null is by using <see cref="IsConnected"/> like:
+    /// <example>
+    /// <code>
+    /// if (client.IsConnected)
+    /// {
+    ///    string username = client.Username; // not null
+    /// }
+    /// string? user = client.Username; // needs '?' to not rise warning without <see cref="IsConnected"/> check
+    /// </code>
+    /// </example>
+    /// </remarks>
+    [MemberNotNullWhen(true, nameof(IsConnected))]
+    string? Username { get; }
 
     /// <summary>
-    /// When the client has left the game/socket
+    /// The code that the client is currently in, use <see cref="IsConnected"/> to check whether this is null
     /// </summary>
-    event Func<object?, LeftEventArgs, Task>? Left;
+    /// <remarks>
+    /// The recommended way to check whether this null is by using <see cref="IsConnected"/> like:
+    /// <example>
+    /// <code>
+    /// if (client.IsConnected)
+    /// {
+    ///    uint code = client.Code; // not null
+    /// }
+    /// uint? nullCode = client.Code; // needs '?' to not rise warning without <see cref="IsConnected"/> check
+    /// </code>
+    /// </example>
+    /// </remarks>
+    [MemberNotNullWhen(true, nameof(IsConnected))]
+    uint? Code { get; }
 
     /// <summary>
-    /// When the client has received a question
+    /// Event triggered when the <see cref="JoinAsync(uint, string, CancellationToken)"/> action completes its task
     /// </summary>
-    event Func<object?, QuestionReceivedEventArgs, Task> QuestionReceived;
+    event Func<object?, JoinEventArgs, Task> Joined;
 
     /// <summary>
-    /// Join a kahoot game with the name and code
+    /// Event triggered when the client leaves the game
     /// </summary>
-    /// <param name="code">The code of the game</param>
-    /// <param name="username">The username of the user to join the game, cannot be null</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the task</param>
-    /// <returns>Whether the game was found or not</returns>
-    Task<bool> JoinAsync(int code, string username, CancellationToken cancellationToken = default);
+    event Func<object?, LeftEventArgs, Task> Left;
 
     /// <summary>
-    /// Disconnects the client from the Kahoot game
+    /// Event triggered when the client receives the question
     /// </summary>
-    /// <param name="cancellationToken">Cancellation token to cancel the task</param>
-    /// <returns>Awaitable</returns>
-    Task LeaveAsync(CancellationToken cancellationToken = default);
+    event Func<object?, QuestionReceivedArgs, Task> QuestionReceived;
+
+    /// <summary>
+    /// Event triggered when the host wants feedback from the players
+    /// </summary>
+    event Func<object?, EventArgs, Task> FeedbackRequested;
+
+    /// <summary>
+    /// Sends a question answer to the host if the question is answerable, else it ignores it.
+    /// </summary>
+    /// <param name="quizQuestion"></param>
+    /// <param name="answerIndex"></param>
+    /// <param name="array"></param>
+    /// <param name="text"></param>
+    /// <remarks>
+    /// Should be used in unision with <see cref="QuestionReceived"/> or else the host will get confused.
+    /// For which param would be used to answer you should perform a check of <see cref="QuizQuestionData.QuestionType"/> and answer accordingly.
+    /// If the answer type is incorrect the method ignores
+    /// </remarks>
+    ValueTask AnswerAsync(QuizQuestionData quizQuestion, int? answerIndex = null, int[]? array = null, string? text = null);
+
+    /// <summary>
+    /// The client begins to join the game and will report its results to the delegate property
+    /// </summary>
+    /// <param name="code"></param>
+    /// <param name="username"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Whether the client has completed the handshake process without error. **This doesn't mean that the client has joined the game yet</returns>
+    /// <remarks>
+    /// The result of this operation will received at <see cref="QuestionReceived"/>
+    /// </remarks>
+    Task<bool> JoinAsync(uint code, string username, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Use this function when <see cref="FeedbackRequested"/> is triggered, and want to send game feedback to the host
+    /// </summary>
+    /// <param name="feedback"></param>
+    /// <returns></returns>
+    ValueTask SendFeedbackAsync(Feedback feedback);
+
+    /// <summary>
+    /// Disconnects the client from the Kahoot! game
+    /// </summary>
+    /// <remarks>
+    /// This will also trigger <see cref="Left"/> event
+    /// </remarks>
+    Task LeaveAsync();
 }

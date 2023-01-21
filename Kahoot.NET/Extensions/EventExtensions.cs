@@ -12,7 +12,10 @@ internal static class EventExtensions
     /// <returns>A <see cref="Task"/> to <see langword="await"/></returns>
     internal static async Task InvokeEventAsync<TEventArgs>(
         this Func<object?, TEventArgs, Task>? @event, object? sender, TEventArgs args)
+        where TEventArgs : EventArgs
     {
+        Debug.Assert(args != null);
+
         if (@event is not null)
         {
             await @event(sender, args);

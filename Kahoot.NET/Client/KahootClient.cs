@@ -88,7 +88,7 @@ public partial class KahootClient : IKahootClient
 
 
     /// <inheritdoc/>
-    public async Task<bool> JoinAsync(int gameCode, string username, CancellationToken cancellationToken = default)
+    public async Task<bool> JoinAsync(int code, string username, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(username)) throw new ArgumentNullException(nameof(username));
 
@@ -97,7 +97,7 @@ public partial class KahootClient : IKahootClient
         await _senderLock.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         _username = username;
-        _code = gameCode;
+        _code = code;
 
         _logger?.LogDebug("Trying to join game");
 

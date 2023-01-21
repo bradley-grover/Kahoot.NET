@@ -38,11 +38,11 @@ public interface IKahootClient : IDisposable
     /// <summary>
     /// The client begins to join the game and will report its results to the delegate property
     /// </summary>
-    /// <param name="gameCode"></param>
+    /// <param name="code"></param>
     /// <param name="username"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<bool> JoinAsync(int gameCode, string username, CancellationToken cancellationToken = default);
+    Task<bool> JoinAsync(int code, string username, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Disconnects the client from the Kahoot! game

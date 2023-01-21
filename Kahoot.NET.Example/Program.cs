@@ -1,4 +1,5 @@
-﻿using Kahoot.NET.Client;
+﻿using Kahoot.NET.API.Authentication;
+using Kahoot.NET.Client;
 using Microsoft.Extensions.Logging;
 
 namespace Kahoot.NET.Example;
@@ -27,7 +28,6 @@ public class Program
         kahootClient.Left += ClientEvents.KahootClient_Left;
         kahootClient.QuestionReceived += ClientEvents.KahootClient_QuestionRec;
 
-
         var validGame = await kahootClient.JoinAsync(code, Random.Shared.Next(0, 999_999_999).ToString());
 
         await Task.Delay(-1);
@@ -36,6 +36,8 @@ public class Program
 
     public static async Task<int> GetValidCodeAsync()
     {
+        Console.WriteLine("Enter game code:");
+
         while (true)
         {
             int result;
@@ -45,7 +47,12 @@ public class Program
                 Console.WriteLine($"Could not get numeric code, try again");
             }
 
-            return result;
+            if (await Request.GameExistsAsync(httpClient, result))
+            {
+                return result;
+            }
+
+            Console.WriteLine("Game doesn't exist");
         }
     }
 }

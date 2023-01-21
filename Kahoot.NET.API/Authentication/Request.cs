@@ -31,7 +31,7 @@ public static class Request
             return false;
         }
 
-        return true;
+        return false;
     }
 
     /// <summary>

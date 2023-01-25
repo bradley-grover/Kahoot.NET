@@ -1,13 +1,11 @@
-﻿using System.Data;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Jace;
-using Kahoot.NET.API;
 using Kahoot.NET.Benchmarks.Alternatives;
 using Kahoot.NET.Mathematics;
+using AngouriMath;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
 
-[BenchmarkModule("MathParser", "Testing a built math parser for performance gains potentially")]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Benchmark class, has to be instance methods")]
 public class MathParser
 {
@@ -15,6 +13,14 @@ public class MathParser
     public long Eval()
     {
         return SimpleExpression.Evaluate(Mock.OffsetString);
+    }
+
+    [Benchmark]
+    public long Angouri_Eval()
+    {
+        Entity entity = Mock.OffsetString;
+
+        return (long)entity.EvalNumerical();
     }
 
     internal static readonly CalculationEngine _engine = new();

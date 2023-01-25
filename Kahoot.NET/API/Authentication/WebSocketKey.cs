@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Kahoot.NET.API.Authentication;
+﻿namespace Kahoot.NET.API.Authentication;
 
 /// <summary>
 /// Static class to create the websocket key used for connection to the socket, on platforms that support <see cref="Vector{T}"/> the decoding will perform faster due to vectorization of decoding
@@ -51,6 +49,7 @@ public static class WebSocketKey
         return BitwiseOrSpans(header, challenge);
     }
 
+    // Vector<T>.Count is a JIT constant so better to use it directly then store it in length
     internal static string BitwiseOrSpans(Span<char> header, Span<char> challenge)
     {
         if (!(challenge.Length >= header.Length))
@@ -63,19 +62,18 @@ public static class WebSocketKey
         if (Vector.IsHardwareAccelerated && header.Length >= Vector<ushort>.Count)
         {
             int length = header.Length;
-            int vectorLength = Vector<ushort>.Count;
 
             // we need to use unsigned shorts as chars are not supported by vectors
 
             Span<ushort> headerRaw = MemoryMarshal.Cast<char, ushort>(header);
             Span<ushort> challengeRaw = MemoryMarshal.Cast<char, ushort>(challenge);
 
-            for (i = 0; i <= length - vectorLength; i += vectorLength)
+            for (i = 0; i <= length - Vector<ushort>.Count; i += Vector<ushort>.Count)
             {
-                var headerVec = new Vector<ushort>(headerRaw.Slice(i, vectorLength));
-                var challengeVec = new Vector<ushort>(challengeRaw.Slice(i, vectorLength));
+                var headerVec = new Vector<ushort>(headerRaw.Slice(i, Vector<ushort>.Count));
+                var challengeVec = new Vector<ushort>(challengeRaw.Slice(i, Vector<ushort>.Count));
 
-                Vector.Xor(headerVec, challengeVec).CopyTo(headerRaw.Slice(i, vectorLength));
+                Vector.Xor(headerVec, challengeVec).CopyTo(headerRaw.Slice(i, Vector<ushort>.Count));
             }
         }
 

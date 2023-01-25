@@ -4,7 +4,6 @@ using Kahoot.NET.Benchmarks.Alternatives;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
 
-[BenchmarkModule("XOrStrings", "The result of ^ on strings")]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Benchmark class, has to be instance methods")]
 public class BitwiseStrings
 {

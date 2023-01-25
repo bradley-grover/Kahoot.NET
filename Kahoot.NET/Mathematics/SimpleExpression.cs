@@ -11,7 +11,7 @@ namespace Kahoot.NET.Mathematics;
 /// <remarks>
 /// Expressions are very simple and designed by nature to make it faster,
 /// so only simple expressions with simple operators and brackets
-/// like + - * / ^ ( ). In NET 7 generic <see cref="SimpleExpression"/> is supported as a static generic if you would prefer to use on generic types instead
+/// like + - * / ^ ( ).
 /// </remarks>
 public static unsafe class SimpleExpression
 {

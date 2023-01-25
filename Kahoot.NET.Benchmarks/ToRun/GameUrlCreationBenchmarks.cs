@@ -4,7 +4,6 @@ using Kahoot.NET.Extensions;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
 
-[BenchmarkModule("GameUrl", "Comparing URL performances")]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Benchmark class, has to be instance methods")]
 public class GameUrlCreationBenchmarks
 {

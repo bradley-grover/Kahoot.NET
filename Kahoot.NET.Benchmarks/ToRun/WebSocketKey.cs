@@ -1,12 +1,8 @@
-﻿using BenchmarkDotNet.Engines;
-using BenchmarkDotNet.Jobs;
-using Kahoot.NET.API.Authentication;
+﻿using Kahoot.NET.API.Authentication;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection.PortableExecutable;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
 
-[BenchmarkModule("KeyCreationSteps", "Benchmarks the methods involved with creating the websocket key used to connect to a Kahoot!")]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Benchmark class, has to be instance methods")]
 public class WebSocketKeyBenchmarks
 {

@@ -3,7 +3,6 @@ using Kahoot.NET.Mathematics;
 
 namespace Kahoot.NET.Benchmarks.ToRun;
 
-[BenchmarkModule("Operations", "Bench ops")]
 [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Benchmark class, has to be instance methods")]
 public class OperationInvokeBenchmarks
 {

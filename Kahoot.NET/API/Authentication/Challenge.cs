@@ -1,4 +1,7 @@
-﻿namespace Kahoot.NET.API.Authentication;
+﻿using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
+namespace Kahoot.NET.API.Authentication;
 
 // this file contains the most performance impact on the WebSocketKey.Create method as it has parse a math string
 // and has to a allocate a string from the span
@@ -85,7 +88,16 @@ internal static class Challenge
     /// </summary>
     internal static int Decode(ReadOnlySpan<char> input, Span<char> output, long offset)
     {
-        for (int i = 0; (uint)i < (uint)input.Length; i++)
+        Debug.Assert(!(input.Length > ushort.MaxValue));
+
+#if NET7_0_OR_GREATER
+        if (offset <= ushort.MaxValue)
+        {
+            return FastDecode(input, output, (ushort)offset);
+        }
+#endif
+
+        for (ushort i = 0; i < input.Length; i++)
         {
             // add decoded characters to span
             output[i] = Repl(input[i], i, offset);
@@ -93,6 +105,59 @@ internal static class Challenge
 
         return input.Length;
     }
+
+#if NET7_0_OR_GREATER
+    internal static int FastDecode(ReadOnlySpan<char> input, Span<char> output, ushort offset)
+    {
+        ushort i = 0;
+
+        if (Vector256.IsHardwareAccelerated && input.Length >= Vector256<ushort>.Count)
+        {
+            ReadOnlySpan<ushort> ushorts = MemoryMarshal.Cast<char, ushort>(input);
+            Span<ushort> outputAsUshort = MemoryMarshal.Cast<char, ushort>(output);
+
+            var offsetVec = Vector256.Create<ushort>(offset);
+            var modulo = Vector256.Create<ushort>(77);
+            var addition = Vector256.Create<ushort>(48);
+
+            for (; i <= input.Length - Vector256<ushort>.Count; i += (ushort)Vector256<ushort>.Count)
+            {
+                var indices = Vector256.Create(i, (ushort)(i + 1), 
+                    (ushort)(i + 2), (ushort)(i + 3),
+                    (ushort)(i + 4), (ushort)(i + 5), 
+                    (ushort)(i + 6), (ushort)(i + 7), 
+                    (ushort)(i + 8), (ushort)(i + 9), 
+                    (ushort)(i + 10), (ushort)(i + 11), 
+                    (ushort)(i + 12), (ushort)(i + 13), 
+                    (ushort)(i + 14), (ushort)(i + 15));
+
+                var characters = Vector256.Create(ushorts.Slice(i, Vector256<ushort>.Count));
+
+                var result = Vector256.Multiply(characters, indices);
+
+                result += offsetVec;
+
+                var a = result - modulo;
+
+                var b = (result / modulo);
+
+                result = a * b;
+
+                result += addition;
+
+                result.CopyTo(outputAsUshort.Slice(i, Vector256<ushort>.Count));
+            }
+        }
+
+        for (; i < input.Length; i++)
+        {
+            // add decoded characters to span
+            output[i] = Repl(input[i], i, offset);
+        }
+
+        return input.Length;
+    }
+#endif
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static char Repl(char character, int position, long offset)

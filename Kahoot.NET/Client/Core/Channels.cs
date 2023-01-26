@@ -96,6 +96,11 @@ public partial class KahootClient
                         break;
                     case LiveEventId.QuizStart:
                         _logger?.LogInformation("The quiz has started");
+
+                        await QuizStarted.InvokeEventAsync(this, new() { 
+                            QuizTitle = JsonSerializer.Deserialize(content.Span, QuizInfoContext.Default.QuizInfo).Title 
+                        });
+
                         break;
                     case LiveEventId.QuizEnd: // kicked or left
                         await LeaveAsync(LeaveCondition.Kicked);

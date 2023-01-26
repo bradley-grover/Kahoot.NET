@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Kahoot.NET.Mathematics;
+﻿namespace Kahoot.NET.Mathematics;
 
 /// <summary>
 /// A lightweight stack for a small amount of blittable structs and falls back to <see cref="ArrayPool{T}"/> when needed

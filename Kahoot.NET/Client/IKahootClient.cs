@@ -57,6 +57,12 @@ public interface IKahootClient : IDisposable
     event Func<object?, LeftEventArgs, Task> Left;
 
     /// <summary>
+    /// Event triggered when the host starts the quiz
+    /// </summary>
+
+    event Func<object?, QuizStartedEventArgs, Task> QuizStarted;
+
+    /// <summary>
     /// Event triggered when the client receives the question
     /// </summary>
     event Func<object?, QuestionReceivedArgs, Task> QuestionReceived;

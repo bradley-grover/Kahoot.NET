@@ -67,6 +67,9 @@ public partial class KahootClient : IKahootClient
     public event Func<object?, QuestionReceivedArgs, Task> QuestionReceived;
 
     /// <inheritdoc/>
+    public event Func<object?, QuizStartedEventArgs, Task> QuizStarted;
+
+    /// <inheritdoc/>
     public event Func<object?, EventArgs, Task> FeedbackRequested;
 
     /// <summary>

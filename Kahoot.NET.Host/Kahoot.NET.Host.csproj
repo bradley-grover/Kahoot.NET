@@ -1,2 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Kahoot.NET\Kahoot.NET.csproj" />
+  </ItemGroup>
 </Project>
